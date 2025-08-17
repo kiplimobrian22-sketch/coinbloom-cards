@@ -125,7 +125,7 @@ const VerifyGiftcard = () => {
                       <SelectContent className="max-h-60">
                         {giftCards.map((card) => (
                           <SelectItem key={card.name} value={card.name}>
-                            {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
+                            {card.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -146,19 +146,19 @@ const VerifyGiftcard = () => {
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="pin">
-                      PIN {selectedGiftCard?.requiresPin ? "*" : "(if applicable)"}
-                    </Label>
-                    <Input
-                      id="pin"
-                      placeholder="Enter PIN"
-                      value={formData.pin}
-                      onChange={(e) => handleInputChange("pin", e.target.value)}
-                      required={selectedGiftCard?.requiresPin}
-                      className="font-mono"
-                    />
-                  </div>
+                  {selectedGiftCard?.requiresPin && (
+                    <div className="space-y-2">
+                      <Label htmlFor="pin">PIN *</Label>
+                      <Input
+                        id="pin"
+                        placeholder="Enter PIN"
+                        value={formData.pin}
+                        onChange={(e) => handleInputChange("pin", e.target.value)}
+                        required
+                        className="font-mono"
+                      />
+                    </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label htmlFor="amount">Expected Amount *</Label>
