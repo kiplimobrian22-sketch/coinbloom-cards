@@ -5,10 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield } from "lucide-react";
+import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { giftCards, GiftCard } from "@/data/giftcards";
 
 const SellGiftcards = () => {
   const { toast } = useToast();
@@ -21,7 +22,9 @@ const SellGiftcards = () => {
     amount: "",
     code: "",
     pin: "",
-    email: ""
+    email: "",
+    frontImage: null as File | null,
+    backImage: null as File | null
   });
 
   const [sellForm, setSellForm] = useState({
@@ -31,13 +34,13 @@ const SellGiftcards = () => {
     code: "",
     pin: "",
     amount: "",
-    email: ""
+    email: "",
+    frontImage: null as File | null,
+    backImage: null as File | null
   });
 
-  const giftcardBrands = [
-    "Amazon", "iTunes", "Google Play", "Steam", "PlayStation", 
-    "Xbox", "Walmart", "Target", "Best Buy", "eBay", "Netflix", "Spotify"
-  ];
+  const selectedExchangeCard = giftCards.find(card => card.name === exchangeForm.giftcardToTrade);
+  const selectedSellCard = giftCards.find(card => card.name === sellForm.giftcardName);
 
   const paymentMethods = [
     { value: "bank", label: "Bank Transfer", icon: Building },
@@ -66,7 +69,9 @@ const SellGiftcards = () => {
       amount: "",
       code: "",
       pin: "",
-      email: ""
+      email: "",
+      frontImage: null,
+      backImage: null
     });
   };
 
@@ -90,7 +95,9 @@ const SellGiftcards = () => {
       code: "",
       pin: "",
       amount: "",
-      email: ""
+      email: "",
+      frontImage: null,
+      backImage: null
     });
   };
 
@@ -171,10 +178,10 @@ const SellGiftcards = () => {
                           <SelectTrigger>
                             <SelectValue placeholder="Select gift card to trade" />
                           </SelectTrigger>
-                          <SelectContent>
-                            {giftcardBrands.map((brand) => (
-                              <SelectItem key={brand} value={brand}>
-                                {brand}
+                          <SelectContent className="max-h-60">
+                            {giftCards.map((card) => (
+                              <SelectItem key={card.name} value={card.name}>
+                                {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -190,10 +197,10 @@ const SellGiftcards = () => {
                           <SelectTrigger>
                             <SelectValue placeholder="Select gift card you want" />
                           </SelectTrigger>
-                          <SelectContent>
-                            {giftcardBrands.map((brand) => (
-                              <SelectItem key={brand} value={brand}>
-                                {brand}
+                          <SelectContent className="max-h-60">
+                            {giftCards.map((card) => (
+                              <SelectItem key={card.name} value={card.name}>
+                                {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -226,14 +233,67 @@ const SellGiftcards = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="pin">PIN (if needed)</Label>
+                        <Label htmlFor="pin">
+                          PIN {selectedExchangeCard?.requiresPin ? "*" : "(if needed)"}
+                        </Label>
                         <Input
                           id="pin"
-                          placeholder="Enter PIN if required"
+                          placeholder="Enter PIN"
                           value={exchangeForm.pin}
                           onChange={(e) => setExchangeForm({...exchangeForm, pin: e.target.value})}
+                          required={selectedExchangeCard?.requiresPin}
                           className="font-mono"
                         />
+                      </div>
+                    </div>
+
+                    {/* Image Upload Section */}
+                    <div className="space-y-4">
+                      <Label>Upload Gift Card Images *</Label>
+                      <div className="grid gap-6 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="exchangeFrontImage">Front of Gift Card</Label>
+                          <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                            <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                            <Input
+                              id="exchangeFrontImage"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setExchangeForm({...exchangeForm, frontImage: e.target.files?.[0] || null})}
+                              className="hidden"
+                              required
+                            />
+                            <Label htmlFor="exchangeFrontImage" className="cursor-pointer">
+                              {exchangeForm.frontImage ? (
+                                <span className="text-primary font-medium">{exchangeForm.frontImage.name}</span>
+                              ) : (
+                                <span className="text-muted-foreground">Click to upload front image</span>
+                              )}
+                            </Label>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="exchangeBackImage">Back of Gift Card</Label>
+                          <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                            <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                            <Input
+                              id="exchangeBackImage"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setExchangeForm({...exchangeForm, backImage: e.target.files?.[0] || null})}
+                              className="hidden"
+                              required
+                            />
+                            <Label htmlFor="exchangeBackImage" className="cursor-pointer">
+                              {exchangeForm.backImage ? (
+                                <span className="text-primary font-medium">{exchangeForm.backImage.name}</span>
+                              ) : (
+                                <span className="text-muted-foreground">Click to upload back image</span>
+                              )}
+                            </Label>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -319,10 +379,10 @@ const SellGiftcards = () => {
                         <SelectTrigger>
                           <SelectValue placeholder="Select gift card brand" />
                         </SelectTrigger>
-                        <SelectContent>
-                          {giftcardBrands.map((brand) => (
-                            <SelectItem key={brand} value={brand}>
-                              {brand}
+                        <SelectContent className="max-h-60">
+                          {giftCards.map((card) => (
+                            <SelectItem key={card.name} value={card.name}>
+                              {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -343,12 +403,15 @@ const SellGiftcards = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="sellPin">PIN (if needed)</Label>
+                        <Label htmlFor="sellPin">
+                          PIN {selectedSellCard?.requiresPin ? "*" : "(if needed)"}
+                        </Label>
                         <Input
                           id="sellPin"
-                          placeholder="Enter PIN if required"
+                          placeholder="Enter PIN"
                           value={sellForm.pin}
                           onChange={(e) => setSellForm({...sellForm, pin: e.target.value})}
+                          required={selectedSellCard?.requiresPin}
                           className="font-mono"
                         />
                       </div>
@@ -363,6 +426,56 @@ const SellGiftcards = () => {
                         onChange={(e) => setSellForm({...sellForm, amount: e.target.value})}
                         required
                       />
+                    </div>
+
+                    {/* Image Upload Section */}
+                    <div className="space-y-4">
+                      <Label>Upload Gift Card Images *</Label>
+                      <div className="grid gap-6 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="sellFrontImage">Front of Gift Card</Label>
+                          <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                            <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                            <Input
+                              id="sellFrontImage"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setSellForm({...sellForm, frontImage: e.target.files?.[0] || null})}
+                              className="hidden"
+                              required
+                            />
+                            <Label htmlFor="sellFrontImage" className="cursor-pointer">
+                              {sellForm.frontImage ? (
+                                <span className="text-primary font-medium">{sellForm.frontImage.name}</span>
+                              ) : (
+                                <span className="text-muted-foreground">Click to upload front image</span>
+                              )}
+                            </Label>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="sellBackImage">Back of Gift Card</Label>
+                          <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                            <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                            <Input
+                              id="sellBackImage"
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => setSellForm({...sellForm, backImage: e.target.files?.[0] || null})}
+                              className="hidden"
+                              required
+                            />
+                            <Label htmlFor="sellBackImage" className="cursor-pointer">
+                              {sellForm.backImage ? (
+                                <span className="text-primary font-medium">{sellForm.backImage.name}</span>
+                              ) : (
+                                <span className="text-muted-foreground">Click to upload back image</span>
+                              )}
+                            </Label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="space-y-2">

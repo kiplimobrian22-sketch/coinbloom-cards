@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShoppingCart, Star, CreditCard, Shield, Zap } from "lucide-react";
+import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -11,13 +11,15 @@ import { useToast } from "@/hooks/use-toast";
 const BuyGiftcards = () => {
   const { toast } = useToast();
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
+  const [cart, setCart] = useState<Array<{ id: string; name: string; amount: number; quantity: number; price: number }>>([]);
+  const [showCart, setShowCart] = useState(false);
   
   const giftCards = [
     {
       id: 1,
       name: "Amazon",
       description: "Shop everything on Amazon with instant delivery",
-      image: "🛒",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [10, 25, 50, 100, 200],
       rating: 4.9,
       discount: "2% off",
@@ -27,7 +29,7 @@ const BuyGiftcards = () => {
       id: 2,
       name: "iTunes",
       description: "Music, movies, apps, and more from Apple",
-      image: "🎵",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [15, 25, 50, 100],
       rating: 4.8,
       discount: "3% off",
@@ -37,7 +39,7 @@ const BuyGiftcards = () => {
       id: 3,
       name: "Google Play",
       description: "Apps, games, and digital content",
-      image: "📱",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [10, 25, 50, 100],
       rating: 4.7,
       discount: "1% off",
@@ -47,7 +49,7 @@ const BuyGiftcards = () => {
       id: 4,
       name: "Steam",
       description: "Gaming platform with thousands of games",
-      image: "🎮",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [20, 50, 100],
       rating: 4.9,
       discount: "5% off",
@@ -57,7 +59,7 @@ const BuyGiftcards = () => {
       id: 5,
       name: "Walmart",
       description: "Shop at America's largest retailer",
-      image: "🏪",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [25, 50, 100, 200],
       rating: 4.6,
       discount: "2% off",
@@ -67,7 +69,7 @@ const BuyGiftcards = () => {
       id: 6,
       name: "PlayStation",
       description: "Games and content for PlayStation consoles",
-      image: "🎯",
+      image: "/placeholder.svg?height=80&width=80",
       denominations: [25, 50, 100],
       rating: 4.8,
       discount: "4% off",
@@ -78,10 +80,51 @@ const BuyGiftcards = () => {
   const currencies = ["USD", "EUR", "GBP", "CAD", "AUD"];
 
   const handlePurchase = (cardName: string, amount: number) => {
+    const existingItem = cart.find(item => item.name === cardName && item.amount === amount);
+    
+    if (existingItem) {
+      setCart(cart.map(item => 
+        item.name === cardName && item.amount === amount
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+    } else {
+      const newItem = {
+        id: `${cardName}-${amount}-${Date.now()}`,
+        name: cardName,
+        amount,
+        quantity: 1,
+        price: amount
+      };
+      setCart([...cart, newItem]);
+    }
+
     toast({
       title: "Added to Cart",
       description: `${cardName} $${amount} gift card has been added to your cart.`,
     });
+  };
+
+  const updateCartQuantity = (id: string, change: number) => {
+    setCart(cart.map(item => {
+      if (item.id === id) {
+        const newQuantity = Math.max(0, item.quantity + change);
+        return newQuantity === 0 ? null : { ...item, quantity: newQuantity };
+      }
+      return item;
+    }).filter(Boolean) as typeof cart);
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart(cart.filter(item => item.id !== id));
+  };
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const getTotalItems = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
   return (
@@ -103,8 +146,8 @@ const BuyGiftcards = () => {
             </p>
           </div>
 
-          {/* Currency Selector */}
-          <div className="flex justify-center mb-8">
+          {/* Currency Selector & Cart */}
+          <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
               <label className="text-sm font-medium text-foreground">Currency:</label>
               <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
@@ -120,7 +163,86 @@ const BuyGiftcards = () => {
                 </SelectContent>
               </Select>
             </div>
+
+            <Button 
+              onClick={() => setShowCart(!showCart)}
+              className="relative"
+              variant={showCart ? "default" : "outline"}
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Cart {getTotalItems() > 0 && `(${getTotalItems()})`}
+              {getTotalItems() > 0 && (
+                <Badge className="ml-2 bg-primary text-primary-foreground">
+                  ${getTotalPrice().toFixed(2)}
+                </Badge>
+              )}
+            </Button>
           </div>
+
+          {/* Cart Display */}
+          {showCart && cart.length > 0 && (
+            <Card className="mb-8 card-glow">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Shopping Cart</span>
+                  <Button variant="ghost" size="sm" onClick={() => setShowCart(false)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {cart.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{item.name} - ${item.amount}</p>
+                        <p className="text-sm text-muted-foreground">
+                          ${item.price.toFixed(2)} each
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => updateCartQuantity(item.id, -1)}
+                          >
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="px-3 py-1 min-w-[40px] text-center">
+                            {item.quantity}
+                          </span>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => updateCartQuantity(item.id, 1)}
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="border-t pt-4">
+                    <div className="flex justify-between items-center font-semibold text-lg">
+                      <span>Total: ${getTotalPrice().toFixed(2)}</span>
+                      <Button className="btn-primary">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Checkout
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Features */}
           <div className="grid gap-6 md:grid-cols-3 mb-16">
@@ -156,7 +278,11 @@ const BuyGiftcards = () => {
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <span className="text-3xl">{card.image}</span>
+                      <img 
+                        src={card.image} 
+                        alt={card.name} 
+                        className="w-12 h-12 object-cover rounded-lg"
+                      />
                       <div>
                         <CardTitle className="flex items-center gap-2">
                           {card.name}
@@ -215,7 +341,7 @@ const BuyGiftcards = () => {
                 Secure Payment Processing
               </h3>
               <p className="text-muted-foreground mb-6">
-                All payments are processed securely through PayPal. You'll be redirected to complete your purchase safely.
+                All payments are processed securely through PayPal. Cards bought are instantly delivered to their mail upon successful payment.
               </p>
               <div className="flex items-center justify-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">

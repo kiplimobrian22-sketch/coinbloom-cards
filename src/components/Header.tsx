@@ -26,7 +26,7 @@ const Header = () => {
               <CreditCard className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-primary-glow to-primary bg-clip-text text-transparent">
-              GiftHub
+              GiftcardsHub
             </span>
           </Link>
         </div>

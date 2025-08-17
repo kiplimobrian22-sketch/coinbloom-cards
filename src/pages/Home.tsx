@@ -131,7 +131,7 @@ const Home = () => {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
-              Why Choose GiftHub?
+              Why Choose GiftcardsHub?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
               Experience the difference with our trusted platform
@@ -163,7 +163,7 @@ const Home = () => {
             Ready to Get Started?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Join thousands of users who trust GiftHub for secure gift card transactions
+            Join thousands of users who trust GiftcardsHub for secure gift card transactions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="btn-hero">
