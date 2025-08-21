@@ -31,6 +31,13 @@ const SellGiftcards = () => {
   const [sellForm, setSellForm] = useState({
     paymentMethod: "",
     accountDetails: "",
+    paymentDetails: {
+      bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
+      paypal: { email: "" },
+      cashapp: { tag: "" },
+      zelle: { email: "" },
+      venmo: { username: "" }
+    },
     giftcardName: "",
     code: "",
     pin: "",
@@ -92,6 +99,13 @@ const SellGiftcards = () => {
     setSellForm({
       paymentMethod: "",
       accountDetails: "",
+      paymentDetails: {
+        bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
+        paypal: { email: "" },
+        cashapp: { tag: "" },
+        zelle: { email: "" },
+        venmo: { username: "" }
+      },
       giftcardName: "",
       code: "",
       pin: "",
@@ -347,17 +361,149 @@ const SellGiftcards = () => {
                     </div>
 
                     {sellForm.paymentMethod && (
-                      <div className="space-y-2">
-                        <Label htmlFor="accountDetails">
-                          {paymentMethods.find(m => m.value === sellForm.paymentMethod)?.label} Details *
+                      <div className="space-y-4 border rounded-lg p-4 bg-muted/10">
+                        <Label className="text-lg font-semibold">
+                          {paymentMethods.find(m => m.value === sellForm.paymentMethod)?.label} Payment Details
                         </Label>
-                        <Input
-                          id="accountDetails"
-                          placeholder={`Enter your ${paymentMethods.find(m => m.value === sellForm.paymentMethod)?.label} details`}
-                          value={sellForm.accountDetails}
-                          onChange={(e) => setSellForm({...sellForm, accountDetails: e.target.value})}
-                          required
-                        />
+                        
+                        {sellForm.paymentMethod === "bank" && (
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <div>
+                              <Label>Account Holder Name *</Label>
+                              <Input
+                                placeholder="John Doe"
+                                value={sellForm.paymentDetails.bank.accountHolderName}
+                                onChange={(e) => setSellForm({
+                                  ...sellForm,
+                                  paymentDetails: {
+                                    ...sellForm.paymentDetails,
+                                    bank: { ...sellForm.paymentDetails.bank, accountHolderName: e.target.value }
+                                  }
+                                })}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label>Bank Name *</Label>
+                              <Input
+                                placeholder="Chase Bank"
+                                value={sellForm.paymentDetails.bank.bankName}
+                                onChange={(e) => setSellForm({
+                                  ...sellForm,
+                                  paymentDetails: {
+                                    ...sellForm.paymentDetails,
+                                    bank: { ...sellForm.paymentDetails.bank, bankName: e.target.value }
+                                  }
+                                })}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label>Account Number *</Label>
+                              <Input
+                                placeholder="1234567890"
+                                value={sellForm.paymentDetails.bank.accountNumber}
+                                onChange={(e) => setSellForm({
+                                  ...sellForm,
+                                  paymentDetails: {
+                                    ...sellForm.paymentDetails,
+                                    bank: { ...sellForm.paymentDetails.bank, accountNumber: e.target.value }
+                                  }
+                                })}
+                                required
+                              />
+                            </div>
+                            <div>
+                              <Label>Routing Number *</Label>
+                              <Input
+                                placeholder="021000021"
+                                value={sellForm.paymentDetails.bank.routingNumber}
+                                onChange={(e) => setSellForm({
+                                  ...sellForm,
+                                  paymentDetails: {
+                                    ...sellForm.paymentDetails,
+                                    bank: { ...sellForm.paymentDetails.bank, routingNumber: e.target.value }
+                                  }
+                                })}
+                                required
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {sellForm.paymentMethod === "paypal" && (
+                          <div>
+                            <Label>PayPal Email Address *</Label>
+                            <Input
+                              type="email"
+                              placeholder="your.email@example.com"
+                              value={sellForm.paymentDetails.paypal.email}
+                              onChange={(e) => setSellForm({
+                                ...sellForm,
+                                paymentDetails: {
+                                  ...sellForm.paymentDetails,
+                                  paypal: { ...sellForm.paymentDetails.paypal, email: e.target.value }
+                                }
+                              })}
+                              required
+                            />
+                          </div>
+                        )}
+
+                        {sellForm.paymentMethod === "cashapp" && (
+                          <div>
+                            <Label>CashApp Tag *</Label>
+                            <Input
+                              placeholder="$johndoe"
+                              value={sellForm.paymentDetails.cashapp.tag}
+                              onChange={(e) => setSellForm({
+                                ...sellForm,
+                                paymentDetails: {
+                                  ...sellForm.paymentDetails,
+                                  cashapp: { ...sellForm.paymentDetails.cashapp, tag: e.target.value }
+                                }
+                              })}
+                              required
+                            />
+                          </div>
+                        )}
+
+                        {sellForm.paymentMethod === "zelle" && (
+                          <div>
+                            <Label>Zelle Email Address *</Label>
+                            <Input
+                              type="email"
+                              placeholder="your.email@example.com"
+                              value={sellForm.paymentDetails.zelle.email}
+                              onChange={(e) => setSellForm({
+                                ...sellForm,
+                                paymentDetails: {
+                                  ...sellForm.paymentDetails,
+                                  zelle: { ...sellForm.paymentDetails.zelle, email: e.target.value }
+                                }
+                              })}
+                              required
+                            />
+                          </div>
+                        )}
+
+                        {sellForm.paymentMethod === "venmo" && (
+                          <div>
+                            <Label>Venmo Username *</Label>
+                            <Input
+                              placeholder="@johndoe"
+                              value={sellForm.paymentDetails.venmo.username}
+                              onChange={(e) => setSellForm({
+                                ...sellForm,
+                                paymentDetails: {
+                                  ...sellForm.paymentDetails,
+                                  venmo: { ...sellForm.paymentDetails.venmo, username: e.target.value }
+                                }
+                              })}
+                              required
+                            />
+                          </div>
+                        )}
                       </div>
                     )}
 

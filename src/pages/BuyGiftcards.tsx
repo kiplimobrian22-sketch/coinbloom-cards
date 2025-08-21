@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CheckoutModal from "@/components/CheckoutModal";
 import { useToast } from "@/hooks/use-toast";
 
 const BuyGiftcards = () => {
@@ -13,6 +14,7 @@ const BuyGiftcards = () => {
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [cart, setCart] = useState<Array<{ id: string; name: string; amount: number; quantity: number; price: number }>>([]);
   const [showCart, setShowCart] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   
   const giftCards = [
     {
@@ -233,10 +235,18 @@ const BuyGiftcards = () => {
                   <div className="border-t pt-4">
                     <div className="flex justify-between items-center font-semibold text-lg">
                       <span>Total: ${getTotalPrice().toFixed(2)}</span>
-                      <Button className="btn-primary">
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        Checkout
-                      </Button>
+                      {getTotalPrice() > 500 ? (
+                        <p className="text-red-500 text-sm">Maximum purchase limit is $500</p>
+                      ) : (
+                        <Button 
+                          className="btn-primary" 
+                          disabled={getTotalPrice() > 500}
+                          onClick={() => setShowCheckout(true)}
+                        >
+                          <CreditCard className="mr-2 h-4 w-4" />
+                          Checkout
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -311,7 +321,7 @@ const BuyGiftcards = () => {
                   <div className="space-y-4">
                     <h4 className="font-medium text-foreground">Available Amounts:</h4>
                     <div className="grid grid-cols-2 gap-2">
-                      {card.denominations.map((amount) => (
+                      {card.denominations.filter(amount => amount <= 500).map((amount) => (
                         <Button
                           key={amount}
                           variant="outline"
@@ -361,6 +371,14 @@ const BuyGiftcards = () => {
           </div>
         </div>
       </div>
+
+      <CheckoutModal
+        isOpen={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        total={getTotalPrice()}
+        currency={selectedCurrency}
+        cartItems={cart}
+      />
 
       <Footer />
     </div>

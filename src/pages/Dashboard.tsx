@@ -7,17 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  CreditCard, 
-  DollarSign, 
-  Users, 
-  Gift, 
-  TrendingUp,
-  LogOut,
-  Copy,
-  CheckCircle,
-  Clock
-} from 'lucide-react';
+import { CheckCircle, CreditCard, DollarSign, ArrowUpRight, ArrowRightLeft, ShoppingCart, Wallet, BarChart3, Users, TrendingUp, Clock, Star, LogOut, Gift, Copy } from "lucide-react";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -242,22 +232,28 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold mb-2">
-                {balance?.amount?.toFixed(2) || '0.00'} {balance?.currency || 'USD'}
+                {balance ? (balance.amount + balance.pending_amount).toFixed(2) : '0.00'} {balance?.currency || 'USD'}
               </div>
-              {balance && balance.pending_amount > 0 && (
-                <p className="text-xs text-muted-foreground mb-3">
-                  +{balance.pending_amount.toFixed(2)} {balance.currency} pending
-                </p>
-              )}
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="flex-1 text-xs">
+              <p className="text-xs text-muted-foreground mb-3">
+                Available: {balance?.amount?.toFixed(2) || '0.00'} | Pending: {balance?.pending_amount?.toFixed(2) || '0.00'}
+              </p>
+              <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-2 gap-1">
+                  <Button size="sm" variant="outline" className="text-xs" asChild>
+                    <Link to="/buy">
+                      <ShoppingCart className="h-3 w-3 mr-1" />
+                      Buy Cards
+                    </Link>
+                  </Button>
+                  <Button size="sm" variant="outline" className="text-xs">
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
                     Withdraw
                   </Button>
-                  <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
-                    <Link to="/buy">Buy Cards</Link>
-                  </Button>
                 </div>
+                <Button size="sm" variant="outline" className="text-xs w-full">
+                  <ArrowRightLeft className="h-3 w-3 mr-1" />
+                  Transfer
+                </Button>
                 <p className="text-xs text-muted-foreground">
                   Withdraw to: Bank, CashApp, PayPal, Venmo
                 </p>

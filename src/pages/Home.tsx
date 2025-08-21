@@ -24,12 +24,12 @@ const Home = () => {
     
     const { data } = await supabase
       .from('user_balances')
-      .select('amount, currency')
+      .select('amount, pending_amount, currency')
       .eq('user_id', user.id)
       .single();
     
     if (data) {
-      setBalance(data.amount || 0);
+      setBalance((data.amount || 0) + (data.pending_amount || 0));
       setCurrency(data.currency || 'USD');
     }
   };
