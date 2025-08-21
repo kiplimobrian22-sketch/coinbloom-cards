@@ -1,11 +1,39 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, CreditCard, DollarSign, Shield, Star, ArrowRight } from "lucide-react";
+import { CheckCircle, CreditCard, DollarSign, Shield, Star, ArrowRight, Wallet } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const Home = () => {
+  const { user } = useAuth();
+  const [balance, setBalance] = useState<number>(0);
+  const [currency, setCurrency] = useState<string>('USD');
+
+  useEffect(() => {
+    if (user) {
+      fetchBalance();
+    }
+  }, [user]);
+
+  const fetchBalance = async () => {
+    if (!user) return;
+    
+    const { data } = await supabase
+      .from('user_balances')
+      .select('amount, currency')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (data) {
+      setBalance(data.amount || 0);
+      setCurrency(data.currency || 'USD');
+    }
+  };
+
   const features = [
     {
       icon: CheckCircle,
@@ -68,10 +96,29 @@ const Home = () => {
             </p>
           </div>
           
+          {user && (
+            <div className="mb-6 animate-fade-in">
+              <Card className="inline-block bg-gradient-to-r from-primary/10 to-primary-glow/10 border-primary/20">
+                <CardContent className="p-4 flex items-center gap-3">
+                  <Wallet className="h-6 w-6 text-primary" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Available Balance</p>
+                    <p className="text-2xl font-bold text-primary">
+                      {new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: currency
+                      }).format(balance)}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+          
           <div className="mt-10 flex items-center justify-center gap-6 animate-slide-up">
             <Button size="lg" className="btn-hero" asChild>
-              <Link to="/auth">
-                Get Started
+              <Link to={user ? "/dashboard" : "/auth"}>
+                {user ? "Go to Dashboard" : "Get Started"}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

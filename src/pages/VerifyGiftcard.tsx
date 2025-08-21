@@ -7,12 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
 
 const VerifyGiftcard = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
@@ -34,27 +37,102 @@ const VerifyGiftcard = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please log in to verify your gift card.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      let frontImagePath = null;
+      let backImagePath = null;
 
-    toast({
-      title: "Verification Submitted",
-      description: "Your gift card verification request has been submitted successfully. You'll receive results via email within 24 hours.",
-    });
+      // Upload front image
+      if (formData.frontImage) {
+        const frontFileName = `${user.id}/front-${Date.now()}-${formData.frontImage.name}`;
+        const { error: frontUploadError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(frontFileName, formData.frontImage);
+        
+        if (frontUploadError) throw frontUploadError;
+        frontImagePath = frontFileName;
+      }
 
-    setIsSubmitting(false);
-    setFormData({
-      country: "",
-      giftcardName: "",
-      code: "",
-      pin: "",
-      amount: "",
-      email: "",
-      frontImage: null,
-      backImage: null
-    });
+      // Upload back image
+      if (formData.backImage) {
+        const backFileName = `${user.id}/back-${Date.now()}-${formData.backImage.name}`;
+        const { error: backUploadError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(backFileName, formData.backImage);
+        
+        if (backUploadError) throw backUploadError;
+        backImagePath = backFileName;
+      }
+
+      // Store verification request in database
+      const { error: dbError } = await supabase
+        .from('gift_card_verifications')
+        .insert({
+          user_id: user.id,
+          country: formData.country,
+          giftcard_name: formData.giftcardName,
+          code: formData.code,
+          pin: formData.pin,
+          amount: formData.amount,
+          email: formData.email,
+          front_image_path: frontImagePath,
+          back_image_path: backImagePath,
+          status: 'pending'
+        });
+
+      if (dbError) throw dbError;
+
+      // Create transaction record
+      const { error: transactionError } = await supabase
+        .from('transactions')
+        .insert({
+          user_id: user.id,
+          type: 'verification',
+          amount: 0,
+          currency: 'USD',
+          description: `Gift card verification - ${formData.giftcardName} (${formData.amount})`,
+          reference_id: null
+        });
+
+      if (transactionError) throw transactionError;
+
+      toast({
+        title: "Verification Submitted",
+        description: "Your gift card verification request has been submitted successfully. You'll receive results via email within 24 hours.",
+      });
+
+      setFormData({
+        country: "",
+        giftcardName: "",
+        code: "",
+        pin: "",
+        amount: "",
+        email: "",
+        frontImage: null,
+        backImage: null
+      });
+
+    } catch (error) {
+      console.error('Verification submission error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "There was an error submitting your verification. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {

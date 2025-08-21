@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      gift_card_verifications: {
+        Row: {
+          amount: string
+          back_image_path: string | null
+          code: string
+          country: string
+          created_at: string
+          email: string
+          front_image_path: string | null
+          giftcard_name: string
+          id: string
+          pin: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: string
+          back_image_path?: string | null
+          code: string
+          country: string
+          created_at?: string
+          email: string
+          front_image_path?: string | null
+          giftcard_name: string
+          id?: string
+          pin?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: string
+          back_image_path?: string | null
+          code?: string
+          country?: string
+          created_at?: string
+          email?: string
+          front_image_path?: string | null
+          giftcard_name?: string
+          id?: string
+          pin?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           country: Database["public"]["Enums"]["country_code"]
