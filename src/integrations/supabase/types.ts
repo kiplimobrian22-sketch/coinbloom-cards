@@ -14,7 +14,168 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          country: Database["public"]["Enums"]["country_code"]
+          created_at: string | null
+          currency: Database["public"]["Enums"]["currency_code"]
+          email: string
+          first_name: string | null
+          gift_cards_purchased: number | null
+          gift_cards_sold: number | null
+          gift_cards_verified: number | null
+          id: string
+          last_name: string | null
+          referral_code: string | null
+          referred_by_code: string | null
+          signup_bonus_earned: boolean | null
+          signup_bonus_redeemable: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          country?: Database["public"]["Enums"]["country_code"]
+          created_at?: string | null
+          currency?: Database["public"]["Enums"]["currency_code"]
+          email: string
+          first_name?: string | null
+          gift_cards_purchased?: number | null
+          gift_cards_sold?: number | null
+          gift_cards_verified?: number | null
+          id?: string
+          last_name?: string | null
+          referral_code?: string | null
+          referred_by_code?: string | null
+          signup_bonus_earned?: boolean | null
+          signup_bonus_redeemable?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          country?: Database["public"]["Enums"]["country_code"]
+          created_at?: string | null
+          currency?: Database["public"]["Enums"]["currency_code"]
+          email?: string
+          first_name?: string | null
+          gift_cards_purchased?: number | null
+          gift_cards_sold?: number | null
+          gift_cards_verified?: number | null
+          id?: string
+          last_name?: string | null
+          referral_code?: string | null
+          referred_by_code?: string | null
+          signup_bonus_earned?: boolean | null
+          signup_bonus_redeemable?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          bonus_amount: number | null
+          bonus_currency: Database["public"]["Enums"]["currency_code"] | null
+          bonus_earned: boolean | null
+          bonus_redeemable: boolean | null
+          created_at: string | null
+          id: string
+          referral_code: string
+          referred_user_id: string
+          referrer_user_id: string
+        }
+        Insert: {
+          bonus_amount?: number | null
+          bonus_currency?: Database["public"]["Enums"]["currency_code"] | null
+          bonus_earned?: boolean | null
+          bonus_redeemable?: boolean | null
+          created_at?: string | null
+          id?: string
+          referral_code: string
+          referred_user_id: string
+          referrer_user_id: string
+        }
+        Update: {
+          bonus_amount?: number | null
+          bonus_currency?: Database["public"]["Enums"]["currency_code"] | null
+          bonus_earned?: boolean | null
+          bonus_redeemable?: boolean | null
+          created_at?: string | null
+          id?: string
+          referral_code?: string
+          referred_user_id?: string
+          referrer_user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          admin_notes: string | null
+          admin_user_id: string | null
+          amount: number
+          created_at: string | null
+          currency: Database["public"]["Enums"]["currency_code"]
+          description: string | null
+          id: string
+          reference_id: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_user_id?: string | null
+          amount: number
+          created_at?: string | null
+          currency: Database["public"]["Enums"]["currency_code"]
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          type: Database["public"]["Enums"]["transaction_type"]
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_user_id?: string | null
+          amount?: number
+          created_at?: string | null
+          currency?: Database["public"]["Enums"]["currency_code"]
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          type?: Database["public"]["Enums"]["transaction_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_balances: {
+        Row: {
+          amount: number | null
+          created_at: string | null
+          currency: Database["public"]["Enums"]["currency_code"]
+          id: string
+          pending_amount: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string | null
+          currency: Database["public"]["Enums"]["currency_code"]
+          id?: string
+          pending_amount?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string | null
+          currency?: Database["public"]["Enums"]["currency_code"]
+          id?: string
+          pending_amount?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +184,36 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      country_code:
+        | "US"
+        | "CA"
+        | "AU"
+        | "GB"
+        | "DE"
+        | "FR"
+        | "ES"
+        | "IT"
+        | "NL"
+        | "BE"
+        | "AT"
+        | "IE"
+        | "PT"
+        | "FI"
+        | "SE"
+        | "DK"
+        | "NO"
+        | "CH"
+        | "LU"
+      currency_code: "USD" | "CAD" | "AUD" | "GBP" | "EUR"
+      transaction_type:
+        | "signup_bonus"
+        | "referral_bonus"
+        | "gift_card_purchase"
+        | "gift_card_sale"
+        | "gift_card_exchange"
+        | "deposit"
+        | "withdrawal"
+        | "admin_adjustment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +340,39 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      country_code: [
+        "US",
+        "CA",
+        "AU",
+        "GB",
+        "DE",
+        "FR",
+        "ES",
+        "IT",
+        "NL",
+        "BE",
+        "AT",
+        "IE",
+        "PT",
+        "FI",
+        "SE",
+        "DK",
+        "NO",
+        "CH",
+        "LU",
+      ],
+      currency_code: ["USD", "CAD", "AUD", "GBP", "EUR"],
+      transaction_type: [
+        "signup_bonus",
+        "referral_bonus",
+        "gift_card_purchase",
+        "gift_card_sale",
+        "gift_card_exchange",
+        "deposit",
+        "withdrawal",
+        "admin_adjustment",
+      ],
+    },
   },
 } as const

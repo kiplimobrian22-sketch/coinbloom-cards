@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, CreditCard } from "lucide-react";
+import { Menu, X, CreditCard, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, loading } = useAuth();
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -70,9 +72,20 @@ const Header = () => {
 
         {/* CTA Button */}
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Button className="btn-hero">
-            Get Started
-          </Button>
+          {loading ? (
+            <div className="animate-pulse bg-muted rounded-md h-10 w-24"></div>
+          ) : user ? (
+            <Button asChild className="btn-hero">
+              <Link to="/dashboard">
+                <User className="h-4 w-4 mr-2" />
+                Dashboard
+              </Link>
+            </Button>
+          ) : (
+            <Button asChild className="btn-hero">
+              <Link to="/auth">Get Started</Link>
+            </Button>
+          )}
         </div>
       </nav>
 
@@ -95,9 +108,20 @@ const Header = () => {
                 {item.name}
               </Link>
             ))}
-            <Button className="btn-hero w-full mt-4">
-              Get Started
-            </Button>
+            {loading ? (
+              <div className="animate-pulse bg-muted rounded-md h-10 w-full"></div>
+            ) : user ? (
+              <Button asChild className="btn-hero w-full mt-4">
+                <Link to="/dashboard">
+                  <User className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Link>
+              </Button>
+            ) : (
+              <Button asChild className="btn-hero w-full mt-4">
+                <Link to="/auth">Get Started</Link>
+              </Button>
+            )}
           </div>
         </div>
       )}
