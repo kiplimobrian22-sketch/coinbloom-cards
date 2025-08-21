@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CreditCard, Smartphone, DollarSign, Building } from "lucide-react";
+import { CreditCard, Smartphone, DollarSign, Building, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface CheckoutModalProps {
@@ -21,6 +21,8 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
   const { toast } = useToast();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("credit");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [paymentReceipt, setPaymentReceipt] = useState<File | null>(null);
+  const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
 
   const [creditCardForm, setCreditCardForm] = useState({
     cardNumber: "",
@@ -40,8 +42,36 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
     { id: "paypal", label: "PayPal", icon: DollarSign, tag: "payments@giftcardshub.com" }
   ];
 
+  const handleReceiptUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPaymentReceipt(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setReceiptPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeReceipt = () => {
+    setPaymentReceipt(null);
+    setReceiptPreview(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // For non-credit methods, require receipt upload
+    if (selectedPaymentMethod !== "credit" && !paymentReceipt) {
+      toast({
+        title: "Payment Receipt Required",
+        description: "Please upload a screenshot of your payment confirmation.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsProcessing(true);
 
     // Simulate payment processing
@@ -49,7 +79,9 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
 
     toast({
       title: "Order Placed Successfully!",
-      description: "Your gift cards will be delivered to your email within 5-10 minutes.",
+      description: selectedPaymentMethod === "credit" 
+        ? "Your gift cards will be delivered to your email within 5-10 minutes."
+        : "Payment received! Your order will be processed within 24 hours after verification.",
     });
 
     setIsProcessing(false);
@@ -218,6 +250,49 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
                         <p className="text-sm text-muted-foreground mt-4">
                           Include your order reference in the payment memo for faster processing
                         </p>
+                      </div>
+                      
+                      {/* Payment Receipt Upload */}
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="receipt">Upload Payment Receipt *</Label>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            Please upload a screenshot of your payment confirmation
+                          </p>
+                          {!receiptPreview ? (
+                            <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                              <Input
+                                id="receipt"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleReceiptUpload}
+                                className="hidden"
+                              />
+                              <Label htmlFor="receipt" className="cursor-pointer">
+                                <span className="text-sm font-medium">Click to upload receipt</span>
+                                <p className="text-xs text-muted-foreground">PNG, JPG up to 10MB</p>
+                              </Label>
+                            </div>
+                          ) : (
+                            <div className="relative">
+                              <img 
+                                src={receiptPreview} 
+                                alt="Payment receipt" 
+                                className="w-full max-h-40 object-cover rounded-lg border"
+                              />
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                size="sm"
+                                className="absolute top-2 right-2"
+                                onClick={removeReceipt}
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                       
                       <Button onClick={handleSubmit} className="w-full btn-primary" disabled={isProcessing}>
