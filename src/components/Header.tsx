@@ -71,16 +71,21 @@ const Header = () => {
         </div>
 
         {/* CTA Button */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-4">
           {loading ? (
             <div className="animate-pulse bg-muted rounded-md h-10 w-24"></div>
           ) : user ? (
-            <Button asChild className="btn-hero">
-              <Link to="/dashboard">
-                <User className="h-4 w-4 mr-2" />
-                Dashboard
-              </Link>
-            </Button>
+            <>
+              <div className="text-sm text-muted-foreground">
+                Balance: <span className="font-semibold text-primary">$0.00</span>
+              </div>
+              <Button asChild className="btn-hero">
+                <Link to="/dashboard">
+                  <User className="h-4 w-4 mr-2" />
+                  Dashboard
+                </Link>
+              </Button>
+            </>
           ) : (
             <Button asChild className="btn-hero">
               <Link to="/auth">Get Started</Link>
@@ -111,12 +116,17 @@ const Header = () => {
             {loading ? (
               <div className="animate-pulse bg-muted rounded-md h-10 w-full"></div>
             ) : user ? (
-              <Button asChild className="btn-hero w-full mt-4">
-                <Link to="/dashboard">
-                  <User className="h-4 w-4 mr-2" />
-                  Dashboard
-                </Link>
-              </Button>
+              <>
+                <div className="text-sm text-muted-foreground text-center mb-2">
+                  Balance: <span className="font-semibold text-primary">$0.00</span>
+                </div>
+                <Button asChild className="btn-hero w-full">
+                  <Link to="/dashboard">
+                    <User className="h-4 w-4 mr-2" />
+                    Dashboard
+                  </Link>
+                </Button>
+              </>
             ) : (
               <Button asChild className="btn-hero w-full mt-4">
                 <Link to="/auth">Get Started</Link>

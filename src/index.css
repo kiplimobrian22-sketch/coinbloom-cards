@@ -6,17 +6,17 @@
 
 @layer base {
   :root {
-    /* Base colors */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Base colors - Light theme default */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
     /* Card colors */
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
     /* Popover colors */
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     /* Primary - Deep blue gradient */
     --primary: 243 75% 59%;
@@ -44,8 +44,8 @@
     --destructive-foreground: 0 0% 98%;
 
     /* Border and input */
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
     --ring: 243 75% 59%;
 
     --radius: 0.75rem;
@@ -53,7 +53,7 @@
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-hero: linear-gradient(135deg, hsl(243 75% 59%), hsl(249 100% 76%));
-    --gradient-card: linear-gradient(145deg, hsl(240 10% 6%), hsl(240 10% 4%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 98%), hsl(240 5.9% 96%));
     --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(32 98% 58%));
     --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(150 80% 55%));
     
@@ -129,7 +129,6 @@
 
   body {
     @apply bg-background text-foreground;
-    background: var(--gradient-hero);
     min-height: 100vh;
   }
 }

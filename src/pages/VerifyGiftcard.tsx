@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
@@ -118,18 +119,16 @@ const VerifyGiftcard = () => {
 
                   <div className="space-y-2">
                     <Label htmlFor="giftcardName">Gift Card Brand *</Label>
-                    <Select value={formData.giftcardName} onValueChange={(value) => handleInputChange("giftcardName", value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select gift card brand" />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-60">
-                        {giftCards.map((card) => (
-                          <SelectItem key={card.name} value={card.name}>
-                            {card.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <SearchableSelect
+                      options={giftCards.map(card => ({
+                        value: card.name,
+                        label: `${card.name} ${card.requiresPin ? "(Code + PIN)" : "(Code Only)"}`
+                      }))}
+                      value={formData.giftcardName}
+                      onValueChange={(value) => handleInputChange("giftcardName", value)}
+                      placeholder="Select gift card brand"
+                      searchPlaceholder="Search gift cards..."
+                    />
                   </div>
                 </div>
 

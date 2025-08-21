@@ -75,8 +75,10 @@ const Home = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-foreground border-foreground/20 hover:border-primary">
-              Learn More
+            <Button variant="outline" size="lg" className="text-foreground border-foreground/20 hover:border-primary" asChild>
+              <Link to="/verify">
+                Verify Giftcard
+              </Link>
             </Button>
           </div>
         </div>

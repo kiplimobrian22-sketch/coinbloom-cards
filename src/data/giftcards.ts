@@ -65,5 +65,30 @@ export const giftCards: GiftCard[] = [
   { name: "Applebee's", requiresPin: true },
   { name: "Domino's", requiresPin: true },
   { name: "Panera Bread", requiresPin: true },
-  { name: "IHOP", requiresPin: true }
+  { name: "IHOP", requiresPin: true },
+
+  // Additional Code Only (No PIN Required)
+  { name: "Airbnb", requiresPin: false },
+  { name: "Lyft", requiresPin: false },
+  { name: "Tremendous", requiresPin: false },
+  { name: "Lululemon", requiresPin: false },
+  { name: "Disney (digital version)", requiresPin: false },
+  { name: "Verizon (digital version)", requiresPin: false },
+  { name: "Instacart", requiresPin: false },
+  { name: "Love2Shop (e-code format)", requiresPin: false },
+  { name: "Ikea (digital)", requiresPin: false },
+  { name: "JB Hi-Fi (AU digital codes)", requiresPin: false },
+
+  // Additional Code + PIN Required
+  { name: "Southwest Airlines", requiresPin: true },
+  { name: "One4All", requiresPin: true },
+  { name: "John Lewis", requiresPin: true },
+  { name: "Costco", requiresPin: true },
+  { name: "Sainsbury's", requiresPin: true },
+  { name: "Lidl", requiresPin: true },
+  { name: "Aldi", requiresPin: true },
+  { name: "Tesco", requiresPin: true },
+  { name: "Asda", requiresPin: true },
+  { name: "Currys", requiresPin: true },
+  { name: "Air Canada", requiresPin: true }
 ];

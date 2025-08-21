@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
@@ -171,40 +172,30 @@ const SellGiftcards = () => {
                     <div className="grid gap-6 md:grid-cols-2">
                       <div className="space-y-2">
                         <Label htmlFor="giftcardToTrade">Gift Card to Trade *</Label>
-                        <Select 
-                          value={exchangeForm.giftcardToTrade} 
+                        <SearchableSelect
+                          options={giftCards.map(card => ({
+                            value: card.name,
+                            label: `${card.name} ${card.requiresPin ? "(Code + PIN)" : "(Code Only)"}`
+                          }))}
+                          value={exchangeForm.giftcardToTrade}
                           onValueChange={(value) => setExchangeForm({...exchangeForm, giftcardToTrade: value})}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select gift card to trade" />
-                          </SelectTrigger>
-                          <SelectContent className="max-h-60">
-                            {giftCards.map((card) => (
-                              <SelectItem key={card.name} value={card.name}>
-                                {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          placeholder="Select gift card to trade"
+                          searchPlaceholder="Search gift cards..."
+                        />
                       </div>
 
                       <div className="space-y-2">
                         <Label htmlFor="giftcardWanted">Gift Card You Want *</Label>
-                        <Select 
-                          value={exchangeForm.giftcardWanted} 
+                        <SearchableSelect
+                          options={giftCards.map(card => ({
+                            value: card.name,
+                            label: `${card.name} ${card.requiresPin ? "(Code + PIN)" : "(Code Only)"}`
+                          }))}
+                          value={exchangeForm.giftcardWanted}
                           onValueChange={(value) => setExchangeForm({...exchangeForm, giftcardWanted: value})}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select gift card you want" />
-                          </SelectTrigger>
-                          <SelectContent className="max-h-60">
-                            {giftCards.map((card) => (
-                              <SelectItem key={card.name} value={card.name}>
-                                {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                          placeholder="Select gift card you want"
+                          searchPlaceholder="Search gift cards..."
+                        />
                       </div>
                     </div>
 
@@ -372,21 +363,16 @@ const SellGiftcards = () => {
 
                     <div className="space-y-2">
                       <Label htmlFor="giftcardName">Gift Card Brand *</Label>
-                      <Select 
-                        value={sellForm.giftcardName} 
+                      <SearchableSelect
+                        options={giftCards.map(card => ({
+                          value: card.name,
+                          label: `${card.name} ${card.requiresPin ? "(Code + PIN)" : "(Code Only)"}`
+                        }))}
+                        value={sellForm.giftcardName}
                         onValueChange={(value) => setSellForm({...sellForm, giftcardName: value})}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select gift card brand" />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-60">
-                          {giftCards.map((card) => (
-                            <SelectItem key={card.name} value={card.name}>
-                              {card.name} {card.requiresPin ? "(Code + PIN)" : "(Code Only)"}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        placeholder="Select gift card brand"
+                        searchPlaceholder="Search gift cards..."
+                      />
                     </div>
 
                     <div className="grid gap-6 md:grid-cols-2">
