@@ -147,7 +147,7 @@ const Footer = () => {
         {/* Bottom border */}
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-xs text-muted-foreground text-center">
-            © 2024 GiftHub. All rights reserved. Secure gift card transactions made simple.
+            © 2025 GiftHub. All rights reserved. Secure gift card transactions made simple.
           </p>
         </div>
       </div>

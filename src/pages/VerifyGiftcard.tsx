@@ -311,15 +311,17 @@ const VerifyGiftcard = () => {
                   />
                 </div>
 
-                {/* Security Notice */}
-                <div className="p-4 rounded-lg bg-muted/50 border border-border">
+                {/* Important Notice */}
+                <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 text-primary mt-0.5" />
+                    <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mt-0.5" />
                     <div>
-                      <h4 className="font-medium text-foreground mb-1">Security Notice</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Your information is encrypted and secure. We never store sensitive gift card data 
-                        and all verifications are processed through secure channels.
+                      <h4 className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Important Notice</h4>
+                      <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-2">
+                        Please ensure your gift card images are clearly visible and readable. Cards with scratched-off codes or poor image quality may be marked as invalid.
+                      </p>
+                      <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                        Your information is encrypted and secure. We never store sensitive gift card data and all verifications are processed through secure channels.
                       </p>
                     </div>
                   </div>

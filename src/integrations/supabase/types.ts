@@ -16,6 +16,10 @@ export type Database = {
     Tables: {
       gift_card_verifications: {
         Row: {
+          admin_notes: string | null
+          admin_result_amount: number | null
+          admin_result_type: string | null
+          admin_user_id: string | null
           amount: string
           back_image_path: string | null
           code: string
@@ -29,8 +33,13 @@ export type Database = {
           status: string
           updated_at: string
           user_id: string
+          verified_at: string | null
         }
         Insert: {
+          admin_notes?: string | null
+          admin_result_amount?: number | null
+          admin_result_type?: string | null
+          admin_user_id?: string | null
           amount: string
           back_image_path?: string | null
           code: string
@@ -44,8 +53,13 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id: string
+          verified_at?: string | null
         }
         Update: {
+          admin_notes?: string | null
+          admin_result_amount?: number | null
+          admin_result_type?: string | null
+          admin_user_id?: string | null
           amount?: string
           back_image_path?: string | null
           code?: string
@@ -59,6 +73,7 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+          verified_at?: string | null
         }
         Relationships: []
       }

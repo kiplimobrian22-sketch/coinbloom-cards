@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -50,12 +50,24 @@ interface Transaction {
   created_at: string;
 }
 
+interface GiftCardVerification {
+  id: string;
+  giftcard_name: string;
+  amount: string;
+  status: string;
+  admin_result_type: string | null;
+  admin_result_amount: number | null;
+  admin_notes: string | null;
+  created_at: string;
+}
+
 export default function Dashboard() {
   const { user, signOut, loading } = useAuth();
   const { toast } = useToast();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [balance, setBalance] = useState<UserBalance | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [verifications, setVerifications] = useState<GiftCardVerification[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
@@ -129,6 +141,17 @@ export default function Dashboard() {
 
       if (transactionsError) throw transactionsError;
       setTransactions(transactionsData || []);
+
+      // Fetch gift card verifications
+      const { data: verificationsData, error: verificationsError } = await supabase
+        .from('gift_card_verifications')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (verificationsError) throw verificationsError;
+      setVerifications(verificationsData || []);
 
     } catch (error: any) {
       toast({
@@ -218,14 +241,27 @@ export default function Dashboard() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-bold mb-2">
                 {balance?.amount?.toFixed(2) || '0.00'} {balance?.currency || 'USD'}
               </div>
               {balance && balance.pending_amount > 0 && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground mb-3">
                   +{balance.pending_amount.toFixed(2)} {balance.currency} pending
                 </p>
               )}
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" className="flex-1 text-xs">
+                    Withdraw
+                  </Button>
+                  <Button size="sm" variant="outline" className="flex-1 text-xs" asChild>
+                    <Link to="/buy">Buy Cards</Link>
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Withdraw to: Bank, CashApp, PayPal, Venmo
+                </p>
+              </div>
             </CardContent>
           </Card>
 
@@ -353,8 +389,8 @@ export default function Dashboard() {
               Your latest transactions and activities
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            {transactions.length > 0 ? (
+           <CardContent>
+            {(transactions.length > 0 || verifications.length > 0) ? (
               <div className="space-y-4">
                 {transactions.map((transaction) => (
                   <div key={transaction.id} className="flex items-center justify-between py-2">
@@ -370,6 +406,43 @@ export default function Dashboard() {
                       </p>
                       <Badge variant="outline" className="text-xs">
                         {transaction.type.replace('_', ' ')}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+                {verifications.map((verification) => (
+                  <div key={verification.id} className="flex items-center justify-between py-2">
+                    <div>
+                      <p className="font-medium">Gift Card Verification - {verification.giftcard_name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(verification.created_at).toLocaleDateString()} • Expected: {verification.amount}
+                      </p>
+                      {verification.admin_notes && (
+                        <p className="text-xs text-muted-foreground italic">Note: {verification.admin_notes}</p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      {verification.admin_result_type === 'valid' && verification.admin_result_amount ? (
+                        <p className="font-medium text-green-600">
+                          +${verification.admin_result_amount.toFixed(2)} USD
+                        </p>
+                      ) : verification.admin_result_type === 'used' ? (
+                        <p className="font-medium text-yellow-600">Card Used</p>
+                      ) : verification.admin_result_type === 'invalid' ? (
+                        <p className="font-medium text-red-600">Invalid Card</p>
+                      ) : (
+                        <p className="font-medium text-blue-600">Pending</p>
+                      )}
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs ${
+                          verification.admin_result_type === 'valid' ? 'border-green-200 text-green-700' :
+                          verification.admin_result_type === 'used' ? 'border-yellow-200 text-yellow-700' :
+                          verification.admin_result_type === 'invalid' ? 'border-red-200 text-red-700' :
+                          'border-blue-200 text-blue-700'
+                        }`}
+                      >
+                        {verification.admin_result_type || verification.status}
                       </Badge>
                     </div>
                   </div>
