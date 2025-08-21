@@ -69,9 +69,11 @@ const Home = () => {
           </div>
           
           <div className="mt-10 flex items-center justify-center gap-6 animate-slide-up">
-            <Button size="lg" className="btn-hero">
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" className="btn-hero" asChild>
+              <Link to="/auth">
+                Get Started
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
             <Button variant="outline" size="lg" className="text-foreground border-foreground/20 hover:border-primary">
               Learn More
@@ -166,9 +168,11 @@ const Home = () => {
             Join thousands of users who trust GiftcardsHub for secure gift card transactions
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="btn-hero">
-              Start Trading Now
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" className="btn-hero" asChild>
+              <Link to="/auth">
+                Start Trading Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
             <Link to="/reviews">
               <Button variant="outline" size="lg" className="text-foreground border-foreground/20 hover:border-primary">
