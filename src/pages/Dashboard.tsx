@@ -61,6 +61,39 @@ export default function Dashboard() {
   useEffect(() => {
     if (user) {
       fetchUserData();
+      
+      // Set up real-time subscription for transactions and verifications
+      const channel = supabase
+        .channel('dashboard-updates')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'transactions',
+            filter: `user_id=eq.${user.id}`
+          },
+          () => {
+            fetchUserData();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'gift_card_verifications',
+            filter: `user_id=eq.${user.id}`
+          },
+          () => {
+            fetchUserData();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user]);
 

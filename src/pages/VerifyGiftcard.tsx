@@ -98,7 +98,7 @@ const VerifyGiftcard = () => {
         .from('transactions')
         .insert({
           user_id: user.id,
-          type: 'verification',
+          type: 'gift_card_exchange',
           amount: 0,
           currency: 'USD',
           description: `Gift card verification - ${formData.giftcardName} (${formData.amount})`,
