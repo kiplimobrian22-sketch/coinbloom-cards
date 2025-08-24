@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, CreditCard, DollarSign, ArrowUpRight, ArrowRightLeft, ShoppingCart, Wallet, BarChart3, Users, TrendingUp, Clock, Star, LogOut, Gift, Copy } from "lucide-react";
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import WithdrawalModal from '@/components/WithdrawalModal';
 
 interface UserProfile {
   id: string;
@@ -59,6 +60,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [verifications, setVerifications] = useState<GiftCardVerification[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -245,7 +247,12 @@ export default function Dashboard() {
                       Buy Cards
                     </Link>
                   </Button>
-                  <Button size="sm" variant="outline" className="text-xs">
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs"
+                    onClick={() => setShowWithdrawalModal(true)}
+                  >
                     <ArrowUpRight className="h-3 w-3 mr-1" />
                     Withdraw
                   </Button>
@@ -453,6 +460,13 @@ export default function Dashboard() {
         </Card>
       </main>
       <Footer />
+      
+      <WithdrawalModal
+        isOpen={showWithdrawalModal}
+        onClose={() => setShowWithdrawalModal(false)}
+        availableBalance={balance?.amount || 0}
+        currency={balance?.currency || 'USD'}
+      />
     </div>
   );
 }
