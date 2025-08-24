@@ -13,17 +13,19 @@ interface WithdrawalModalProps {
   onClose: () => void;
   availableBalance: number;
   currency: string;
+  defaultTab?: string;
 }
 
 export default function WithdrawalModal({
   isOpen,
   onClose,
   availableBalance,
-  currency
+  currency,
+  defaultTab = 'bank'
 }: WithdrawalModalProps) {
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [withdrawalMethod, setWithdrawalMethod] = useState('bank');
+  const [withdrawalMethod, setWithdrawalMethod] = useState(defaultTab);
   const [amount, setAmount] = useState('');
   
   // Bank transfer form state

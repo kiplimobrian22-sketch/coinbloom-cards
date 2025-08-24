@@ -61,6 +61,7 @@ export default function Dashboard() {
   const [verifications, setVerifications] = useState<GiftCardVerification[]>([]);
   const [loadingData, setLoadingData] = useState(true);
   const [showWithdrawalModal, setShowWithdrawalModal] = useState(false);
+  const [withdrawalModalTab, setWithdrawalModalTab] = useState('bank');
 
   useEffect(() => {
     if (user) {
@@ -239,31 +240,39 @@ export default function Dashboard() {
               <p className="text-xs text-muted-foreground mb-3">
                 Available: {balance?.amount?.toFixed(2) || '0.00'} | Pending: {balance?.pending_amount?.toFixed(2) || '0.00'}
               </p>
-              <div className="grid grid-cols-1 gap-2">
+              <div className="flex flex-col gap-2">
+                <Button size="sm" variant="outline" className="text-xs" asChild>
+                  <Link to="/buy">
+                    <ShoppingCart className="h-3 w-3 mr-1" />
+                    Buy Gift Cards
+                  </Link>
+                </Button>
                 <div className="grid grid-cols-2 gap-1">
-                  <Button size="sm" variant="outline" className="text-xs" asChild>
-                    <Link to="/buy">
-                      <ShoppingCart className="h-3 w-3 mr-1" />
-                      Buy Cards
-                    </Link>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs"
+                    onClick={() => {
+                      setWithdrawalModalTab('bank');
+                      setShowWithdrawalModal(true);
+                    }}
+                  >
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
+                    Withdraw
                   </Button>
                   <Button 
                     size="sm" 
                     variant="outline" 
                     className="text-xs"
-                    onClick={() => setShowWithdrawalModal(true)}
+                    onClick={() => {
+                      setWithdrawalModalTab('transfer');
+                      setShowWithdrawalModal(true);
+                    }}
                   >
-                    <ArrowUpRight className="h-3 w-3 mr-1" />
-                    Withdraw
+                    <ArrowRightLeft className="h-3 w-3 mr-1" />
+                    Transfer
                   </Button>
                 </div>
-                <Button size="sm" variant="outline" className="text-xs w-full">
-                  <ArrowRightLeft className="h-3 w-3 mr-1" />
-                  Transfer
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  Withdraw to: Bank, CashApp, PayPal, Venmo
-                </p>
               </div>
             </CardContent>
           </Card>
@@ -461,11 +470,12 @@ export default function Dashboard() {
       </main>
       <Footer />
       
-      <WithdrawalModal
+      <WithdrawalModal 
         isOpen={showWithdrawalModal}
         onClose={() => setShowWithdrawalModal(false)}
         availableBalance={balance?.amount || 0}
         currency={balance?.currency || 'USD'}
+        defaultTab={withdrawalModalTab}
       />
     </div>
   );
