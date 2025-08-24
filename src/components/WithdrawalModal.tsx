@@ -110,9 +110,9 @@ export default function WithdrawalModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[600px] w-[95vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Withdraw Funds</DialogTitle>
+          <DialogTitle className="text-lg font-semibold">Withdraw Funds</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -136,17 +136,20 @@ export default function WithdrawalModal({
           </div>
 
           <Tabs value={withdrawalMethod} onValueChange={setWithdrawalMethod}>
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1 h-auto p-1">
               {withdrawalMethods.map((method) => {
                 const Icon = method.icon;
                 return (
                   <TabsTrigger 
                     key={method.id} 
                     value={method.id}
-                    className="text-xs flex flex-col gap-1 h-16"
+                    className="text-[10px] sm:text-xs flex flex-col gap-1 h-12 sm:h-16 px-1 py-2"
                   >
-                    <Icon className="h-4 w-4" />
-                    <span>{method.label}</span>
+                    <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <span className="hidden sm:block">{method.label}</span>
+                    <span className="sm:hidden text-[9px] leading-tight text-center">
+                      {method.label.split(' ')[0]}
+                    </span>
                   </TabsTrigger>
                 );
               })}
@@ -161,7 +164,7 @@ export default function WithdrawalModal({
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="accountNumber">Account Number</Label>
                       <Input
@@ -345,14 +348,14 @@ export default function WithdrawalModal({
             </TabsContent>
           </Tabs>
 
-          <div className="flex gap-3 pt-4">
-            <Button variant="outline" onClick={onClose} className="flex-1">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button variant="outline" onClick={onClose} className="flex-1 order-2 sm:order-1">
               Cancel
             </Button>
             <Button 
               onClick={handleSubmit} 
               disabled={isProcessing || !amount}
-              className="flex-1"
+              className="flex-1 order-1 sm:order-2"
             >
               {isProcessing ? (
                 <div className="flex items-center gap-2">
