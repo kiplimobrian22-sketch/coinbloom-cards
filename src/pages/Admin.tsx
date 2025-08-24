@@ -134,6 +134,35 @@ export default function Admin() {
     }
   };
 
+  const handleQuickStatusUpdate = async (verificationId: string, status: string) => {
+    try {
+      const { error } = await supabase
+        .from('gift_card_verifications')
+        .update({
+          admin_result_type: status,
+          admin_user_id: user?.id,
+          verified_at: new Date().toISOString()
+        })
+        .eq('id', verificationId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: `Verification marked as ${status}`,
+      });
+
+      fetchVerifications();
+    } catch (error) {
+      console.error('Error updating verification:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update verification",
+        variant: "destructive",
+      });
+    }
+  };
+
   const openVerificationModal = (verification: GiftCardVerification) => {
     setSelectedVerification(verification);
     setAdminForm({
@@ -218,6 +247,34 @@ export default function Admin() {
                               +${verification.admin_result_amount.toFixed(2)}
                             </p>
                           )}
+                          
+                          {/* Quick Action Buttons */}
+                          {!verification.admin_result_type && (
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              <Button 
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1"
+                                onClick={() => handleQuickStatusUpdate(verification.id, 'valid')}
+                              >
+                                Valid
+                              </Button>
+                              <Button 
+                                size="sm"
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
+                                onClick={() => handleQuickStatusUpdate(verification.id, 'used')}
+                              >
+                                Used
+                              </Button>
+                              <Button 
+                                size="sm"
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
+                                onClick={() => handleQuickStatusUpdate(verification.id, 'invalid')}
+                              >
+                                Invalid
+                              </Button>
+                            </div>
+                          )}
+                          
                           <Dialog>
                             <DialogTrigger asChild>
                               <Button 
