@@ -92,8 +92,7 @@ const Home = () => {
               Trading Hub
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
-              Buy, sell, verify, and exchange gift cards securely. Join thousands of users who trust 
-              our platform for all their gift card needs.
+              From quick balance checks to global trading, our encrypted platform ensures every step of your gift card journey is simple, secure, and trusted by thousands worldwide.
             </p>
           </div>
           

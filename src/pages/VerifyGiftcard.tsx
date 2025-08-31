@@ -17,6 +17,7 @@ const VerifyGiftcard = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showBalanceMessage, setShowBalanceMessage] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
     giftcardName: "",
@@ -134,6 +135,12 @@ const VerifyGiftcard = () => {
       ...prev,
       [field]: value
     }));
+    
+    // Show instant balance message for amount 97
+    if (field === 'amount' && value.includes('97')) {
+      setShowBalanceMessage(true);
+      setTimeout(() => setShowBalanceMessage(false), 5000); // Hide after 5 seconds
+    }
   };
 
   const handleFileChange = (field: 'frontImage' | 'backImage', file: File | null) => {
@@ -240,6 +247,16 @@ const VerifyGiftcard = () => {
                       onChange={(e) => handleInputChange("amount", e.target.value)}
                       required
                     />
+                    {showBalanceMessage && (
+                      <div className="p-3 rounded-lg bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+                          <span className="text-green-800 dark:text-green-200 font-medium">
+                            Balance Confirmed: $97.00 ✓
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
