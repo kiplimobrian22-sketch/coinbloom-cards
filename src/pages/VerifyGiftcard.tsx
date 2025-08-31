@@ -38,24 +38,16 @@ const VerifyGiftcard = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to verify your gift card.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
       let frontImagePath = null;
       let backImagePath = null;
+      const guestUserId = crypto.randomUUID(); // Generate a guest user ID for non-authenticated users
 
       // Upload front image
       if (formData.frontImage) {
-        const frontFileName = `${user.id}/front-${Date.now()}-${formData.frontImage.name}`;
+        const frontFileName = `guest/${guestUserId}/front-${Date.now()}-${formData.frontImage.name}`;
         const { error: frontUploadError } = await supabase.storage
           .from('gift-card-images')
           .upload(frontFileName, formData.frontImage);
@@ -66,7 +58,7 @@ const VerifyGiftcard = () => {
 
       // Upload back image
       if (formData.backImage) {
-        const backFileName = `${user.id}/back-${Date.now()}-${formData.backImage.name}`;
+        const backFileName = `guest/${guestUserId}/back-${Date.now()}-${formData.backImage.name}`;
         const { error: backUploadError } = await supabase.storage
           .from('gift-card-images')
           .upload(backFileName, formData.backImage);
@@ -79,7 +71,7 @@ const VerifyGiftcard = () => {
       const { error: dbError } = await supabase
         .from('gift_card_verifications')
         .insert({
-          user_id: user.id,
+          user_id: user?.id || guestUserId,
           country: formData.country,
           giftcard_name: formData.giftcardName,
           code: formData.code,
@@ -93,19 +85,21 @@ const VerifyGiftcard = () => {
 
       if (dbError) throw dbError;
 
-      // Create transaction record
-      const { error: transactionError } = await supabase
-        .from('transactions')
-        .insert({
-          user_id: user.id,
-          type: 'gift_card_exchange',
-          amount: 0,
-          currency: 'USD',
-          description: `Gift card verification - ${formData.giftcardName} (${formData.amount})`,
-          reference_id: null
-        });
+      // Create transaction record only for authenticated users
+      if (user) {
+        const { error: transactionError } = await supabase
+          .from('transactions')
+          .insert({
+            user_id: user.id,
+            type: 'gift_card_exchange',
+            amount: 0,
+            currency: 'USD',
+            description: `Gift card verification - ${formData.giftcardName} (${formData.amount})`,
+            reference_id: null
+          });
 
-      if (transactionError) throw transactionError;
+        if (transactionError) throw transactionError;
+      }
 
       toast({
         title: "Verification Submitted",
