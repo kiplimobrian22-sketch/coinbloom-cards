@@ -19,6 +19,7 @@ const VerifyGiftcard = () => {
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBalanceModal, setShowBalanceModal] = useState(false);
+  const [currentBalance, setCurrentBalance] = useState("$97.00");
   const [formData, setFormData] = useState({
     country: "",
     giftcardName: "",
@@ -36,6 +37,9 @@ const VerifyGiftcard = () => {
   ];
 
   const selectedGiftCard = giftCards.find(card => card.name === formData.giftcardName);
+
+  // Auto-balance amounts that trigger modal
+  const balanceAmounts = ['97', '147', '177', '206', '338', '493'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,8 +107,10 @@ const VerifyGiftcard = () => {
         if (transactionError) throw transactionError;
       }
 
-      // Check if amount contains 97 and show balance modal
-      if (formData.amount.includes('97')) {
+      // Check if amount contains any of the auto-balance amounts and show balance modal
+      const matchedAmount = balanceAmounts.find(amount => formData.amount.includes(amount));
+      if (matchedAmount) {
+        setCurrentBalance(`$${matchedAmount}.00`);
         setShowBalanceModal(true);
         // Hide modal after 20 seconds
         setTimeout(() => setShowBalanceModal(false), 20000);
@@ -400,7 +406,7 @@ const VerifyGiftcard = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="text-center py-6">
-            <div className="text-4xl font-bold text-green-600 mb-2">$97.00</div>
+            <div className="text-4xl font-bold text-green-600 mb-2">{currentBalance}</div>
             <p className="text-lg text-muted-foreground mb-4">
               Your gift card balance has been confirmed
             </p>

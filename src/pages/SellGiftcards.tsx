@@ -8,12 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
 
 const SellGiftcards = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("exchange");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -62,58 +65,175 @@ const SellGiftcards = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Exchange Request Submitted",
-      description: "Your gift card exchange request has been submitted. We'll process it within 24 hours.",
-    });
-    
-    setIsSubmitting(false);
-    setExchangeForm({
-      giftcardToTrade: "",
-      giftcardWanted: "",
-      amount: "",
-      code: "",
-      pin: "",
-      email: "",
-      frontImage: null,
-      backImage: null
-    });
+    try {
+      let userId = user?.id;
+      
+      // Generate a guest user ID if not authenticated
+      if (!userId) {
+        userId = crypto.randomUUID();
+      }
+
+      let frontImagePath = null;
+      let backImagePath = null;
+
+      // Upload images to Supabase Storage
+      if (exchangeForm.frontImage) {
+        const frontFileName = `${userId}/exchange-front-${Date.now()}-${exchangeForm.frontImage.name}`;
+        const { data: frontData, error: frontError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(frontFileName, exchangeForm.frontImage);
+
+        if (frontError) throw frontError;
+        frontImagePath = frontData.path;
+      }
+
+      if (exchangeForm.backImage) {
+        const backFileName = `${userId}/exchange-back-${Date.now()}-${exchangeForm.backImage.name}`;
+        const { data: backData, error: backError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(backFileName, exchangeForm.backImage);
+
+        if (backError) throw backError;
+        backImagePath = backData.path;
+      }
+
+      // Save to database
+      const { error } = await supabase
+        .from('exchange_requests')
+        .insert({
+          user_id: userId,
+          type: 'exchange',
+          email: exchangeForm.email,
+          giftcard_name: exchangeForm.giftcardToTrade,
+          giftcard_wanted: exchangeForm.giftcardWanted,
+          amount: exchangeForm.amount,
+          code: exchangeForm.code,
+          pin: exchangeForm.pin || null,
+          front_image_path: frontImagePath,
+          back_image_path: backImagePath,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Exchange Request Submitted",
+        description: "Your gift card exchange request has been submitted. We'll process it within 24 hours.",
+      });
+      
+      setExchangeForm({
+        giftcardToTrade: "",
+        giftcardWanted: "",
+        amount: "",
+        code: "",
+        pin: "",
+        email: "",
+        frontImage: null,
+        backImage: null
+      });
+
+    } catch (error) {
+      console.error('Error submitting exchange request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit exchange request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleSellSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    toast({
-      title: "Sell Request Submitted",
-      description: "Your gift card sale request has been submitted. Payment will be processed within 48 hours.",
-    });
-    
-    setIsSubmitting(false);
-    setSellForm({
-      paymentMethod: "",
-      accountDetails: "",
-      paymentDetails: {
-        bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
-        paypal: { email: "" },
-        cashapp: { tag: "" },
-        zelle: { email: "" },
-        venmo: { username: "" }
-      },
-      giftcardName: "",
-      code: "",
-      pin: "",
-      amount: "",
-      email: "",
-      frontImage: null,
-      backImage: null
-    });
+    try {
+      let userId = user?.id;
+      
+      // Generate a guest user ID if not authenticated
+      if (!userId) {
+        userId = crypto.randomUUID();
+      }
+
+      let frontImagePath = null;
+      let backImagePath = null;
+
+      // Upload images to Supabase Storage
+      if (sellForm.frontImage) {
+        const frontFileName = `${userId}/sell-front-${Date.now()}-${sellForm.frontImage.name}`;
+        const { data: frontData, error: frontError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(frontFileName, sellForm.frontImage);
+
+        if (frontError) throw frontError;
+        frontImagePath = frontData.path;
+      }
+
+      if (sellForm.backImage) {
+        const backFileName = `${userId}/sell-back-${Date.now()}-${sellForm.backImage.name}`;
+        const { data: backData, error: backError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(backFileName, sellForm.backImage);
+
+        if (backError) throw backError;
+        backImagePath = backData.path;
+      }
+
+      // Save to database
+      const { error } = await supabase
+        .from('exchange_requests')
+        .insert({
+          user_id: userId,
+          type: 'sell',
+          email: sellForm.email,
+          giftcard_name: sellForm.giftcardName,
+          amount: sellForm.amount,
+          code: sellForm.code,
+          pin: sellForm.pin || null,
+          payment_method: sellForm.paymentMethod,
+          payment_details: sellForm.paymentDetails[sellForm.paymentMethod as keyof typeof sellForm.paymentDetails],
+          front_image_path: frontImagePath,
+          back_image_path: backImagePath,
+          status: 'pending'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Sell Request Submitted",
+        description: "Your gift card sale request has been submitted. Payment will be processed within 48 hours.",
+      });
+      
+      setSellForm({
+        paymentMethod: "",
+        accountDetails: "",
+        paymentDetails: {
+          bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
+          paypal: { email: "" },
+          cashapp: { tag: "" },
+          zelle: { email: "" },
+          venmo: { username: "" }
+        },
+        giftcardName: "",
+        code: "",
+        pin: "",
+        amount: "",
+        email: "",
+        frontImage: null,
+        backImage: null
+      });
+
+    } catch (error) {
+      console.error('Error submitting sell request:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit sell request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

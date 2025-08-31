@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      exchange_requests: {
+        Row: {
+          admin_notes: string | null
+          admin_result_amount: number | null
+          admin_result_type: string | null
+          admin_user_id: string | null
+          amount: string
+          back_image_path: string | null
+          code: string
+          country: string | null
+          created_at: string
+          email: string
+          front_image_path: string | null
+          giftcard_name: string
+          giftcard_wanted: string | null
+          id: string
+          payment_details: Json | null
+          payment_method: string | null
+          pin: string | null
+          status: string
+          type: string
+          updated_at: string
+          user_id: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_result_amount?: number | null
+          admin_result_type?: string | null
+          admin_user_id?: string | null
+          amount: string
+          back_image_path?: string | null
+          code: string
+          country?: string | null
+          created_at?: string
+          email: string
+          front_image_path?: string | null
+          giftcard_name: string
+          giftcard_wanted?: string | null
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string | null
+          pin?: string | null
+          status?: string
+          type: string
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_result_amount?: number | null
+          admin_result_type?: string | null
+          admin_user_id?: string | null
+          amount?: string
+          back_image_path?: string | null
+          code?: string
+          country?: string | null
+          created_at?: string
+          email?: string
+          front_image_path?: string | null
+          giftcard_name?: string
+          giftcard_wanted?: string | null
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string | null
+          pin?: string | null
+          status?: string
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       gift_card_verifications: {
         Row: {
           admin_notes: string | null
