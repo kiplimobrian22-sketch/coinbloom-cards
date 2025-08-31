@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, CreditCard, DollarSign, Shield, Star, ArrowRight, Wallet } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, CreditCard, DollarSign, Shield, Star, ArrowRight, Wallet, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -37,8 +38,8 @@ const Home = () => {
   const features = [
     {
       icon: CheckCircle,
-      title: "Verify Giftcard",
-      description: "Instantly verify the authenticity and balance of your gift cards",
+      title: "Check Balance",
+      description: "Instantly check the balance and status of your gift cards",
       href: "/verify",
       color: "text-success",
     },
@@ -124,7 +125,7 @@ const Home = () => {
             </Button>
             <Button variant="outline" size="lg" className="text-foreground border-foreground/20 hover:border-primary" asChild>
               <Link to="/verify">
-                Verify Giftcard
+                Check Balance
               </Link>
             </Button>
           </div>
@@ -203,6 +204,116 @@ const Home = () => {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Reviews Section */}
+      <section className="py-24 px-6 lg:px-8 bg-muted/20">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-16">
+            <div className="inline-flex p-4 rounded-lg bg-gradient-to-br from-yellow-400/10 to-yellow-600/20 mb-6 animate-float">
+              <Star className="h-8 w-8 text-yellow-500" />
+            </div>
+            <h2 className="text-3xl font-bold text-foreground sm:text-4xl mb-4 animate-fade-in">
+              What Our Customers Say
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Join thousands of satisfied customers who trust us with their gift card needs
+            </p>
+          </div>
+
+          {/* Review Stats */}
+          <div className="grid gap-6 md:grid-cols-4 mb-12">
+            {[
+              { label: "Total Reviews", value: "2,500+" },
+              { label: "Average Rating", value: "4.8" },
+              { label: "5-Star Reviews", value: "89%" },
+              { label: "Verified Users", value: "95%" }
+            ].map((stat, index) => (
+              <div 
+                key={stat.label} 
+                className="text-center p-6 rounded-lg bg-card/50 border animate-fade-in hover:bg-card/80 transition-all duration-300" 
+                style={{ animationDelay: `${index * 0.1 + 0.3}s` }}
+              >
+                <div className="text-2xl font-bold text-primary mb-2">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Featured Reviews */}
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
+            {[
+              {
+                name: "Sarah Johnson",
+                rating: 5,
+                title: "Excellent Service!",
+                content: "Fast verification, competitive rates, and excellent customer support. Highly recommended!",
+                service: "Sell Giftcards"
+              },
+              {
+                name: "Michael Chen", 
+                rating: 5,
+                title: "Trustworthy Platform",
+                content: "Sold my Amazon gift cards and received payment within 24 hours. Great experience overall.",
+                service: "Buy Giftcards"
+              },
+              {
+                name: "Emily Rodriguez",
+                rating: 4,
+                title: "Quick and Easy",
+                content: "The balance check was straightforward and results came back faster than expected.",
+                service: "Check Balance"
+              }
+            ].map((review, index) => (
+              <div 
+                key={review.name}
+                className="card-glow p-6 animate-slide-up"
+                style={{ animationDelay: `${index * 0.2 + 0.5}s` }}
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-primary/20 to-primary-glow/20 rounded-full flex items-center justify-center">
+                    <User className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground">{review.name}</h4>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: 5 }, (_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3 w-3 ${
+                            i < review.rating ? "text-yellow-400 fill-current" : "text-muted-foreground/30"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <h5 className="font-medium text-foreground mb-2">{review.title}</h5>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                  {review.content}
+                </p>
+                <Badge variant="outline" className="text-xs">
+                  {review.service}
+                </Badge>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Button 
+              variant="outline" 
+              className="hover:bg-primary/10 hover:border-primary animate-fade-in" 
+              style={{ animationDelay: '1.1s' }}
+              asChild
+            >
+              <Link to="/reviews">View All Reviews</Link>
+            </Button>
           </div>
         </div>
       </section>
