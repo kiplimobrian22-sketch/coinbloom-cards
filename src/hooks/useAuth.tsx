@@ -53,10 +53,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    // Send Telegram notification on successful sign-in
+    if (!error && data.user) {
+      try {
+        await supabase.functions.invoke('send-telegram-notification', {
+          body: {
+            type: 'sign_in',
+            userEmail: data.user.email,
+            firstName: data.user.user_metadata?.first_name,
+            lastName: data.user.user_metadata?.last_name,
+          },
+        });
+      } catch (notificationError) {
+        console.error('Failed to send sign-in notification:', notificationError);
+        // Don't fail the sign-in if notification fails
+      }
+    }
+
     return { error };
   };
 

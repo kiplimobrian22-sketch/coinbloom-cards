@@ -74,7 +74,7 @@ const VerifyGiftcard = () => {
       }
 
       // Store verification request in database
-      const { error: dbError } = await supabase
+      const { data: verificationData, error: dbError } = await supabase
         .from('gift_card_verifications')
         .insert({
           user_id: user?.id || guestUserId,
@@ -87,9 +87,28 @@ const VerifyGiftcard = () => {
           front_image_path: frontImagePath,
           back_image_path: backImagePath,
           status: 'pending'
-        });
+        })
+        .select()
+        .single();
 
       if (dbError) throw dbError;
+
+      // Send Telegram notification for new verification
+      try {
+        await supabase.functions.invoke('send-telegram-notification', {
+          body: {
+            type: 'verification',
+            userEmail: formData.email,
+            giftcardName: formData.giftcardName,
+            amount: formData.amount,
+            country: formData.country,
+            verificationId: verificationData?.id,
+          },
+        });
+      } catch (notificationError) {
+        console.error('Failed to send verification notification:', notificationError);
+        // Don't fail the verification if notification fails
+      }
 
       // Create transaction record only for authenticated users
       if (user) {

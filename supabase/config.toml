@@ -1,1 +1,13 @@
 project_id = "xtenpennablsscizspsl"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+
+[auth.email]
+enable_signup = true
+
+[functions.send-telegram-notification]
+verify_jwt = false
