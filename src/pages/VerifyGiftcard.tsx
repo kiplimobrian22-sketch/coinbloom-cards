@@ -131,6 +131,7 @@ const VerifyGiftcard = () => {
             verificationId,
             frontImagePath,
             backImagePath,
+            isEGiftCard,
           },
         });
       } catch (notificationError) {
