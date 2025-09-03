@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,6 +21,7 @@ const VerifyGiftcard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [currentBalance, setCurrentBalance] = useState("$97.00");
+  const [isEGiftCard, setIsEGiftCard] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
     giftcardName: "",
