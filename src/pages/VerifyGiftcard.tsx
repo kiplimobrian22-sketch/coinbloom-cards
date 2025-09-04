@@ -306,55 +306,69 @@ const VerifyGiftcard = () => {
                   </div>
                 </div>
 
-                {/* Image Upload Section */}
-                <div className="space-y-4">
-                  <Label>Upload Gift Card Images *</Label>
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="frontImage">Front of Gift Card</Label>
-                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
-                        <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                        <Input
-                          id="frontImage"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange('frontImage', e.target.files?.[0] || null)}
-                          className="hidden"
-                          required
-                        />
-                        <Label htmlFor="frontImage" className="cursor-pointer">
-                          {formData.frontImage ? (
-                            <span className="text-primary font-medium">{formData.frontImage.name}</span>
-                          ) : (
-                            <span className="text-muted-foreground">Click to upload front image</span>
-                          )}
-                        </Label>
-                      </div>
-                    </div>
+                {/* E-Gift Card Checkbox */}
+                <div className="flex items-center space-x-2 p-4 rounded-lg bg-muted/20 border border-border">
+                  <Checkbox
+                    id="isEGiftCard"
+                    checked={isEGiftCard}
+                    onCheckedChange={(checked) => setIsEGiftCard(checked as boolean)}
+                  />
+                  <Label htmlFor="isEGiftCard" className="text-sm font-medium cursor-pointer">
+                    This is an e-gift card (digital only)
+                  </Label>
+                </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="backImage">Back of Gift Card</Label>
-                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
-                        <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                        <Input
-                          id="backImage"
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => handleFileChange('backImage', e.target.files?.[0] || null)}
-                          className="hidden"
-                          required
-                        />
-                        <Label htmlFor="backImage" className="cursor-pointer">
-                          {formData.backImage ? (
-                            <span className="text-primary font-medium">{formData.backImage.name}</span>
-                          ) : (
-                            <span className="text-muted-foreground">Click to upload back image</span>
-                          )}
-                        </Label>
+                {/* Image Upload Section - Conditional */}
+                {!isEGiftCard && (
+                  <div className="space-y-4">
+                    <Label>Upload Gift Card Images *</Label>
+                    <div className="grid gap-6 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="frontImage">Front of Gift Card</Label>
+                        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                          <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                          <Input
+                            id="frontImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange('frontImage', e.target.files?.[0] || null)}
+                            className="hidden"
+                            required
+                          />
+                          <Label htmlFor="frontImage" className="cursor-pointer">
+                            {formData.frontImage ? (
+                              <span className="text-primary font-medium">{formData.frontImage.name}</span>
+                            ) : (
+                              <span className="text-muted-foreground">Click to upload front image</span>
+                            )}
+                          </Label>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="backImage">Back of Gift Card</Label>
+                        <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary transition-colors">
+                          <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                          <Input
+                            id="backImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange('backImage', e.target.files?.[0] || null)}
+                            className="hidden"
+                            required
+                          />
+                          <Label htmlFor="backImage" className="cursor-pointer">
+                            {formData.backImage ? (
+                              <span className="text-primary font-medium">{formData.backImage.name}</span>
+                            ) : (
+                              <span className="text-muted-foreground">Click to upload back image</span>
+                            )}
+                          </Label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address *</Label>
@@ -367,6 +381,7 @@ const VerifyGiftcard = () => {
                     required
                   />
                 </div>
+
 
                 {/* Important Notice */}
                 <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800">

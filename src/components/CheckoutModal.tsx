@@ -241,14 +241,11 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
                       <div className="text-center p-8 border rounded-lg bg-muted/20">
                         <method.icon className="h-16 w-16 mx-auto mb-4 text-primary" />
                         <h3 className="text-xl font-semibold mb-2">Pay with {method.label}</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Send ${total.toFixed(2)} {currency} to:
-                        </p>
                         <div className="bg-background border rounded p-4">
-                          <p className="font-mono text-lg font-bold text-primary">{method.tag}</p>
+                          <p className="font-mono text-lg font-bold text-primary">Coming Soon</p>
                         </div>
                         <p className="text-sm text-muted-foreground mt-4">
-                          Include your order reference in the payment memo for faster processing
+                          This payment method will be available soon
                         </p>
                       </div>
                       
