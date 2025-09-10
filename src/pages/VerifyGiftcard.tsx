@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SearchableSelect } from "@/components/ui/searchable-select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
+import { Shield, CheckCircle, AlertCircle, Upload, Search, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,6 +22,7 @@ const VerifyGiftcard = () => {
   const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [currentBalance, setCurrentBalance] = useState("$97.00");
   const [isEGiftCard, setIsEGiftCard] = useState(false);
+  const [requestedCard, setRequestedCard] = useState("");
   const [formData, setFormData] = useState({
     country: "",
     giftcardName: "",
@@ -38,13 +39,111 @@ const VerifyGiftcard = () => {
     "France", "Japan", "Brazil", "India", "Mexico"
   ];
 
+  // Popular gift cards to display in grid (first 12)
+  const popularGiftCards = giftCards.slice(0, 12);
+
   const selectedGiftCard = giftCards.find(card => card.name === formData.giftcardName);
 
   // Auto-balance amounts that trigger modal
   const balanceAmounts = ['97', '147', '177', '206', '338', '493'];
 
+  const handleGiftCardSelect = (cardName: string) => {
+    setFormData(prev => ({
+      ...prev,
+      giftcardName: cardName
+    }));
+    // Scroll to verification form
+    document.getElementById('verification-form')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleCardRequest = () => {
+    if (requestedCard.trim()) {
+      toast({
+        title: "Request Submitted",
+        description: `Thank you! We'll consider adding "${requestedCard}" to our supported gift cards list.`,
+      });
+      setRequestedCard("");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate mandatory fields
+    if (!formData.country) {
+      toast({
+        title: "Missing Information",
+        description: "Country is a mandatory field. Please select your country.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.giftcardName) {
+      toast({
+        title: "Missing Information", 
+        description: "Gift Card Brand is a mandatory field. Please select a gift card brand.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.code) {
+      toast({
+        title: "Missing Information",
+        description: "Gift Card Code is a mandatory field. Please enter your gift card code.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (selectedGiftCard?.requiresPin && !formData.pin) {
+      toast({
+        title: "Missing Information",
+        description: "PIN is a mandatory field for this gift card. Please enter the PIN.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.amount) {
+      toast({
+        title: "Missing Information",
+        description: "Expected Amount is a mandatory field. Please enter the expected amount.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.email) {
+      toast({
+        title: "Missing Information",
+        description: "Email Address is a mandatory field. Please enter your email address.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate image uploads for physical cards
+    if (!isEGiftCard) {
+      if (!formData.frontImage) {
+        toast({
+          title: "Missing Information",
+          description: "Front image is mandatory for physical gift cards. Please upload the front image.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!formData.backImage) {
+        toast({
+          title: "Missing Information",
+          description: "Back image is mandatory for physical gift cards. Please upload the back image.",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
     
     setIsSubmitting(true);
 
@@ -225,8 +324,67 @@ const VerifyGiftcard = () => {
             </p>
           </div>
 
+          {/* Gift Card Browser */}
+          <div className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-foreground mb-4">
+                Browse our list of popular gift cards below.
+              </h2>
+              <p className="text-muted-foreground">
+                If you don't see the one you're looking for, simply type its name in the box — we'll record your request and do our best to add it soon!
+              </p>
+            </div>
+
+            {/* Popular Gift Cards Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+              {popularGiftCards.map((card) => (
+                <Card 
+                  key={card.name}
+                  className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-105 group"
+                  onClick={() => handleGiftCardSelect(card.name)}
+                >
+                  <CardContent className="p-4 text-center">
+                    <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-gradient-to-br from-primary/10 to-primary/20 flex items-center justify-center group-hover:from-primary/20 group-hover:to-primary/30 transition-colors">
+                      <CreditCard className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="font-medium text-sm text-foreground mb-1 group-hover:text-primary transition-colors">
+                      {card.name}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {card.requiresPin ? "Code + PIN" : "Code Only"}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Search/Request Box */}
+            <Card className="max-w-2xl mx-auto">
+              <CardContent className="p-6">
+                <div className="flex gap-3">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                    <Input
+                      placeholder="Can't find your gift card? Type its name here…"
+                      value={requestedCard}
+                      onChange={(e) => setRequestedCard(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleCardRequest}
+                    disabled={!requestedCard.trim()}
+                    className="shrink-0"
+                  >
+                    Check Balance
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* Verification Form */}
-          <Card className="card-glow">
+          <Card className="card-glow" id="verification-form">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-success" />
