@@ -94,17 +94,26 @@ export default function Admin() {
     switch (status) {
       case 'valid': return 'border-green-500 text-green-700 bg-green-50 dark:bg-green-900/20 dark:text-green-300 dark:border-green-600';
       case 'invalid': return 'border-red-500 text-red-700 bg-red-50 dark:bg-red-900/20 dark:text-red-300 dark:border-red-600';
-      case 'used': return 'border-red-500 text-red-700 bg-red-50 dark:bg-red-900/20 dark:text-red-300 dark:border-red-600';
+      case 'used': return 'border-gray-500 text-gray-700 bg-gray-50 dark:bg-gray-900/20 dark:text-gray-300 dark:border-gray-600';
       default: return 'border-blue-500 text-blue-700 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-600';
     }
   };
 
-  const getStatusEmoji = (status: string | null) => {
+  const getStatusIcon = (status: string | null) => {
     switch (status) {
-      case 'valid': return '🟢';
-      case 'invalid': return '🔴';
-      case 'used': return '🔴';
-      default: return '🔵';
+      case 'valid': return '✓';
+      case 'invalid': return '✗';
+      case 'used': return '⦸';
+      default: return '⏳';
+    }
+  };
+
+  const getStatusLabel = (status: string | null) => {
+    switch (status) {
+      case 'valid': return 'Valid';
+      case 'invalid': return 'Invalid'; 
+      case 'used': return 'Used';
+      default: return 'Pending';
     }
   };
 
@@ -234,7 +243,8 @@ export default function Admin() {
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold">{verification.giftcard_name}</h3>
                             <Badge className={getStatusColor(verification.admin_result_type || 'pending')}>
-                              {getStatusEmoji(verification.admin_result_type || 'pending')} {verification.admin_result_type ? verification.admin_result_type.charAt(0).toUpperCase() + verification.admin_result_type.slice(1) : 'Pending'}
+                              <span className="mr-1">{getStatusIcon(verification.admin_result_type || 'pending')}</span>
+                              {getStatusLabel(verification.admin_result_type || 'pending')}
                             </Badge>
                           </div>
                           <div className="text-sm text-muted-foreground space-y-1">

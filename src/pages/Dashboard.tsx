@@ -11,6 +11,7 @@ import { CheckCircle, CreditCard, DollarSign, ArrowUpRight, ArrowRightLeft, Shop
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WithdrawalModal from '@/components/WithdrawalModal';
+import GiftCardStatus from '@/components/GiftCardStatus';
 
 interface UserProfile {
   id: string;
@@ -320,7 +321,12 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Gift Cards Status Section */}
+          <div className="lg:col-span-2">
+            <GiftCardStatus />
+          </div>
+          
           {/* Welcome Bonus Card */}
           <Card>
             <CardHeader>
@@ -434,27 +440,49 @@ export default function Dashboard() {
                       )}
                     </div>
                     <div className="text-right">
-                      {verification.admin_result_type === 'valid' && verification.admin_result_amount ? (
-                        <p className="font-medium text-green-600">
-                          +${verification.admin_result_amount.toFixed(2)} USD
-                        </p>
-                      ) : verification.admin_result_type === 'used' ? (
-                        <p className="font-medium text-yellow-600">Card Used</p>
-                      ) : verification.admin_result_type === 'invalid' ? (
-                        <p className="font-medium text-red-600">Invalid Card</p>
-                      ) : (
-                        <p className="font-medium text-blue-600">Pending</p>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {verification.admin_result_type === 'valid' && verification.admin_result_amount ? (
+                          <>
+                            <span className="text-green-600 text-lg">✓</span>
+                            <p className="font-medium text-green-600">
+                              +${verification.admin_result_amount.toFixed(2)} USD
+                            </p>
+                          </>
+                        ) : verification.admin_result_type === 'used' ? (
+                          <>
+                            <span className="text-gray-600 text-lg">⦸</span>
+                            <p className="font-medium text-gray-600 line-through">Card Used</p>
+                          </>
+                        ) : verification.admin_result_type === 'invalid' ? (
+                          <>
+                            <span className="text-red-600 text-lg">✗</span>
+                            <p className="font-medium text-red-600">Invalid Card</p>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-blue-600 text-lg">⏳</span>
+                            <p className="font-medium text-blue-600">Pending Review</p>
+                          </>
+                        )}
+                      </div>
                       <Badge 
                         variant="outline" 
-                        className={`text-xs ${
-                          verification.admin_result_type === 'valid' ? 'border-green-200 text-green-700' :
-                          verification.admin_result_type === 'used' ? 'border-yellow-200 text-yellow-700' :
-                          verification.admin_result_type === 'invalid' ? 'border-red-200 text-red-700' :
-                          'border-blue-200 text-blue-700'
+                        className={`text-xs flex items-center gap-1 ${
+                          verification.admin_result_type === 'valid' ? 'border-green-200 text-green-700 bg-green-50' :
+                          verification.admin_result_type === 'used' ? 'border-gray-200 text-gray-700 bg-gray-50' :
+                          verification.admin_result_type === 'invalid' ? 'border-red-200 text-red-700 bg-red-50' :
+                          'border-blue-200 text-blue-700 bg-blue-50'
                         }`}
                       >
-                        {verification.admin_result_type || verification.status}
+                        {verification.admin_result_type === 'valid' ? (
+                          <>✓ Valid</>
+                        ) : verification.admin_result_type === 'used' ? (
+                          <>⦸ Used</>
+                        ) : verification.admin_result_type === 'invalid' ? (
+                          <>✗ Invalid</>
+                        ) : (
+                          <>⏳ {verification.status}</>
+                        )}
                       </Badge>
                     </div>
                   </div>
