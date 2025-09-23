@@ -267,32 +267,22 @@ export default function Admin() {
                             </p>
                           )}
                           
-                          {/* Quick Action Buttons */}
-                          {!verification.admin_result_type && (
-                            <div className="flex flex-wrap gap-2 mb-2">
-                              <Button 
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700 text-white px-3 py-1"
-                                onClick={() => handleQuickStatusUpdate(verification.id, 'valid')}
-                              >
-                                Valid
-                              </Button>
-                              <Button 
-                                size="sm"
-                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
-                                onClick={() => handleQuickStatusUpdate(verification.id, 'used')}
-                              >
-                                Used
-                              </Button>
-                              <Button 
-                                size="sm"
-                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1"
-                                onClick={() => handleQuickStatusUpdate(verification.id, 'invalid')}
-                              >
-                                Invalid
-                              </Button>
-                            </div>
-                          )}
+                          {/* Status Dropdown */}
+                          <div className="mb-2">
+                            <Select
+                              value={verification.admin_result_type || ""}
+                              onValueChange={(value) => handleQuickStatusUpdate(verification.id, value)}
+                            >
+                              <SelectTrigger className="w-32 h-8 bg-background border-2">
+                                <SelectValue placeholder="Set Status" />
+                              </SelectTrigger>
+                              <SelectContent className="bg-background border-2 shadow-lg z-50">
+                                <SelectItem value="valid">✓ Valid</SelectItem>
+                                <SelectItem value="used">⦸ Used</SelectItem>
+                                <SelectItem value="invalid">✗ Invalid</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
                           
                           <Dialog>
                             <DialogTrigger asChild>
