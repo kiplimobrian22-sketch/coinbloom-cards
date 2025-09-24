@@ -163,6 +163,7 @@ export type Database = {
           gift_cards_sold: number | null
           gift_cards_verified: number | null
           id: string
+          is_admin: boolean
           last_name: string | null
           referral_code: string | null
           referred_by_code: string | null
@@ -181,6 +182,7 @@ export type Database = {
           gift_cards_sold?: number | null
           gift_cards_verified?: number | null
           id?: string
+          is_admin?: boolean
           last_name?: string | null
           referral_code?: string | null
           referred_by_code?: string | null
@@ -199,6 +201,7 @@ export type Database = {
           gift_cards_sold?: number | null
           gift_cards_verified?: number | null
           id?: string
+          is_admin?: boolean
           last_name?: string | null
           referral_code?: string | null
           referred_by_code?: string | null
