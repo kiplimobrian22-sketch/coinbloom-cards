@@ -11,3 +11,6 @@ enable_signup = true
 
 [functions.send-telegram-notification]
 verify_jwt = false
+
+[functions.telegram-webhook]
+verify_jwt = false
