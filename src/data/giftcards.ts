@@ -95,5 +95,6 @@ export const giftCards: GiftCard[] = [
   { name: "Crate & Barrel", requiresPin: true },
   { name: "Fanatics Gift Card", requiresPin: true },
   { name: "Autozone", requiresPin: true },
-  { name: "JD Sport", requiresPin: true }
+  { name: "JD Sport", requiresPin: true },
+  { name: "Argos", requiresPin: true }
 ];

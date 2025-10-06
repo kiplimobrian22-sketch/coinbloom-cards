@@ -257,7 +257,7 @@ const VerifyGiftcard = () => {
                     <SearchableSelect
                       options={giftCards.map(card => ({
                         value: card.name,
-                        label: `${card.name} ${card.requiresPin ? "(Code + PIN)" : "(Code Only)"}`
+                        label: card.name
                       }))}
                       value={formData.giftcardName}
                       onValueChange={(value) => handleInputChange("giftcardName", value)}
