@@ -98,10 +98,8 @@ serve(async (req) => {
                 `🌍 Country: ${notificationData.country}\n` +
                 `🆔 ID: ${notificationData.verificationId}\n` +
                 `⏰ Time: ${new Date().toLocaleString()}\n\n` +
-                `*To process, reply with:*\n` +
-                `VALID ${notificationData.verificationId}\n` +
-                `INVALID ${notificationData.verificationId}\n` +
-                `USED ${notificationData.verificationId}`;
+                `*To process, reply to this message with:*\n` +
+                `VALID, INVALID, or USED`;
 
       // Send the text message first
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {

@@ -14,6 +14,9 @@ interface TelegramUpdate {
       id: number;
       username?: string;
     };
+    reply_to_message?: {
+      text?: string;
+    };
   };
 }
 
@@ -50,27 +53,50 @@ serve(async (req) => {
       });
     }
 
-    // Parse command format: "VALID/INVALID/USED {verification_id}"
-    const validPattern = /^VALID\s+([a-f0-9-]{36})$/i;
-    const invalidPattern = /^INVALID\s+([a-f0-9-]{36})$/i;
-    const usedPattern = /^USED\s+([a-f0-9-]{36})$/i;
-
     let status: string | null = null;
     let verificationId: string | null = null;
 
-    if (validPattern.test(messageText)) {
+    // Check if message is a reply to another message
+    const replyToMessage = update.message?.reply_to_message?.text;
+    
+    // Simple status commands
+    if (messageText === 'VALID') {
       status = 'valid';
-      verificationId = messageText.match(validPattern)![1];
-    } else if (invalidPattern.test(messageText)) {
+    } else if (messageText === 'INVALID') {
       status = 'invalid';
-      verificationId = messageText.match(invalidPattern)![1];
-    } else if (usedPattern.test(messageText)) {
+    } else if (messageText === 'USED') {
       status = 'used';
-      verificationId = messageText.match(usedPattern)![1];
+    }
+
+    // If we have a status from simple command, try to extract verification ID from reply
+    if (status && replyToMessage) {
+      // Extract verification ID from the original message (format: "ID: {uuid}")
+      const idMatch = replyToMessage.match(/ID:\s*([a-f0-9-]{36})/i);
+      if (idMatch) {
+        verificationId = idMatch[1];
+      }
+    }
+
+    // Fallback: Parse command format "VALID/INVALID/USED {verification_id}"
+    if (!status || !verificationId) {
+      const validPattern = /^VALID\s+([a-f0-9-]{36})$/i;
+      const invalidPattern = /^INVALID\s+([a-f0-9-]{36})$/i;
+      const usedPattern = /^USED\s+([a-f0-9-]{36})$/i;
+
+      if (validPattern.test(messageText)) {
+        status = 'valid';
+        verificationId = messageText.match(validPattern)![1];
+      } else if (invalidPattern.test(messageText)) {
+        status = 'invalid';
+        verificationId = messageText.match(invalidPattern)![1];
+      } else if (usedPattern.test(messageText)) {
+        status = 'used';
+        verificationId = messageText.match(usedPattern)![1];
+      }
     }
 
     if (!status || !verificationId) {
-      console.log('Message does not match expected format');
+      console.log('Message does not match expected format or missing verification ID');
       return new Response(JSON.stringify({ ok: true }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
