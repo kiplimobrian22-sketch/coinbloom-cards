@@ -121,21 +121,17 @@ serve(async (req) => {
       });
     }
 
-    // Mask the card number (show first 4 and last 4 digits)
+    // Mask the card number (show only last 4 digits)
     const cardCode = verification.code || '';
-    const maskedCard = maskCardNumber(cardCode);
+    const last4 = cardCode.slice(-4);
+    const maskedEnding = `******${last4}`;
 
     // Send email to user
-    const statusText = status === 'valid' ? 'valid' : status === 'invalid' ? 'invalid' : 'used';
+    const statusText = status === 'valid' ? 'Valid' : status === 'invalid' ? 'Invalid' : 'Used';
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #333;">Gift Card Verification Update</h2>
         <p>Dear Customer,</p>
-        <p>You have submitted a <strong>${statusText}</strong> gift card worth <strong>$${verification.amount}</strong> ending with <strong>${maskedCard}</strong>.</p>
-        ${status === 'valid' ? '<p style="color: green;">Your gift card has been verified and the amount will be credited to your account.</p>' : ''}
-        ${status === 'invalid' ? '<p style="color: red;">Unfortunately, your gift card could not be verified. Please contact support if you believe this is an error.</p>' : ''}
-        ${status === 'used' ? '<p style="color: orange;">This gift card has already been used and cannot be processed again.</p>' : ''}
-        <p>Thank you for using our service.</p>
+        <p>You have submitted a <strong>${statusText.toLowerCase()}</strong> ${verification.giftcard_name} worth <strong>${verification.amount}</strong> ending with <strong>${maskedEnding}</strong>.</p>
         <p>Best regards,<br/>Gift Card Verification Team</p>
       </div>
     `;
@@ -144,7 +140,7 @@ serve(async (req) => {
       const { error: emailError } = await resend.emails.send({
         from: 'Gift Card Verification <onboarding@resend.dev>',
         to: [verification.email],
-        subject: `Gift Card Verification Update - ${statusText.toUpperCase()}`,
+        subject: `${statusText} Giftcard`,
         html: emailHtml,
       });
 
