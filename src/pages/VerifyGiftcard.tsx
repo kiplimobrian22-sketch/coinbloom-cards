@@ -101,7 +101,7 @@ const VerifyGiftcard = () => {
         const { data, error } = await supabase
           .from('gift_card_verifications')
           .insert({
-            user_id: null,
+            user_id: guestUserId,
             country: formData.country,
             giftcard_name: formData.giftcardName,
             code: formData.code,

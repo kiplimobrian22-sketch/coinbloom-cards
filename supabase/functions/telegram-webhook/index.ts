@@ -164,7 +164,7 @@ serve(async (req) => {
 
     try {
       const { error: emailError } = await resend.emails.send({
-        from: 'Gift Card Verification Team <Team@giftcardvalidation.com>',
+        from: 'Gift Card Verification <onboarding@resend.dev>',
         to: [verification.email],
         subject: `${statusText} Giftcard`,
         html: emailHtml,
