@@ -98,7 +98,7 @@ const VerifyGiftcard = () => {
         if (error) throw error;
         verificationId = data?.id ?? null;
       } else {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('gift_card_verifications')
           .insert({
             user_id: guestUserId,
@@ -111,12 +111,9 @@ const VerifyGiftcard = () => {
             front_image_path: frontImagePath,
             back_image_path: backImagePath,
             status: 'pending'
-          })
-          .select()
-          .maybeSingle();
+          });
 
         if (error) throw error;
-        verificationId = data?.id ?? null;
       }
 
 
