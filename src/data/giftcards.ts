@@ -39,6 +39,7 @@ export const giftCards: GiftCard[] = [
   { name: "Delta Airlines", requiresPin: true },
   { name: "Walmart", requiresPin: true },
   { name: "Target", requiresPin: true },
+  { name: "Ticketmaster", requiresPin: true },
   { name: "Visa Gift Card", requiresPin: true },
   { name: "Mastercard Gift Card", requiresPin: true },
   { name: "American Express Gift Card", requiresPin: true },
