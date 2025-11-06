@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import GiftCardSlider from "@/components/GiftCardSlider";
 
 const Home = () => {
   const { user } = useAuth();
@@ -341,6 +342,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <GiftCardSlider />
 
       <Footer />
     </div>

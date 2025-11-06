@@ -184,6 +184,10 @@
   .animate-slide-up {
     animation: slideUp 0.8s ease-out forwards;
   }
+  
+  .animate-slide-infinite {
+    animation: slideInfinite 30s linear infinite;
+  }
 }
 
 @keyframes gradientShift {
@@ -223,5 +227,14 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes slideInfinite {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
