@@ -343,9 +343,9 @@ const Home = () => {
         </div>
       </section>
 
-      <GiftCardSlider />
-
       <Footer />
+      
+      <GiftCardSlider />
     </div>
   );
 };
