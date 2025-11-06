@@ -7,6 +7,11 @@ import bestbuyLogo from "@/assets/logos/bestbuy.png";
 import walmartLogo from "@/assets/logos/walmart.png";
 import johnlewisLogo from "@/assets/logos/johnlewis.png";
 import ikeaLogo from "@/assets/logos/ikea.png";
+import xboxLogo from "@/assets/logos/xbox.png";
+import amazonLogo from "@/assets/logos/amazon.png";
+import asdaLogo from "@/assets/logos/asda.png";
+import argosLogo from "@/assets/logos/argos.png";
+import lululemonLogo from "@/assets/logos/lululemon.png";
 
 const GiftCardSlider = () => {
   const giftCards = [
@@ -19,6 +24,11 @@ const GiftCardSlider = () => {
     { name: "Walmart", logo: walmartLogo },
     { name: "John Lewis", logo: johnlewisLogo },
     { name: "Ikea", logo: ikeaLogo },
+    { name: "Xbox", logo: xboxLogo },
+    { name: "Amazon", logo: amazonLogo },
+    { name: "Asda", logo: asdaLogo },
+    { name: "Argos", logo: argosLogo },
+    { name: "Lululemon", logo: lululemonLogo },
   ];
 
   // Duplicate the array to create seamless loop
