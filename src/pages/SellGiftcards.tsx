@@ -116,6 +116,21 @@ const SellGiftcards = () => {
 
       if (error) throw error;
 
+      // Send Telegram notification
+      await supabase.functions.invoke('send-telegram-notification', {
+        body: {
+          type: 'exchange',
+          email: exchangeForm.email,
+          giftcardToTrade: exchangeForm.giftcardToTrade,
+          giftcardWanted: exchangeForm.giftcardWanted,
+          amount: exchangeForm.amount,
+          code: exchangeForm.code,
+          pin: exchangeForm.pin || 'N/A',
+          frontImagePath: frontImagePath,
+          backImagePath: backImagePath
+        }
+      });
+
       toast({
         title: "Exchange Request Submitted",
         description: "Your gift card exchange request has been submitted. We'll process it within 24 hours.",
@@ -199,6 +214,22 @@ const SellGiftcards = () => {
         });
 
       if (error) throw error;
+
+      // Send Telegram notification
+      await supabase.functions.invoke('send-telegram-notification', {
+        body: {
+          type: 'sell',
+          email: sellForm.email,
+          giftcardName: sellForm.giftcardName,
+          amount: sellForm.amount,
+          code: sellForm.code,
+          pin: sellForm.pin || 'N/A',
+          paymentMethod: sellForm.paymentMethod,
+          paymentDetails: sellForm.paymentDetails[sellForm.paymentMethod as keyof typeof sellForm.paymentDetails],
+          frontImagePath: frontImagePath,
+          backImagePath: backImagePath
+        }
+      });
 
       toast({
         title: "Sell Request Submitted",

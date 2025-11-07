@@ -8,6 +8,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CheckoutModal from "@/components/CheckoutModal";
 import { useToast } from "@/hooks/use-toast";
+import amazonLogo from "@/assets/logos/amazon.png";
+import itunesLogo from "@/assets/logos/itunes.png";
+import googlePlayLogo from "@/assets/logos/googleplay.png";
+import steamLogo from "@/assets/logos/steam.png";
+import walmartLogo from "@/assets/logos/walmart.png";
+import playstationLogo from "@/assets/logos/playstation.png";
 
 const BuyGiftcards = () => {
   const { toast } = useToast();
@@ -21,7 +27,7 @@ const BuyGiftcards = () => {
       id: 1,
       name: "Amazon",
       description: "Shop everything on Amazon with instant delivery",
-      image: "/placeholder.svg?height=80&width=80",
+      image: amazonLogo,
       denominations: [10, 25, 50, 100, 200],
       rating: 4.9,
       discount: "2% off",
@@ -31,7 +37,7 @@ const BuyGiftcards = () => {
       id: 2,
       name: "iTunes",
       description: "Music, movies, apps, and more from Apple",
-      image: "/placeholder.svg?height=80&width=80",
+      image: itunesLogo,
       denominations: [15, 25, 50, 100],
       rating: 4.8,
       discount: "3% off",
@@ -41,7 +47,7 @@ const BuyGiftcards = () => {
       id: 3,
       name: "Google Play",
       description: "Apps, games, and digital content",
-      image: "/placeholder.svg?height=80&width=80",
+      image: googlePlayLogo,
       denominations: [10, 25, 50, 100],
       rating: 4.7,
       discount: "1% off",
@@ -51,7 +57,7 @@ const BuyGiftcards = () => {
       id: 4,
       name: "Steam",
       description: "Gaming platform with thousands of games",
-      image: "/placeholder.svg?height=80&width=80",
+      image: steamLogo,
       denominations: [20, 50, 100],
       rating: 4.9,
       discount: "5% off",
@@ -61,7 +67,7 @@ const BuyGiftcards = () => {
       id: 5,
       name: "Walmart",
       description: "Shop at America's largest retailer",
-      image: "/placeholder.svg?height=80&width=80",
+      image: walmartLogo,
       denominations: [25, 50, 100, 200],
       rating: 4.6,
       discount: "2% off",
@@ -71,7 +77,7 @@ const BuyGiftcards = () => {
       id: 6,
       name: "PlayStation",
       description: "Games and content for PlayStation consoles",
-      image: "/placeholder.svg?height=80&width=80",
+      image: playstationLogo,
       denominations: [25, 50, 100],
       rating: 4.8,
       discount: "4% off",
