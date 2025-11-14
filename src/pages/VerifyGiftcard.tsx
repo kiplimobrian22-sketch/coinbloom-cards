@@ -21,6 +21,7 @@ const VerifyGiftcard = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [currentBalance, setCurrentBalance] = useState("$97.00");
+  const [currentGiftCardName, setCurrentGiftCardName] = useState("");
   const [isEGiftCard, setIsEGiftCard] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
@@ -159,6 +160,7 @@ const VerifyGiftcard = () => {
       const matchedAmount = balanceAmounts.find(amount => formData.amount.includes(amount));
       if (matchedAmount) {
         setCurrentBalance(`$${matchedAmount}.00`);
+        setCurrentGiftCardName(formData.giftcardName);
         // Add a 2 second delay before showing the modal
         setTimeout(() => {
           setShowBalanceModal(true);
@@ -484,7 +486,7 @@ const VerifyGiftcard = () => {
               {/* Gift Card Name */}
               <div className="px-6 py-3 rounded-xl bg-gradient-to-r from-background/80 to-background/60 backdrop-blur-sm border border-border/50">
                 <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Gift Card</p>
-                <p className="text-lg font-semibold text-foreground">{formData.giftcardName}</p>
+                <p className="text-lg font-semibold text-foreground">{currentGiftCardName}</p>
               </div>
               
               {/* Balance Amount */}
