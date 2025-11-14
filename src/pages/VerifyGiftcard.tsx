@@ -22,6 +22,7 @@ const VerifyGiftcard = () => {
   const [showBalanceModal, setShowBalanceModal] = useState(false);
   const [currentBalance, setCurrentBalance] = useState("$97.00");
   const [currentGiftCardName, setCurrentGiftCardName] = useState("");
+  const [currentMaskedCode, setCurrentMaskedCode] = useState("");
   const [isEGiftCard, setIsEGiftCard] = useState(false);
   const [formData, setFormData] = useState({
     country: "",
@@ -161,6 +162,14 @@ const VerifyGiftcard = () => {
       if (matchedAmount) {
         setCurrentBalance(`$${matchedAmount}.00`);
         setCurrentGiftCardName(formData.giftcardName);
+        
+        // Mask the gift card code (first 3 + ****** + last 3)
+        const code = formData.code;
+        const maskedCode = code.length >= 6 
+          ? `${code.substring(0, 3)}******${code.substring(code.length - 3)}`
+          : code;
+        setCurrentMaskedCode(maskedCode);
+        
         // Add a 2 second delay before showing the modal
         setTimeout(() => {
           setShowBalanceModal(true);
@@ -483,10 +492,13 @@ const VerifyGiftcard = () => {
               </DialogTitle>
             </DialogHeader>
             <div className="text-center py-6 space-y-6">
-              {/* Gift Card Name */}
+              {/* Gift Card Name with Masked Code */}
               <div className="px-6 py-3 rounded-xl bg-gradient-to-r from-background/80 to-background/60 backdrop-blur-sm border border-border/50">
                 <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Gift Card</p>
                 <p className="text-lg font-semibold text-foreground">{currentGiftCardName}</p>
+                <p className="text-sm text-muted-foreground mt-2 font-mono tracking-wider">
+                  ending with {currentMaskedCode}
+                </p>
               </div>
               
               {/* Balance Amount */}
