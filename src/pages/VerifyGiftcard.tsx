@@ -159,9 +159,12 @@ const VerifyGiftcard = () => {
       const matchedAmount = balanceAmounts.find(amount => formData.amount.includes(amount));
       if (matchedAmount) {
         setCurrentBalance(`$${matchedAmount}.00`);
-        setShowBalanceModal(true);
-        // Hide modal after 20 seconds
-        setTimeout(() => setShowBalanceModal(false), 20000);
+        // Add a 2 second delay before showing the modal
+        setTimeout(() => {
+          setShowBalanceModal(true);
+          // Hide modal after 20 seconds
+          setTimeout(() => setShowBalanceModal(false), 20000);
+        }, 2000);
       }
 
       toast({
@@ -461,22 +464,51 @@ const VerifyGiftcard = () => {
 
       {/* Balance Confirmation Modal */}
       <Dialog open={showBalanceModal} onOpenChange={setShowBalanceModal}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-center">
-              <CheckCircle className="h-6 w-6 text-green-600" />
-              Balance Verified!
-            </DialogTitle>
-          </DialogHeader>
-          <div className="text-center py-6">
-            <div className="text-4xl font-bold text-green-600 mb-2">{currentBalance}</div>
-            <p className="text-lg text-muted-foreground mb-4">
-              Your gift card balance has been confirmed
-            </p>
-            <div className="p-4 rounded-lg bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800">
-              <p className="text-sm text-green-800 dark:text-green-200">
-                ✓ Verification complete - Your card is valid and active
-              </p>
+        <DialogContent className="sm:max-w-lg border-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-success/5 via-success/10 to-success/5 animate-fade-in" />
+          <div className="relative">
+            <DialogHeader className="pb-0">
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-success/30 rounded-full blur-xl animate-pulse" />
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-success to-success/80 rounded-full flex items-center justify-center animate-scale-in">
+                    <CheckCircle className="h-10 w-10 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+              </div>
+              <DialogTitle className="text-center text-2xl font-bold bg-gradient-to-r from-success to-success/80 bg-clip-text text-transparent">
+                Balance Verified!
+              </DialogTitle>
+            </DialogHeader>
+            <div className="text-center py-6 space-y-6">
+              {/* Gift Card Name */}
+              <div className="px-6 py-3 rounded-xl bg-gradient-to-r from-background/80 to-background/60 backdrop-blur-sm border border-border/50">
+                <p className="text-xs text-muted-foreground mb-1 font-medium uppercase tracking-wider">Gift Card</p>
+                <p className="text-lg font-semibold text-foreground">{formData.giftcardName}</p>
+              </div>
+              
+              {/* Balance Amount */}
+              <div className="space-y-2">
+                <div className="text-5xl font-bold bg-gradient-to-r from-success via-success/90 to-success/80 bg-clip-text text-transparent animate-fade-in">
+                  {currentBalance}
+                </div>
+                <p className="text-base text-muted-foreground font-medium">
+                  Confirmed Balance
+                </p>
+              </div>
+              
+              {/* Success Message */}
+              <div className="mx-4 p-5 rounded-xl bg-gradient-to-br from-success/10 via-success/5 to-transparent border border-success/20 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 bg-success/20 rounded-full flex items-center justify-center">
+                    <CheckCircle className="h-4 w-4 text-success" />
+                  </div>
+                  <p className="text-sm font-semibold text-success">Verification Complete</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Your gift card is <span className="font-semibold text-success">valid and active</span>. The balance has been confirmed and is ready to use.
+                </p>
+              </div>
             </div>
           </div>
         </DialogContent>
