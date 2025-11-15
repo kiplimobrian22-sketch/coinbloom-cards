@@ -107,7 +107,7 @@ export type Database = {
           pin: string | null
           status: string
           updated_at: string
-          user_id: string
+          user_id: string | null
           verified_at: string | null
         }
         Insert: {
@@ -127,7 +127,7 @@ export type Database = {
           pin?: string | null
           status?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
           verified_at?: string | null
         }
         Update: {
@@ -147,7 +147,7 @@ export type Database = {
           pin?: string | null
           status?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
           verified_at?: string | null
         }
         Relationships: []
@@ -322,10 +322,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_current_user_admin: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      is_current_user_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       country_code:
