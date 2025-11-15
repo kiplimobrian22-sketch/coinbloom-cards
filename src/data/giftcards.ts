@@ -73,7 +73,7 @@ export const giftCards: GiftCard[] = [
   { name: "Lyft", requiresPin: false },
   { name: "Tremendous", requiresPin: false },
   { name: "Lululemon", requiresPin: false },
-  { name: "Disney (digital version)", requiresPin: false },
+  { name: "Disney (digital version)", requiresPin: true },
   { name: "Verizon (digital version)", requiresPin: false },
   { name: "Instacart", requiresPin: false },
   { name: "Love2Shop (e-code format)", requiresPin: false },
