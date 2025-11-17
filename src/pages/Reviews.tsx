@@ -12,6 +12,116 @@ const Reviews = () => {
   const reviews = [
     {
       id: 1,
+      name: "Amanda Martinez",
+      rating: 5,
+      title: "Perfect Experience!",
+      content: "Just completed another transaction with GiftHub and as always, it was seamless. The platform continues to improve and their service is top-notch. Highly recommend to anyone!",
+      date: "November 2025",
+      verified: true,
+      service: "Sell Giftcards"
+    },
+    {
+      id: 2,
+      name: "James Patterson",
+      rating: 5,
+      title: "Reliable and Fast",
+      content: "Been using GiftHub throughout 2025 and they never disappoint. Fast processing, great rates, and excellent communication. This is my go-to platform for gift cards.",
+      date: "October 2025",
+      verified: true,
+      service: "Buy Giftcards"
+    },
+    {
+      id: 3,
+      name: "Lisa Anderson",
+      rating: 5,
+      title: "Best Gift Card Service",
+      content: "I've tried multiple platforms but GiftHub stands out. Their verification is quick, rates are competitive, and customer service is responsive. Been a customer since early 2025.",
+      date: "September 2025",
+      verified: true,
+      service: "Verify Giftcard"
+    },
+    {
+      id: 4,
+      name: "Marcus Johnson",
+      rating: 4,
+      title: "Great Platform",
+      content: "Sold multiple gift cards through GiftHub this year. The process is straightforward and payments are always on time. Only minor suggestion would be faster verification for large amounts.",
+      date: "August 2025",
+      verified: true,
+      service: "Sell Giftcards"
+    },
+    {
+      id: 5,
+      name: "Sophia Lee",
+      rating: 5,
+      title: "Excellent Customer Care",
+      content: "Had an issue with a transaction and their support team went above and beyond to help. Resolved everything within a few hours. This level of service is rare these days!",
+      date: "July 2025",
+      verified: true,
+      service: "Buy Giftcards"
+    },
+    {
+      id: 6,
+      name: "Daniel Brown",
+      rating: 5,
+      title: "Trustworthy and Secure",
+      content: "Security is my top concern when dealing with gift cards online. GiftHub has proven to be completely trustworthy. Used them multiple times with zero issues.",
+      date: "June 2025",
+      verified: true,
+      service: "Sell Giftcards"
+    },
+    {
+      id: 7,
+      name: "Rachel White",
+      rating: 5,
+      title: "Fast Verification",
+      content: "The verification service is incredibly fast! Got results within an hour which saved me from a potential scam. Worth every penny for peace of mind.",
+      date: "May 2025",
+      verified: true,
+      service: "Verify Giftcard"
+    },
+    {
+      id: 8,
+      name: "Kevin Torres",
+      rating: 4,
+      title: "Good Exchange Rates",
+      content: "Been exchanging gift cards on GiftHub for months now. Their rates are consistently better than competitors. The 10% discount for exchanges is a great bonus!",
+      date: "April 2025",
+      verified: true,
+      service: "Sell Giftcards"
+    },
+    {
+      id: 9,
+      name: "Michelle Garcia",
+      rating: 5,
+      title: "Professional Service",
+      content: "Very impressed with the professionalism of this platform. Everything is clear, transparent, and secure. This is how gift card services should operate!",
+      date: "March 2025",
+      verified: true,
+      service: "Buy Giftcards"
+    },
+    {
+      id: 10,
+      name: "Brian Cooper",
+      rating: 5,
+      title: "Highly Recommended",
+      content: "Found GiftHub early this year and haven't looked back. They offer the best rates, fastest processing, and most reliable service. Can't recommend them enough!",
+      date: "February 2025",
+      verified: true,
+      service: "Sell Giftcards"
+    },
+    {
+      id: 11,
+      name: "Jennifer Davis",
+      rating: 5,
+      title: "Amazing Start to 2025",
+      content: "Started using GiftHub in January and it's been fantastic. The verification feature alone has saved me hundreds of dollars by catching invalid cards. Great service!",
+      date: "January 2025",
+      verified: true,
+      service: "Verify Giftcard"
+    },
+    {
+      id: 12,
       name: "Sarah Johnson",
       rating: 5,
       title: "Excellent Service!",
@@ -21,7 +131,7 @@ const Reviews = () => {
       service: "Sell Giftcards"
     },
     {
-      id: 2,
+      id: 13,
       name: "Michael Chen",
       rating: 5,
       title: "Trustworthy Platform",
@@ -31,7 +141,7 @@ const Reviews = () => {
       service: "Buy Giftcards"
     },
     {
-      id: 3,
+      id: 14,
       name: "Emily Rodriguez",
       rating: 4,
       title: "Quick and Easy",
@@ -41,7 +151,7 @@ const Reviews = () => {
       service: "Verify Giftcard"
     },
     {
-      id: 4,
+      id: 15,
       name: "David Thompson",
       rating: 5,
       title: "Best Rates Available",
@@ -51,7 +161,7 @@ const Reviews = () => {
       service: "Sell Giftcards"
     },
     {
-      id: 5,
+      id: 16,
       name: "Jessica Wilson",
       rating: 5,
       title: "Outstanding Support",
@@ -61,7 +171,7 @@ const Reviews = () => {
       service: "Buy Giftcards"
     },
     {
-      id: 6,
+      id: 17,
       name: "Robert Kim",
       rating: 4,
       title: "Smooth Exchange Process",
