@@ -26,6 +26,7 @@ const SellGiftcards = () => {
     amount: "",
     code: "",
     pin: "",
+    ecode: "",
     email: "",
     frontImage: null as File | null,
     backImage: null as File | null
@@ -44,6 +45,7 @@ const SellGiftcards = () => {
     giftcardName: "",
     code: "",
     pin: "",
+    ecode: "",
     amount: "",
     email: "",
     frontImage: null as File | null,
@@ -97,6 +99,9 @@ const SellGiftcards = () => {
         backImagePath = backData.path;
       }
 
+      // Calculate adjusted amount with 10% deduction
+      const adjustedAmount = parseFloat(exchangeForm.amount) * 0.9;
+
       // Save to database
       const { error } = await supabase
         .from('exchange_requests')
@@ -106,7 +111,7 @@ const SellGiftcards = () => {
           email: exchangeForm.email,
           giftcard_name: exchangeForm.giftcardToTrade,
           giftcard_wanted: exchangeForm.giftcardWanted,
-          amount: exchangeForm.amount,
+          amount: adjustedAmount.toString(),
           code: exchangeForm.code,
           pin: exchangeForm.pin || null,
           front_image_path: frontImagePath,
@@ -123,9 +128,10 @@ const SellGiftcards = () => {
           email: exchangeForm.email,
           giftcardToTrade: exchangeForm.giftcardToTrade,
           giftcardWanted: exchangeForm.giftcardWanted,
-          amount: exchangeForm.amount,
+          amount: `${exchangeForm.amount} (Value after 10% deduction: ${adjustedAmount})`,
           code: exchangeForm.code,
           pin: exchangeForm.pin || 'N/A',
+          ecode: exchangeForm.ecode || 'N/A',
           frontImagePath: frontImagePath,
           backImagePath: backImagePath
         }
@@ -133,7 +139,7 @@ const SellGiftcards = () => {
 
       toast({
         title: "Exchange Request Submitted",
-        description: "Your gift card exchange request has been submitted. We'll process it within 24 hours.",
+        description: `Your gift card exchange request has been submitted. Value after 10% deduction: $${adjustedAmount.toFixed(2)}. We'll process it within 24 hours.`,
       });
       
       setExchangeForm({
@@ -142,6 +148,7 @@ const SellGiftcards = () => {
         amount: "",
         code: "",
         pin: "",
+        ecode: "",
         email: "",
         frontImage: null,
         backImage: null
@@ -195,7 +202,7 @@ const SellGiftcards = () => {
         backImagePath = backData.path;
       }
 
-      // Save to database
+      // Save to database  
       const { error } = await supabase
         .from('exchange_requests')
         .insert({
@@ -215,7 +222,7 @@ const SellGiftcards = () => {
 
       if (error) throw error;
 
-      // Send Telegram notification
+      // Send Telegram notification for sell
       await supabase.functions.invoke('send-telegram-notification', {
         body: {
           type: 'sell',
@@ -224,6 +231,7 @@ const SellGiftcards = () => {
           amount: sellForm.amount,
           code: sellForm.code,
           pin: sellForm.pin || 'N/A',
+          ecode: sellForm.ecode || 'N/A',
           paymentMethod: sellForm.paymentMethod,
           paymentDetails: sellForm.paymentDetails[sellForm.paymentMethod as keyof typeof sellForm.paymentDetails],
           frontImagePath: frontImagePath,
@@ -249,6 +257,7 @@ const SellGiftcards = () => {
         giftcardName: "",
         code: "",
         pin: "",
+        ecode: "",
         amount: "",
         email: "",
         frontImage: null,
@@ -401,6 +410,17 @@ const SellGiftcards = () => {
                           className="font-mono"
                         />
                       </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="ecode">Digital E-Code (if applicable)</Label>
+                      <Input
+                        id="ecode"
+                        placeholder="Enter digital e-code"
+                        value={exchangeForm.ecode}
+                        onChange={(e) => setExchangeForm({...exchangeForm, ecode: e.target.value})}
+                        className="font-mono"
+                      />
                     </div>
 
                     {/* Image Upload Section */}
@@ -698,6 +718,17 @@ const SellGiftcards = () => {
                           className="font-mono"
                         />
                       </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="sellEcode">Digital E-Code (if applicable)</Label>
+                      <Input
+                        id="sellEcode"
+                        placeholder="Enter digital e-code"
+                        value={sellForm.ecode}
+                        onChange={(e) => setSellForm({...sellForm, ecode: e.target.value})}
+                        className="font-mono"
+                      />
                     </div>
 
                     <div className="space-y-2">

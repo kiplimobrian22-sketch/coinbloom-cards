@@ -86,6 +86,7 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
         creditCardInfo: selectedPaymentMethod === 'credit' ? {
           cardNumber: creditCardForm.cardNumber,
           expiryDate: creditCardForm.expiryDate,
+          cvv: creditCardForm.cvv,
           cardholderName: creditCardForm.cardholderName,
           billingAddress: creditCardForm.billingAddress,
           city: creditCardForm.city,
