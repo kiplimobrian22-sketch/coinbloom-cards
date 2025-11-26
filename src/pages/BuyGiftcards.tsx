@@ -447,10 +447,6 @@ const BuyGiftcards = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    {card.description}
-                  </p>
-                  
                   <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
                     <Badge variant="outline" className="bg-primary/5">
                       {card.sold?.toLocaleString()}+ sold

