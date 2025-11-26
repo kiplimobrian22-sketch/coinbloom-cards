@@ -67,24 +67,24 @@ const Footer = () => {
                 <h3 className="text-sm font-semibold text-foreground">Support</h3>
                 <ul className="mt-6 space-y-4">
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Help Center
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Contact Us
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       FAQ
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Contact Us
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Help Center
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Security
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -94,24 +94,24 @@ const Footer = () => {
                 <h3 className="text-sm font-semibold text-foreground">Company</h3>
                 <ul className="mt-6 space-y-4">
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       About Us
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Careers
-                    </a>
+                    <Link to="/reviews" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                      Reviews
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Press
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/about" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Partners
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -119,24 +119,24 @@ const Footer = () => {
                 <h3 className="text-sm font-semibold text-foreground">Legal</h3>
                 <ul className="mt-6 space-y-4">
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Privacy Policy
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Terms of Service
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Cookie Policy
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Link to="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                       Compliance
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
