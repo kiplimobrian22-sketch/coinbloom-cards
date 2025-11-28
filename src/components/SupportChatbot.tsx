@@ -209,8 +209,12 @@ const SupportChatbot = () => {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-muted text-foreground rounded-lg px-4 py-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
+              <div className="bg-muted text-foreground rounded-lg px-4 py-3">
+                <div className="flex gap-1 items-center">
+                  <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce [animation-delay:0ms]"></div>
+                  <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce [animation-delay:150ms]"></div>
+                  <div className="w-2 h-2 bg-foreground/60 rounded-full animate-bounce [animation-delay:300ms]"></div>
+                </div>
               </div>
             </div>
           )}
