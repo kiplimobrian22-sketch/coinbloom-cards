@@ -16,6 +16,7 @@ const SupportChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showQuickReplies, setShowQuickReplies] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -60,13 +61,15 @@ const SupportChatbot = () => {
     }
   };
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const messageContent = messageText || input.trim();
+    if (!messageContent || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: input };
+    const userMessage: Message = { role: 'user', content: messageContent };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
+    setShowQuickReplies(false);
     setIsLoading(true);
 
     try {
@@ -124,6 +127,16 @@ const SupportChatbot = () => {
       sendMessage();
     }
   };
+
+  const handleQuickReply = (message: string) => {
+    sendMessage(message);
+  };
+
+  const quickReplyOptions = [
+    { label: 'Check Balance', icon: '💰', message: 'I want to check my gift card balance' },
+    { label: 'Verify Card', icon: '✅', message: 'I want to verify my gift card' },
+    { label: 'Find Code Location', icon: '🔍', message: 'Where is the code on my gift card?' },
+  ];
 
   if (!isOpen) {
     return (
@@ -187,6 +200,26 @@ const SupportChatbot = () => {
         </div>
       </ScrollArea>
 
+      {/* Quick Reply Buttons */}
+      {showQuickReplies && messages.length > 0 && !isLoading && (
+        <div className="px-4 pb-2">
+          <div className="flex flex-wrap gap-2">
+            {quickReplyOptions.map((option) => (
+              <Button
+                key={option.label}
+                onClick={() => handleQuickReply(option.message)}
+                variant="outline"
+                size="sm"
+                className="text-xs"
+              >
+                <span className="mr-1">{option.icon}</span>
+                {option.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <div className="p-4 border-t border-border">
         <div className="flex gap-2">
@@ -199,7 +232,7 @@ const SupportChatbot = () => {
             className="flex-1"
           />
           <Button
-            onClick={sendMessage}
+            onClick={() => sendMessage()}
             disabled={isLoading || !input.trim()}
             size="icon"
           >
