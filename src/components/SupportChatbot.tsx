@@ -168,7 +168,7 @@ const SupportChatbot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-[380px] h-[600px] bg-background border border-border rounded-lg shadow-2xl flex flex-col z-50">
+    <div className="fixed bottom-6 right-6 w-[380px] md:h-[600px] h-[calc(100vh-3rem)] bg-background border border-border rounded-lg shadow-2xl flex flex-col z-50 max-h-[90vh]">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border bg-primary text-primary-foreground rounded-t-lg">
         <div className="flex items-center gap-2">
