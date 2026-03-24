@@ -13,7 +13,7 @@ const Footer = () => {
                 <CreditCard className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-primary-glow to-primary bg-clip-text text-transparent">
-                GiftHub
+                All Giftcards
               </span>
             </div>
             <p className="text-muted-foreground text-sm max-w-md">
