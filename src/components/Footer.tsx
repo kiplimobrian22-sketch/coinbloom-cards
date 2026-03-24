@@ -13,7 +13,7 @@ const Footer = () => {
                 <CreditCard className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-primary-glow to-primary bg-clip-text text-transparent">
-                GiftHub
+                All Giftcards
               </span>
             </div>
             <p className="text-muted-foreground text-sm max-w-md">
@@ -147,7 +147,7 @@ const Footer = () => {
         {/* Bottom border */}
         <div className="mt-12 border-t border-border pt-8">
           <p className="text-xs text-muted-foreground text-center">
-            © 2025 GiftHub. All rights reserved. Secure gift card transactions made simple.
+            © 2025 All Giftcards. All rights reserved. Secure gift card transactions made simple.
           </p>
         </div>
       </div>
