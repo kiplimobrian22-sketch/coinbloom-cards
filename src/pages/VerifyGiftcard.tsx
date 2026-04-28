@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Checkbox } from "@/components/ui/checkbox";
 import { Shield, CheckCircle, AlertCircle, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
@@ -178,9 +179,9 @@ const VerifyGiftcard = () => {
         }, 2000);
       }
 
-      toast({
-        title: "Verification Submitted",
+      sonnerToast.success("Verification Submitted", {
         description: "Your gift card verification request has been submitted successfully. You'll receive results via email in a few minutes. Please keep checking your inbox (and spam folder).",
+        duration: 30000,
       });
 
       setFormData({
