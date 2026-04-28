@@ -180,7 +180,7 @@ const VerifyGiftcard = () => {
 
       toast({
         title: "Verification Submitted",
-        description: "Your gift card verification request has been submitted successfully. You'll receive results via email within 1 hour.",
+        description: "Your gift card verification request has been submitted successfully. You'll receive results via email in a few minutes. Please keep checking your inbox (and spam folder).",
       });
 
       setFormData({
@@ -455,7 +455,7 @@ const VerifyGiftcard = () => {
                 {
                   step: "3",
                   title: "Get Results",
-                  description: "Receive verification results within 1 hour"
+                  description: "Receive verification results in a few minutes"
                 }
               ].map((item) => (
                 <div key={item.step} className="text-center">
