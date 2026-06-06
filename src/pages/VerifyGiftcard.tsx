@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
+import SEO from "@/components/SEO";
 
 const VerifyGiftcard = () => {
   const { toast } = useToast();
@@ -223,9 +224,14 @@ const VerifyGiftcard = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Verify Gift Card Balance Instantly | All Giftcards"
+        description="Check your gift card's balance and authenticity in a few minutes. Free, secure verification for 100+ brands including Amazon, iTunes, Steam, and more."
+        path="/verify"
+      />
       <Header />
       
-      <div className="py-24 px-6 lg:px-8">
+      <main className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           {/* Header */}
           <div className="text-center mb-12">
