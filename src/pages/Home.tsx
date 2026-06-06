@@ -9,6 +9,28 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GiftCardSlider from "@/components/GiftCardSlider";
+import SEO from "@/components/SEO";
+
+const homeJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "All Giftcards",
+    url: "https://coinbloom-cards.lovable.app/",
+    logo: "https://coinbloom-cards.lovable.app/favicon.ico",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "All Giftcards",
+    url: "https://coinbloom-cards.lovable.app/",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://coinbloom-cards.lovable.app/buy?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  },
+];
 
 const Home = () => {
   const { user } = useAuth();
@@ -80,7 +102,15 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="All Giftcards — Check, Buy, Sell & Exchange Gift Cards"
+        description="All Giftcards lets you check balances, buy discounted gift cards, and sell or exchange unused cards securely with 24/7 support."
+        path="/"
+        jsonLd={homeJsonLd}
+      />
       <Header />
+      <main>
+      
       
       {/* Hero Section */}
       <section className="hero-section py-24 px-6 lg:px-8 relative overflow-hidden">
@@ -343,6 +373,7 @@ const Home = () => {
         </div>
       </section>
 
+      </main>
       <Footer />
       
       <GiftCardSlider />

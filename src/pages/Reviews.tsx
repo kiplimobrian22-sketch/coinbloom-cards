@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Quote, ChevronLeft, ChevronRight, User } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const Reviews = () => {
   const [currentReview, setCurrentReview] = useState(0);
@@ -210,9 +211,14 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Customer Reviews & Ratings | All Giftcards"
+        description="See verified reviews from thousands of customers who buy, sell, and verify gift cards on All Giftcards. 4.8/5 average rating."
+        path="/reviews"
+      />
       <Header />
       
-      <div className="py-24 px-6 lg:px-8">
+      <main className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header */}
           <div className="text-center mb-16">
@@ -295,6 +301,7 @@ const Reviews = () => {
                   variant="outline"
                   size="sm"
                   onClick={prevReview}
+                  aria-label="Previous review"
                   className="hover:bg-primary/10 hover:border-primary"
                 >
                   <ChevronLeft className="h-4 w-4" />
@@ -303,6 +310,7 @@ const Reviews = () => {
                   {reviews.map((_, index) => (
                     <button
                       key={index}
+                      aria-label={`Go to review ${index + 1}`}
                       className={`w-2 h-2 rounded-full transition-colors ${
                         index === currentReview 
                           ? "bg-primary" 
@@ -316,6 +324,7 @@ const Reviews = () => {
                   variant="outline"
                   size="sm"
                   onClick={nextReview}
+                  aria-label="Next review"
                   className="hover:bg-primary/10 hover:border-primary"
                 >
                   <ChevronRight className="h-4 w-4" />
@@ -394,7 +403,7 @@ const Reviews = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>

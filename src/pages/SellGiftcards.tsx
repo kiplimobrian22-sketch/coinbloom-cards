@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
+import SEO from "@/components/SEO";
 
 const SellGiftcards = () => {
   const { toast } = useToast();
@@ -267,9 +268,14 @@ const SellGiftcards = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Sell or Exchange Gift Cards for Cash | All Giftcards"
+        description="Sell unused gift cards for cash or exchange them for brands you'll actually use. Up to 95% value, payment within 24-48 hours."
+        path="/sell"
+      />
       <Header />
       
-      <div className="py-24 px-6 lg:px-8">
+      <main className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
           <div className="text-center mb-12">
@@ -305,7 +311,7 @@ const SellGiftcards = () => {
             ].map((benefit, index) => (
               <div key={benefit.title} className="text-center p-6 rounded-lg bg-muted/20 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <benefit.icon className="h-8 w-8 text-accent mx-auto mb-4" />
-                <h3 className="font-semibold text-foreground mb-2">{benefit.title}</h3>
+                <h2 className="font-semibold text-foreground mb-2">{benefit.title}</h2>
                 <p className="text-sm text-muted-foreground">{benefit.description}</p>
               </div>
             ))}
@@ -797,7 +803,7 @@ const SellGiftcards = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>

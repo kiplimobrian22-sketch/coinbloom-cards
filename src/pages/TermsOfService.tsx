@@ -1,13 +1,19 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { FileText } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const TermsOfService = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Terms of Service | All Giftcards"
+        description="The terms and conditions governing your use of the All Giftcards platform for buying, selling, and verifying gift cards."
+        path="/terms"
+      />
       <Header />
       
-      <div className="py-24 px-6 lg:px-8">
+      <main className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <div className="inline-flex p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary-glow/20 mb-6">
@@ -163,7 +169,7 @@ const TermsOfService = () => {
             </section>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
