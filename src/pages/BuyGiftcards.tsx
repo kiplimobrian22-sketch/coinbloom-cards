@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CheckoutModal from "@/components/CheckoutModal";
 import { useToast } from "@/hooks/use-toast";
+import SEO from "@/components/SEO";
 import amazonLogo from "@/assets/logos/amazon.png";
 import itunesLogo from "@/assets/logos/itunes.png";
 import googlePlayLogo from "@/assets/logos/googleplay.png";
@@ -264,9 +265,14 @@ const BuyGiftcards = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Buy Gift Cards at 30% Off | Amazon, iTunes, Steam — All Giftcards"
+        description="Buy gift cards from Amazon, iTunes, Steam, Walmart and 100+ brands at up to 30% off. Instant digital delivery and secure PayPal checkout."
+        path="/buy"
+      />
       <Header />
       
-      <div className="py-24 px-6 lg:px-8">
+      <main className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header */}
           <div className="text-center mb-12">
@@ -408,7 +414,7 @@ const BuyGiftcards = () => {
             ].map((feature, index) => (
               <div key={feature.title} className="text-center p-6 rounded-lg bg-muted/20 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <feature.icon className="h-8 w-8 text-primary mx-auto mb-4" />
-                <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
+                <h2 className="font-semibold text-foreground mb-2">{feature.title}</h2>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>
             ))}
@@ -423,7 +429,7 @@ const BuyGiftcards = () => {
                     <div className="flex items-center gap-3">
                       <img 
                         src={card.image} 
-                        alt={card.name} 
+                        alt={`${card.name} gift card logo`} 
                         className="w-12 h-12 object-cover rounded-lg"
                       />
                       <div>
@@ -482,9 +488,9 @@ const BuyGiftcards = () => {
           {/* Payment Info */}
           <div className="mt-16 p-8 rounded-lg bg-gradient-to-r from-primary/5 to-primary-glow/5 border border-primary/20">
             <div className="text-center">
-              <h3 className="text-xl font-semibold text-foreground mb-4">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
                 Secure Payment Processing
-              </h3>
+              </h2>
               <p className="text-muted-foreground mb-6">
                 All payments are processed securely through PayPal. Cards bought are instantly delivered to their mail upon successful payment.
               </p>
@@ -505,7 +511,7 @@ const BuyGiftcards = () => {
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       <CheckoutModal
         isOpen={showCheckout}
