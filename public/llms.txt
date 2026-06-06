@@ -1,0 +1,20 @@
+# All Giftcards
+
+> All Giftcards lets you check balances, buy, sell, and exchange gift cards from 100+ major brands quickly and securely.
+
+## Pages
+
+- [Home](/): Overview of All Giftcards services.
+- [Check Balance](/verify): Verify the balance and validity of any gift card.
+- [Buy Gift Cards](/buy): Purchase discounted gift cards from top brands with instant digital delivery.
+- [Sell Gift Cards](/sell): Convert unused gift cards into cash via credit card payout.
+- [Exchange Guide](/guides/sell-gift-cards-for-cash): How to safely exchange gift cards for cash.
+- [Reviews](/reviews): Customer reviews and ratings.
+- [FAQ](/faq): Answers to common questions.
+- [About](/about): About All Giftcards.
+- [Contact](/contact): Reach our support team.
+
+## Optional
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)

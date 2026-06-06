@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://coinbloom-cards.lovable.app/sitemap.xml
