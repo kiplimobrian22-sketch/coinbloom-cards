@@ -122,7 +122,7 @@ const FAQ = () => {
             </a>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
