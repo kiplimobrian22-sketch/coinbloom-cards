@@ -269,9 +269,10 @@ const SellGiftcards = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Sell or Exchange Gift Cards for Cash | All Giftcards"
-        description="Sell unused gift cards for cash or exchange them for brands you'll actually use. Up to 95% value, payment within 24-48 hours."
+        title="Sell Gift Cards for Cash – Instant Payment | All Giftcards"
+        description="Sell your unwanted gift cards for instant cash. Best rates for Amazon, iTunes, Google Play and more."
         path="/sell"
+        keywords="sell gift cards, gift cards for cash, sell Amazon gift card, sell iTunes gift card"
       />
       <Header />
       

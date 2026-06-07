@@ -69,9 +69,10 @@ const FAQ = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Gift Card FAQ — Verification, Payments & Exchanges"
-        description="Answers to common questions about verifying, buying, selling, and exchanging gift cards on All Giftcards."
+        title="Frequently Asked Questions | All Giftcards"
+        description="Got questions about buying, selling or verifying gift cards? Find answers to the most common questions on All Giftcards."
         path="/faq"
+        keywords="gift card FAQ, gift card questions, how to sell gift cards"
         jsonLd={faqJsonLd}
       />
       <Header />

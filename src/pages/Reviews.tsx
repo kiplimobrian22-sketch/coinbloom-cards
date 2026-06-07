@@ -212,9 +212,10 @@ const Reviews = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Customer Reviews & Ratings | All Giftcards"
-        description="See verified reviews from thousands of customers who buy, sell, and verify gift cards on All Giftcards. 4.8/5 average rating."
+        title="Customer Reviews & Testimonials | All Giftcards"
+        description="See what thousands of happy customers say about All Giftcards. Read verified reviews and ratings from real users."
         path="/reviews"
+        keywords="gift card reviews, All Giftcards reviews, trusted gift card platform"
       />
       <Header />
       
