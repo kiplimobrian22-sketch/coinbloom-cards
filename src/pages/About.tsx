@@ -7,9 +7,10 @@ const About = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="About All Giftcards — Trusted Gift Card Marketplace"
-        description="Learn about All Giftcards, the trusted platform helping thousands buy, sell, exchange, and verify gift cards safely since 2020."
+        title="About All Giftcards – Trusted Gift Card Platform"
+        description="Learn about All Giftcards, the secure and trusted marketplace for buying, selling and exchanging gift cards worldwide."
         path="/about"
+        keywords="about All Giftcards, trusted gift card marketplace"
       />
       <Header />
       

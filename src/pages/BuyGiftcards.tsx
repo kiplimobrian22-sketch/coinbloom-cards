@@ -266,9 +266,10 @@ const BuyGiftcards = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Buy Gift Cards at 30% Off | Amazon, iTunes, Steam — All Giftcards"
-        description="Buy gift cards from Amazon, iTunes, Steam, Walmart and 100+ brands at up to 30% off. Instant digital delivery and secure PayPal checkout."
+        title="Buy Gift Cards Online – Amazon, iTunes, Google Play & More | All Giftcards"
+        description="Shop the best gift cards online. Buy Amazon, iTunes, Google Play, Steam, PlayStation and more at great prices with secure checkout."
         path="/buy"
+        keywords="buy gift cards online, Amazon gift card, iTunes gift card, Google Play gift card, Steam gift card"
       />
       <Header />
       

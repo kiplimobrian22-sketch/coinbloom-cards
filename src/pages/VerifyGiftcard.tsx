@@ -225,9 +225,10 @@ const VerifyGiftcard = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Verify Gift Card Balance Instantly | All Giftcards"
-        description="Check your gift card's balance and authenticity in a few minutes. Free, secure verification for 100+ brands including Amazon, iTunes, Steam, and more."
+        title="Verify Gift Card Balance – Fast & Secure | All Giftcards"
+        description="Check your gift card balance instantly and securely. Verify Amazon, iTunes, Google Play, Steam gift cards in seconds."
         path="/verify"
+        keywords="verify gift card, check gift card balance, gift card balance checker"
       />
       <Header />
       

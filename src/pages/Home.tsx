@@ -103,9 +103,10 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="All Giftcards — Check, Buy, Sell & Exchange Gift Cards"
-        description="All Giftcards lets you check balances, buy discounted gift cards, and sell or exchange unused cards securely with 24/7 support."
+        title="All Giftcards – Buy, Sell & Verify Gift Cards Instantly"
+        description="Your trusted platform to buy, sell, verify, and exchange gift cards from Amazon, iTunes, Google Play, Steam and more. Fast, secure, 24/7 support."
         path="/"
+        keywords="buy gift cards, sell gift cards, verify gift cards, exchange gift cards, gift card trading"
         jsonLd={homeJsonLd}
       />
       <Header />

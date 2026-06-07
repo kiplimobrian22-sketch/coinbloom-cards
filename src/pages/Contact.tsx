@@ -49,9 +49,10 @@ const Contact = () => {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Contact All Giftcards Support"
-        description="Get in touch with the All Giftcards support team by email, phone, or message form. We respond within 24 hours."
+        title="Contact Us | All Giftcards"
+        description="Get in touch with the All Giftcards team. We offer 24/7 customer support for all your gift card needs."
         path="/contact"
+        keywords="contact All Giftcards, gift card support, customer service"
         jsonLd={contactJsonLd}
       />
       <Header />
