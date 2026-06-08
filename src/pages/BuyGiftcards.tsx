@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus } from "lucide-react";
+import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CheckoutModal from "@/components/CheckoutModal";
