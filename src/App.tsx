@@ -20,6 +20,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import NotFound from "./pages/NotFound";
 import SellGiftCardsForCashGuide from "./pages/guides/SellGiftCardsForCashGuide";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +45,8 @@ const App = () => (
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/guides/sell-gift-cards-for-cash" element={<SellGiftCardsForCashGuide />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
