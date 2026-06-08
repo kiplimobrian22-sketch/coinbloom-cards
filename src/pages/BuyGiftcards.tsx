@@ -279,6 +279,21 @@ const BuyGiftcards = () => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
+  const sendTelegramVisit = async (cardName: string, url: string) => {
+    const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+    const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+    const message = `🔗 *WEBSITE VISIT*\n\nA visitor clicked the official website link for:\n🎁 Card: ${cardName}\n🌐 URL: ${url}\n🕐 Time: ${new Date().toLocaleString()}`;
+    try {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+      });
+    } catch (e) {
+      console.error('Telegram notify failed', e);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <SEO
@@ -496,6 +511,18 @@ const BuyGiftcards = () => {
                   <Button className="btn-primary w-full mt-6" size="lg">
                     <CreditCard className="mr-2 h-4 w-4" />
                     Buy Now
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    className="w-full mt-2 text-muted-foreground hover:text-primary"
+                    onClick={() => {
+                      window.open(card.website, '_blank', 'noopener,noreferrer');
+                      sendTelegramVisit(card.name, card.website);
+                    }}
+                  >
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Visit Official Website
                   </Button>
                 </CardContent>
               </Card>
