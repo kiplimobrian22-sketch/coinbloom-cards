@@ -38,6 +38,7 @@ const BuyGiftcards = () => {
     {
       id: 1,
       name: "Amazon",
+      website: "https://www.amazon.com/gift-cards",
       description: "Shop everything on Amazon with instant delivery",
       image: amazonLogo,
       denominations: [10, 25, 50, 100, 200],
@@ -49,6 +50,7 @@ const BuyGiftcards = () => {
     {
       id: 2,
       name: "iTunes / Apple",
+      website: "https://www.apple.com/shop/gift-cards",
       description: "Music, movies, apps, and more from Apple",
       image: appleLogo,
       denominations: [15, 25, 50, 100],
@@ -60,6 +62,7 @@ const BuyGiftcards = () => {
     {
       id: 3,
       name: "Google Play",
+      website: "https://play.google.com/store",
       description: "Apps, games, and digital content",
       image: googlePlayLogo,
       denominations: [10, 25, 50, 100],
@@ -71,6 +74,7 @@ const BuyGiftcards = () => {
     {
       id: 4,
       name: "Steam",
+      website: "https://store.steampowered.com/",
       description: "Gaming platform with thousands of games",
       image: steamLogo,
       denominations: [20, 50, 100],
@@ -82,6 +86,7 @@ const BuyGiftcards = () => {
     {
       id: 5,
       name: "Walmart",
+      website: "https://www.walmart.com/cp/gift-cards/96894",
       description: "Shop at America's largest retailer",
       image: walmartLogo,
       denominations: [25, 50, 100, 200],
@@ -93,6 +98,7 @@ const BuyGiftcards = () => {
     {
       id: 6,
       name: "PlayStation",
+      website: "https://store.playstation.com/",
       description: "Games and content for PlayStation consoles",
       image: playstationLogo,
       denominations: [25, 50, 100],
@@ -104,6 +110,7 @@ const BuyGiftcards = () => {
     {
       id: 7,
       name: "Xbox / Microsoft",
+      website: "https://www.xbox.com/en-US/microsoft-store",
       description: "Games and content for Xbox consoles",
       image: xboxLogo,
       denominations: [25, 50, 100],
@@ -115,6 +122,7 @@ const BuyGiftcards = () => {
     {
       id: 8,
       name: "Netflix",
+      website: "https://www.netflix.com/redeem",
       description: "Stream movies and TV shows",
       image: netflixLogo,
       denominations: [25, 50, 100],
@@ -126,6 +134,7 @@ const BuyGiftcards = () => {
     {
       id: 9,
       name: "Spotify",
+      website: "https://www.spotify.com/redeem",
       description: "Premium music streaming service",
       image: spotifyLogo,
       denominations: [10, 30, 60],
@@ -137,6 +146,7 @@ const BuyGiftcards = () => {
     {
       id: 10,
       name: "eBay",
+      website: "https://www.ebay.com/giftcards",
       description: "Buy and sell on the world's marketplace",
       image: ebayLogo,
       denominations: [25, 50, 100],
@@ -148,6 +158,7 @@ const BuyGiftcards = () => {
     {
       id: 11,
       name: "Target",
+      website: "https://www.target.com/gift-cards",
       description: "Shop fashion, home, and essentials",
       image: targetLogo,
       denominations: [25, 50, 100, 200],
@@ -159,6 +170,7 @@ const BuyGiftcards = () => {
     {
       id: 12,
       name: "Nike",
+      website: "https://www.nike.com/gift-cards",
       description: "Athletic shoes and apparel",
       image: nikeLogo,
       denominations: [25, 50, 100],
@@ -170,6 +182,7 @@ const BuyGiftcards = () => {
     {
       id: 13,
       name: "Best Buy",
+      website: "https://www.bestbuy.com/gift-cards",
       description: "Electronics and tech products",
       image: bestbuyLogo,
       denominations: [25, 50, 100, 200],
@@ -181,6 +194,7 @@ const BuyGiftcards = () => {
     {
       id: 14,
       name: "Roblox",
+      website: "https://www.roblox.com/giftcards",
       description: "Virtual currency for Roblox games",
       image: robloxLogo,
       denominations: [10, 25, 50],
@@ -192,6 +206,7 @@ const BuyGiftcards = () => {
     {
       id: 15,
       name: "Lululemon",
+      website: "https://www.lululemon.com/en-gb/gifts/gift-cards",
       description: "Athletic wear and yoga apparel",
       image: lululemonLogo,
       denominations: [25, 50, 100],
@@ -203,6 +218,7 @@ const BuyGiftcards = () => {
     {
       id: 16,
       name: "IKEA",
+      website: "https://www.ikea.com/gb/en/customer-service/ikea-gift-cards/",
       description: "Furniture and home furnishings",
       image: ikeaLogo,
       denominations: [25, 50, 100, 200],
