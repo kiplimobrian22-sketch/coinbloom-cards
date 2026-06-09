@@ -64,5 +64,70 @@ export const blogPosts: BlogPost[] = [
     date: "2026-06-07",
     readTime: "6 min read",
     coverImage: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=800&auto=format&fit=crop"
+  },
+  {
+    id: "5",
+    slug: "how-to-check-amazon-gift-card-balance",
+    title: "How to Check Your Amazon Gift Card Balance in Seconds",
+    excerpt: "Need to check your Amazon gift card balance? Here are the fastest and easiest ways to do it online.",
+    content: `## Why Check Your Amazon Gift Card Balance?\n\nBefore shopping on Amazon, it's smart to know exactly how much is on your gift card. Here's how to check it quickly.\n\n## Method 1: Use All Giftcards (Fastest)\n\n1. Go to the All Giftcards Verify page\n2. Select Amazon from the brand dropdown\n3. Enter your claim code\n4. Get your balance instantly — no Amazon account needed\n\n## Method 2: Check on Amazon's Website\n\n1. Log into your Amazon account\n2. Click Accounts & Lists → Gift Cards\n3. Your balance is displayed at the top\n\n## Where is the Amazon Gift Card Code?\n\n- Physical card: Under the scratch-off area on the back\n- Digital card: In the email or on the receipt\n\n## Conclusion\n\nChecking your Amazon gift card balance takes seconds. Use our verify tool for the fastest result.`,
+    category: "How-To",
+    tags: ["check amazon gift card balance", "amazon gift card balance", "amazon gift card"],
+    author: "All Giftcards Team",
+    date: "2026-06-09",
+    readTime: "3 min read",
+    coverImage: "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800&auto=format&fit=crop"
+  },
+  {
+    id: "6",
+    slug: "how-to-check-itunes-gift-card-balance",
+    title: "How to Check Your iTunes / Apple Gift Card Balance",
+    excerpt: "Have an Apple or iTunes gift card and want to know the balance? Here's how to check it instantly.",
+    content: `## How to Check iTunes / Apple Gift Card Balance\n\nApple gift cards work across the App Store, Apple Music, Apple TV+, and iCloud. Here's how to check your balance.\n\n## Method 1: Use All Giftcards (No Apple ID Needed)\n\n1. Go to the All Giftcards Verify page\n2. Select iTunes / Apple from the dropdown\n3. Enter your 16-digit card code\n4. Get your balance instantly\n\n## Method 2: On Your iPhone or iPad\n\n1. Open the App Store\n2. Tap your profile icon (top right)\n3. Your Apple Account balance is shown at the top\n\n## Does an Apple Gift Card Expire?\n\nNo — Apple gift cards have no expiration date and no inactivity fees.\n\n## Conclusion\n\nUse our free balance checker to check your Apple gift card balance in seconds — no Apple ID required.`,
+    category: "How-To",
+    tags: ["check itunes gift card balance", "apple gift card balance", "itunes gift card"],
+    author: "All Giftcards Team",
+    date: "2026-06-09",
+    readTime: "3 min read",
+    coverImage: "https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800&auto=format&fit=crop"
+  },
+  {
+    id: "7",
+    slug: "how-to-check-google-play-gift-card-balance",
+    title: "How to Check Your Google Play Gift Card Balance",
+    excerpt: "Want to know how much is left on your Google Play gift card? Here's how to check your balance instantly.",
+    content: `## How to Check Google Play Gift Card Balance\n\nGoogle Play gift cards are great for apps, games, movies and more. Here's how to check your remaining balance.\n\n## Method 1: Use All Giftcards (Fastest)\n\n1. Go to the All Giftcards Verify page\n2. Select Google Play from the dropdown\n3. Enter your 16-character code\n4. Get your balance instantly — no Google account needed\n\n## Method 2: On Android\n\n1. Open the Google Play Store\n2. Tap your profile icon → Payments & subscriptions\n3. Tap Payment methods to see your Play balance\n\n## Does a Google Play Gift Card Expire?\n\nNo — Google Play gift cards don't expire.\n\n## Conclusion\n\nCheck your Google Play gift card balance free using our verify tool.`,
+    category: "How-To",
+    tags: ["check google play gift card balance", "google play gift card balance", "google play gift card"],
+    author: "All Giftcards Team",
+    date: "2026-06-09",
+    readTime: "3 min read",
+    coverImage: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop"
+  },
+  {
+    id: "8",
+    slug: "how-to-check-steam-gift-card-balance",
+    title: "How to Check Your Steam Gift Card Balance",
+    excerpt: "Not sure how much is on your Steam gift card? Here's how to check your Steam wallet balance in seconds.",
+    content: `## How to Check Steam Gift Card Balance\n\nSteam gift cards add funds to your Steam wallet. Here's how to check your balance.\n\n## Method 1: Use All Giftcards (No Steam Account Needed)\n\n1. Go to the All Giftcards Verify page\n2. Select Steam from the dropdown\n3. Enter your Steam wallet code\n4. Get your balance instantly\n\n## Method 2: On Steam Desktop App\n\n1. Open Steam and log in\n2. Click your username (top right)\n3. Go to Account Details — your Steam wallet balance is shown\n\n## Does a Steam Wallet Code Expire?\n\nNo — Steam wallet codes don't expire.\n\n## Conclusion\n\nCheck your Steam gift card balance instantly using our free verify tool.`,
+    category: "How-To",
+    tags: ["check steam gift card balance", "steam gift card balance", "steam wallet balance"],
+    author: "All Giftcards Team",
+    date: "2026-06-09",
+    readTime: "3 min read",
+    coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop"
+  },
+  {
+    id: "9",
+    slug: "how-to-check-roblox-gift-card-balance",
+    title: "How to Check Your Roblox Gift Card Balance",
+    excerpt: "Want to know how many Robux are on your Roblox gift card? Here's how to check your balance instantly.",
+    content: `## How to Check Roblox Gift Card Balance\n\nRoblox gift cards give you Robux to spend in games. Here's how to check your card balance.\n\n## Method 1: Use All Giftcards (Fastest)\n\n1. Go to the All Giftcards Verify page\n2. Select Roblox from the dropdown\n3. Enter your card PIN\n4. Get your balance instantly\n\n## How Much Robux Does Each Card Give?\n\n- $10 card = 800 Robux\n- $25 card = 2,000 Robux\n- $50 card = 4,500 Robux\n\n## Does a Roblox Gift Card Expire?\n\nNo — Roblox gift cards don't expire.\n\n## Conclusion\n\nCheck your Roblox gift card balance free using our verify tool.`,
+    category: "How-To",
+    tags: ["check roblox gift card balance", "roblox gift card balance", "roblox gift card"],
+    author: "All Giftcards Team",
+    date: "2026-06-09",
+    readTime: "3 min read",
+    coverImage: "https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?w=800&auto=format&fit=crop"
   }
 ];

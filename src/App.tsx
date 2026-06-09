@@ -22,6 +22,8 @@ import NotFound from "./pages/NotFound";
 import SellGiftCardsForCashGuide from "./pages/guides/SellGiftCardsForCashGuide";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import CheckGiftCardBalance from "./pages/CheckGiftCardBalance";
+import GiftCardBalance from "./pages/GiftCardBalance";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,8 @@ const App = () => (
             <Route path="/guides/sell-gift-cards-for-cash" element={<SellGiftCardsForCashGuide />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/check-gift-card-balance" element={<CheckGiftCardBalance />} />
+            <Route path="/check-gift-card-balance/:brand" element={<GiftCardBalance />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/admin" element={<Admin />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
