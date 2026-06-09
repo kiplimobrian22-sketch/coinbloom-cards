@@ -15,6 +15,7 @@ const Header = () => {
     { name: "Verify", href: "/verify" },
     { name: "Buy", href: "/buy" },
     { name: "Sell", href: "/sell" },
+    { name: "Balance Check", href: "/check-gift-card-balance" },
     { name: "Reviews", href: "/reviews" },
     { name: "Blog", href: "/blog" },
   ];
