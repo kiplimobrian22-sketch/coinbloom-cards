@@ -21,15 +21,15 @@ const Header = () => {
   ];
 
   return (
-    <header className="relative z-50">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-background/85 backdrop-blur-md border-b border-border">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         {/* Logo */}
         <div className="flex lg:flex-1">
-          <Link to="/" className="flex items-center space-x-2 animate-fade-in">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-primary to-primary-glow">
-              <CreditCard className="h-6 w-6 text-primary-foreground" />
+          <Link to="/" className="flex items-center space-x-2.5 animate-fade-in">
+            <div className="p-2 rounded-xl bg-primary">
+              <CreditCard className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-primary-glow to-primary bg-clip-text text-transparent">
+            <span className="text-lg font-bold tracking-tight text-foreground">
               All Giftcards
             </span>
           </Link>

