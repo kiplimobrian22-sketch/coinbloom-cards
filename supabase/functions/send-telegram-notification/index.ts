@@ -69,8 +69,32 @@ serve(async (req) => {
     }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    const notificationData: TelegramNotification = await req.json();
+    const notificationData: any = await req.json();
     console.log('Received notification request:', notificationData);
+
+    // Simple generic passthrough: { message, type }
+    if (typeof notificationData.message === 'string' && notificationData.message.length > 0) {
+      const tgRes = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: notificationData.message,
+          parse_mode: 'Markdown',
+        }),
+      });
+      const tgJson = await tgRes.json();
+      if (!tgRes.ok || !tgJson.ok) {
+        console.error('Telegram error:', tgJson);
+        return new Response(
+          JSON.stringify({ error: 'Telegram rejected the request', details: tgJson }),
+          { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     let message = '';
     
