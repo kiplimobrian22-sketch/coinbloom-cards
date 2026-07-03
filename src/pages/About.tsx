@@ -1,20 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SEO from "@/components/SEO";
 import { Shield, Users, Zap, Award } from "lucide-react";
 
 const About = () => {
   return (
     <div className="min-h-screen">
-      <SEO
-        title="About All Giftcards – Trusted Gift Card Platform"
-        description="Learn about All Giftcards, the secure and trusted marketplace for buying, selling and exchanging gift cards worldwide."
-        path="/about"
-        keywords="about All Giftcards, trusted gift card marketplace"
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-foreground sm:text-5xl mb-6">
@@ -78,7 +71,7 @@ const About = () => {
             </p>
           </div>
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>

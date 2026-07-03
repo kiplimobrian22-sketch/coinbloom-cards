@@ -9,28 +9,6 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GiftCardSlider from "@/components/GiftCardSlider";
-import SEO from "@/components/SEO";
-
-const homeJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "All Giftcards",
-    url: "https://coinbloom-cards.lovable.app/",
-    logo: "https://coinbloom-cards.lovable.app/favicon.ico",
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "All Giftcards",
-    url: "https://coinbloom-cards.lovable.app/",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://coinbloom-cards.lovable.app/buy?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  },
-];
 
 const Home = () => {
   const { user } = useAuth();
@@ -102,16 +80,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="All Giftcards – Buy, Sell & Verify Gift Cards Instantly"
-        description="Your trusted platform to buy, sell, verify, and exchange gift cards from Amazon, iTunes, Google Play, Steam and more. Fast, secure, 24/7 support."
-        path="/"
-        keywords="buy gift cards, sell gift cards, verify gift cards, exchange gift cards, gift card trading"
-        jsonLd={homeJsonLd}
-      />
       <Header />
-      <main>
-      
       
       {/* Hero Section */}
       <section className="hero-section py-24 px-6 lg:px-8 relative overflow-hidden">
@@ -374,7 +343,6 @@ const Home = () => {
         </div>
       </section>
 
-      </main>
       <Footer />
       
       <GiftCardSlider />

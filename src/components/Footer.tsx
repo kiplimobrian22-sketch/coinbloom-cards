@@ -61,11 +61,6 @@ const Footer = () => {
                       Reviews
                     </Link>
                   </li>
-                  <li>
-                    <Link to="/blog" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                      Blog
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div>
@@ -91,17 +86,6 @@ const Footer = () => {
                       Security
                     </Link>
                   </li>
-                </ul>
-              </div>
-              <div className="mt-8 md:mt-0 md:col-span-2">
-                <h3 className="text-sm font-semibold text-foreground">Tools</h3>
-                <ul className="mt-6 space-y-4">
-                  <li><Link to="/check-gift-card-balance" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check Gift Card Balance</Link></li>
-                  <li><Link to="/check-gift-card-balance/amazon" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check Amazon Balance</Link></li>
-                  <li><Link to="/check-gift-card-balance/itunes" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check iTunes Balance</Link></li>
-                  <li><Link to="/check-gift-card-balance/google-play" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check Google Play Balance</Link></li>
-                  <li><Link to="/check-gift-card-balance/steam" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check Steam Balance</Link></li>
-                  <li><Link to="/check-gift-card-balance/roblox" className="text-sm text-muted-foreground hover:text-primary transition-colors">Check Roblox Balance</Link></li>
                 </ul>
               </div>
             </div>

@@ -1,25 +1,6 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SEO from "@/components/SEO";
-
-const contactJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: "All Giftcards",
-  telephone: "+1-555-123-4567",
-  email: "support@gifthub.com",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "123 Gift Street",
-    addressLocality: "New York",
-    addressRegion: "NY",
-    postalCode: "10001",
-    addressCountry: "US",
-  },
-  openingHours: "Mo-Fr 08:00-18:00",
-  url: "https://coinbloom-cards.lovable.app/contact",
-};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,16 +29,9 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Contact Us | All Giftcards"
-        description="Get in touch with the All Giftcards team. We offer 24/7 customer support for all your gift card needs."
-        path="/contact"
-        keywords="contact All Giftcards, gift card support, customer service"
-        jsonLd={contactJsonLd}
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h1 className="text-4xl font-bold text-foreground sm:text-5xl mb-6">
@@ -167,7 +141,7 @@ const Contact = () => {
             </CardContent>
           </Card>
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>

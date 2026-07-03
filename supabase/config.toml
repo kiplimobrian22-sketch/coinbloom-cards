@@ -17,6 +17,3 @@ verify_jwt = false
 
 [functions.giftcard-support-chat]
 verify_jwt = false
-
-[functions.keep-alive]
-verify_jwt = false

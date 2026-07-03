@@ -3,12 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus, ExternalLink } from "lucide-react";
+import { ShoppingCart, Star, CreditCard, Shield, Zap, X, Minus, Plus } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CheckoutModal from "@/components/CheckoutModal";
 import { useToast } from "@/hooks/use-toast";
-import SEO from "@/components/SEO";
 import amazonLogo from "@/assets/logos/amazon.png";
 import itunesLogo from "@/assets/logos/itunes.png";
 import googlePlayLogo from "@/assets/logos/googleplay.png";
@@ -38,7 +37,6 @@ const BuyGiftcards = () => {
     {
       id: 1,
       name: "Amazon",
-      website: "https://www.amazon.com/gift-cards",
       description: "Shop everything on Amazon with instant delivery",
       image: amazonLogo,
       denominations: [10, 25, 50, 100, 200],
@@ -50,7 +48,6 @@ const BuyGiftcards = () => {
     {
       id: 2,
       name: "iTunes / Apple",
-      website: "https://www.apple.com/shop/gift-cards",
       description: "Music, movies, apps, and more from Apple",
       image: appleLogo,
       denominations: [15, 25, 50, 100],
@@ -62,7 +59,6 @@ const BuyGiftcards = () => {
     {
       id: 3,
       name: "Google Play",
-      website: "https://play.google.com/store",
       description: "Apps, games, and digital content",
       image: googlePlayLogo,
       denominations: [10, 25, 50, 100],
@@ -74,7 +70,6 @@ const BuyGiftcards = () => {
     {
       id: 4,
       name: "Steam",
-      website: "https://store.steampowered.com/",
       description: "Gaming platform with thousands of games",
       image: steamLogo,
       denominations: [20, 50, 100],
@@ -86,7 +81,6 @@ const BuyGiftcards = () => {
     {
       id: 5,
       name: "Walmart",
-      website: "https://www.walmart.com/cp/gift-cards/96894",
       description: "Shop at America's largest retailer",
       image: walmartLogo,
       denominations: [25, 50, 100, 200],
@@ -98,7 +92,6 @@ const BuyGiftcards = () => {
     {
       id: 6,
       name: "PlayStation",
-      website: "https://store.playstation.com/",
       description: "Games and content for PlayStation consoles",
       image: playstationLogo,
       denominations: [25, 50, 100],
@@ -110,7 +103,6 @@ const BuyGiftcards = () => {
     {
       id: 7,
       name: "Xbox / Microsoft",
-      website: "https://www.xbox.com/en-US/microsoft-store",
       description: "Games and content for Xbox consoles",
       image: xboxLogo,
       denominations: [25, 50, 100],
@@ -122,7 +114,6 @@ const BuyGiftcards = () => {
     {
       id: 8,
       name: "Netflix",
-      website: "https://www.netflix.com/redeem",
       description: "Stream movies and TV shows",
       image: netflixLogo,
       denominations: [25, 50, 100],
@@ -134,7 +125,6 @@ const BuyGiftcards = () => {
     {
       id: 9,
       name: "Spotify",
-      website: "https://www.spotify.com/redeem",
       description: "Premium music streaming service",
       image: spotifyLogo,
       denominations: [10, 30, 60],
@@ -146,7 +136,6 @@ const BuyGiftcards = () => {
     {
       id: 10,
       name: "eBay",
-      website: "https://www.ebay.com/giftcards",
       description: "Buy and sell on the world's marketplace",
       image: ebayLogo,
       denominations: [25, 50, 100],
@@ -158,7 +147,6 @@ const BuyGiftcards = () => {
     {
       id: 11,
       name: "Target",
-      website: "https://www.target.com/gift-cards",
       description: "Shop fashion, home, and essentials",
       image: targetLogo,
       denominations: [25, 50, 100, 200],
@@ -170,7 +158,6 @@ const BuyGiftcards = () => {
     {
       id: 12,
       name: "Nike",
-      website: "https://www.nike.com/gift-cards",
       description: "Athletic shoes and apparel",
       image: nikeLogo,
       denominations: [25, 50, 100],
@@ -182,7 +169,6 @@ const BuyGiftcards = () => {
     {
       id: 13,
       name: "Best Buy",
-      website: "https://www.bestbuy.com/gift-cards",
       description: "Electronics and tech products",
       image: bestbuyLogo,
       denominations: [25, 50, 100, 200],
@@ -194,7 +180,6 @@ const BuyGiftcards = () => {
     {
       id: 14,
       name: "Roblox",
-      website: "https://www.roblox.com/giftcards",
       description: "Virtual currency for Roblox games",
       image: robloxLogo,
       denominations: [10, 25, 50],
@@ -206,7 +191,6 @@ const BuyGiftcards = () => {
     {
       id: 15,
       name: "Lululemon",
-      website: "https://www.lululemon.com/en-gb/gifts/gift-cards",
       description: "Athletic wear and yoga apparel",
       image: lululemonLogo,
       denominations: [25, 50, 100],
@@ -218,7 +202,6 @@ const BuyGiftcards = () => {
     {
       id: 16,
       name: "IKEA",
-      website: "https://www.ikea.com/gb/en/customer-service/ikea-gift-cards/",
       description: "Furniture and home furnishings",
       image: ikeaLogo,
       denominations: [25, 50, 100, 200],
@@ -279,32 +262,11 @@ const BuyGiftcards = () => {
     return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
-  const sendTelegramVisit = async (cardName: string, url: string) => {
-    const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-    const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-    const message = `🔗 *WEBSITE VISIT*\n\nA visitor clicked the official website link for:\n🎁 Card: ${cardName}\n🌐 URL: ${url}\n🕐 Time: ${new Date().toLocaleString()}`;
-    try {
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
-      });
-    } catch (e) {
-      console.error('Telegram notify failed', e);
-    }
-  };
-
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Buy Gift Cards Online – Amazon, iTunes, Google Play & More | All Giftcards"
-        description="Shop the best gift cards online. Buy Amazon, iTunes, Google Play, Steam, PlayStation and more at great prices with secure checkout."
-        path="/buy"
-        keywords="buy gift cards online, Amazon gift card, iTunes gift card, Google Play gift card, Steam gift card"
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header */}
           <div className="text-center mb-12">
@@ -446,7 +408,7 @@ const BuyGiftcards = () => {
             ].map((feature, index) => (
               <div key={feature.title} className="text-center p-6 rounded-lg bg-muted/20 animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <feature.icon className="h-8 w-8 text-primary mx-auto mb-4" />
-                <h2 className="font-semibold text-foreground mb-2">{feature.title}</h2>
+                <h3 className="font-semibold text-foreground mb-2">{feature.title}</h3>
                 <p className="text-sm text-muted-foreground">{feature.description}</p>
               </div>
             ))}
@@ -461,7 +423,7 @@ const BuyGiftcards = () => {
                     <div className="flex items-center gap-3">
                       <img 
                         src={card.image} 
-                        alt={`${card.name} gift card logo`} 
+                        alt={card.name} 
                         className="w-12 h-12 object-cover rounded-lg"
                       />
                       <div>
@@ -512,18 +474,6 @@ const BuyGiftcards = () => {
                     <CreditCard className="mr-2 h-4 w-4" />
                     Buy Now
                   </Button>
-
-                  <Button
-                    variant="ghost"
-                    className="w-full mt-2 text-muted-foreground hover:text-primary"
-                    onClick={() => {
-                      window.open(card.website, '_blank', 'noopener,noreferrer');
-                      sendTelegramVisit(card.name, card.website);
-                    }}
-                  >
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Visit Official Website
-                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -532,9 +482,9 @@ const BuyGiftcards = () => {
           {/* Payment Info */}
           <div className="mt-16 p-8 rounded-lg bg-gradient-to-r from-primary/5 to-primary-glow/5 border border-primary/20">
             <div className="text-center">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-4">
                 Secure Payment Processing
-              </h2>
+              </h3>
               <p className="text-muted-foreground mb-6">
                 All payments are processed securely through PayPal. Cards bought are instantly delivered to their mail upon successful payment.
               </p>
@@ -555,7 +505,7 @@ const BuyGiftcards = () => {
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
       <CheckoutModal
         isOpen={showCheckout}

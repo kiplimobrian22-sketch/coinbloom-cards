@@ -1,19 +1,13 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Shield } from "lucide-react";
-import SEO from "@/components/SEO";
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Privacy Policy | All Giftcards"
-        description="How All Giftcards collects, uses, and protects your information when you use our gift card marketplace platform."
-        path="/privacy"
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <div className="inline-flex p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary-glow/20 mb-6">
@@ -156,7 +150,7 @@ const PrivacyPolicy = () => {
             </section>
           </div>
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>

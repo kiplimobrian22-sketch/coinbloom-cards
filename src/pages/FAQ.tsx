@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
-import SEO from "@/components/SEO";
 
 const FAQ = () => {
   const faqs = [
@@ -56,28 +55,11 @@ const FAQ = () => {
     }
   ];
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.question,
-      acceptedAnswer: { "@type": "Answer", text: f.answer },
-    })),
-  };
-
   return (
     <div className="min-h-screen">
-      <SEO
-        title="Frequently Asked Questions | All Giftcards"
-        description="Got questions about buying, selling or verifying gift cards? Find answers to the most common questions on All Giftcards."
-        path="/faq"
-        keywords="gift card FAQ, gift card questions, how to sell gift cards"
-        jsonLd={faqJsonLd}
-      />
       <Header />
       
-      <main className="py-24 px-6 lg:px-8">
+      <div className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <div className="inline-flex p-4 rounded-lg bg-gradient-to-br from-primary/10 to-primary-glow/20 mb-6">
@@ -123,7 +105,7 @@ const FAQ = () => {
             </a>
           </div>
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>

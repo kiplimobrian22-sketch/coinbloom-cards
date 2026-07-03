@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { CreditCard, Building, Smartphone, Send, ArrowRightLeft } from 'lucide-react';
 
 interface WithdrawalModalProps {
@@ -71,35 +70,6 @@ export default function WithdrawalModal({
     }
 
     setIsProcessing(true);
-
-    let details = '';
-    if (withdrawalMethod === 'bank') {
-      details = `Bank: ${bankDetails.bankName}\nAccount: ${bankDetails.accountNumber}\nRouting: ${bankDetails.routingNumber}\nHolder: ${bankDetails.accountHolderName}`;
-    } else if (withdrawalMethod === 'transfer') {
-      details = `Recipient: ${transferDetails.recipientEmail}\nNote: ${transferDetails.note}`;
-    } else {
-      details = `Handle/Email: ${digitalDetails.handle || digitalDetails.email}`;
-    }
-
-    const message = `💸 *WITHDRAWAL REQUEST*\n\n` +
-      `Method: ${withdrawalMethod.toUpperCase()}\n` +
-      `Amount: ${amount} ${currency}\n\n` +
-      `📋 Details:\n${details}`;
-
-    const { error: tgError } = await supabase.functions.invoke("send-telegram-notification", {
-      body: { message, type: "withdrawal" },
-    });
-
-    if (tgError) {
-      console.error('Telegram notify error:', tgError);
-      setIsProcessing(false);
-      toast({
-        variant: "destructive",
-        title: "Withdrawal Could Not Be Submitted",
-        description: "We couldn't send your request right now. Please try again in a moment.",
-      });
-      return;
-    }
 
     // Simulate processing delay
     setTimeout(() => {
