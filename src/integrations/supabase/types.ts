@@ -152,6 +152,21 @@ export type Database = {
         }
         Relationships: []
       }
+      keepalive: {
+        Row: {
+          id: number
+          last_ping: string
+        }
+        Insert: {
+          id?: number
+          last_ping?: string
+        }
+        Update: {
+          id?: number
+          last_ping?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           country: Database["public"]["Enums"]["country_code"]
