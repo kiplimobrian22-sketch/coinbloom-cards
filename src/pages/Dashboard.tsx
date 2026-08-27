@@ -12,6 +12,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WithdrawalModal from '@/components/WithdrawalModal';
 import GiftCardStatus from '@/components/GiftCardStatus';
+import Seo from "@/components/Seo";
 
 interface UserProfile {
   id: string;
@@ -210,6 +211,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <Seo title="Dashboard | All Giftcards" description="Your All Giftcards account dashboard." path="/dashboard" noindex />
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">

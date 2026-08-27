@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Shield, Users, Zap, Award } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const About = () => {
   return (
     <div className="min-h-screen">
+      <Seo title="About All Giftcards | Secure Gift Card Marketplace" description="Learn about All Giftcards, the secure marketplace for checking, buying and selling gift cards worldwide." path="/about" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

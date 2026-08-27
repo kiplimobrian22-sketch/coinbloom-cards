@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, MessageSquare, Phone, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Seo from "@/components/Seo";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -29,6 +30,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="Contact All Giftcards Support" description="Get in touch with the All Giftcards support team. 24/7 help with gift card verification, purchases and sales." path="/contact" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

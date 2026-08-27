@@ -13,6 +13,7 @@ import { Eye, Filter } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import Seo from "@/components/Seo";
 
 interface GiftCardVerification {
   id: string;
@@ -193,7 +194,8 @@ export default function Admin() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
-        <Header />
+        <Seo title="Admin | All Giftcards" description="Administration area." path="/admin" noindex />
+      <Header />
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">Loading...</div>
         </div>

@@ -14,6 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
+import Seo from "@/components/Seo";
 
 const SellGiftcards = () => {
   const { toast } = useToast();
@@ -267,6 +268,7 @@ const SellGiftcards = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="Sell Gift Cards for Cash | All Giftcards" description="Turn unused gift cards into cash or exchange them for other brands. Fast payouts and competitive rates." path="/sell" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

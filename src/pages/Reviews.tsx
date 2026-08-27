@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Quote, ChevronLeft, ChevronRight, User } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const Reviews = () => {
   const [currentReview, setCurrentReview] = useState(0);
@@ -210,6 +211,7 @@ const Reviews = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="Customer Reviews | All Giftcards" description="Read verified customer reviews about buying, selling and verifying gift cards with All Giftcards." path="/reviews" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">
