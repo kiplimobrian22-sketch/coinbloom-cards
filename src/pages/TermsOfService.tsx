@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { FileText } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const TermsOfService = () => {
   return (
     <div className="min-h-screen">
+      <Seo title="Terms of Service | All Giftcards" description="The terms and conditions for using the All Giftcards platform to check, buy and sell gift cards." path="/terms" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

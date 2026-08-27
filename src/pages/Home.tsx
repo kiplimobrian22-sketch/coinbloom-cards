@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GiftCardSlider from "@/components/GiftCardSlider";
+import Seo from "@/components/Seo";
 
 const Home = () => {
   const { user } = useAuth();
@@ -80,6 +81,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="All Giftcards - Check Gift Card Balances in Seconds" description="Check gift card balances instantly, buy discounted gift cards, or sell yours for cash. Secure, encrypted trading with 24/7 support." path="/" />
       <Header />
       
       {/* Hero Section */}

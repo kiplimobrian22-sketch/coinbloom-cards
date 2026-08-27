@@ -1,10 +1,12 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Shield } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen">
+      <Seo title="Privacy Policy | All Giftcards" description="How All Giftcards collects, uses and protects your personal and gift card information." path="/privacy" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

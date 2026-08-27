@@ -18,6 +18,7 @@ import { countries, getCurrencyByCountry } from '@/data/countries';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Seo from "@/components/Seo";
 
 const signUpSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -147,6 +148,7 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted">
+      <Seo title="Sign In | All Giftcards" description="Sign in or create your All Giftcards account." path="/auth" noindex />
       <Header />
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-md mx-auto">

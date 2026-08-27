@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { HelpCircle } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const FAQ = () => {
   const faqs = [
@@ -57,6 +58,7 @@ const FAQ = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="Gift Card FAQ | All Giftcards" description="Answers to common questions about gift card verification, buying, selling, payouts and security." path="/faq" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

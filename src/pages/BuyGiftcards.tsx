@@ -25,6 +25,7 @@ import robloxLogo from "@/assets/logos/roblox.png";
 import appleLogo from "@/assets/logos/apple.png";
 import lululemonLogo from "@/assets/logos/lululemon.png";
 import ikeaLogo from "@/assets/logos/ikea.png";
+import Seo from "@/components/Seo";
 
 const BuyGiftcards = () => {
   const { toast } = useToast();
@@ -264,6 +265,7 @@ const BuyGiftcards = () => {
 
   return (
     <div className="min-h-screen">
+      <Seo title="Buy Discounted Gift Cards Online | All Giftcards" description="Buy gift cards from top brands at up to 30% off. Instant delivery and secure checkout on All Giftcards." path="/buy" />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">
