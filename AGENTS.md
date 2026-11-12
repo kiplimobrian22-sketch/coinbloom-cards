@@ -1,0 +1,1 @@
+- Derive card directory links, detail routes, verification choices, and sitemap entries from `src/data/giftcards.ts` so supported cards stay consistent.

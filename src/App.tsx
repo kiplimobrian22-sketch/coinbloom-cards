@@ -18,6 +18,8 @@ import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import GiftCardDirectory from "./pages/GiftCardDirectory";
+import GiftCardDetail from "./pages/GiftCardDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/verify" element={<VerifyGiftcard />} />
+            <Route path="/cards" element={<GiftCardDirectory />} />
+            <Route path="/cards/:cardSlug" element={<GiftCardDetail />} />
             <Route path="/buy" element={<BuyGiftcards />} />
             <Route path="/sell" element={<SellGiftcards />} />
             <Route path="/reviews" element={<Reviews />} />

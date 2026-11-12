@@ -26,15 +26,19 @@ const VerifyGiftcard = () => {
   const [currentGiftCardName, setCurrentGiftCardName] = useState("");
   const [currentMaskedCode, setCurrentMaskedCode] = useState("");
   const [isEGiftCard, setIsEGiftCard] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => {
+    const requestedCard = new URLSearchParams(window.location.search).get("card") ?? "";
+    const giftcardName = giftCards.some((card) => card.name === requestedCard) ? requestedCard : "";
+    return {
     country: "",
-    giftcardName: "",
+    giftcardName,
     code: "",
     pin: "",
     amount: "",
     email: "",
     frontImage: null as File | null,
     backImage: null as File | null
+    };
   });
 
   const countries = [
@@ -285,10 +289,10 @@ const VerifyGiftcard = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="code">Gift Card Code *</Label>
+                    <Label htmlFor="code">{selectedGiftCard?.requiresPin ? "Gift Card Number / Code *" : "Gift Card Code *"}</Label>
                   <Input
                     id="code"
-                    placeholder="Enter your gift card code"
+                    placeholder={selectedGiftCard?.requiresPin ? "Enter your card number or code" : "Enter your gift card code"}
                     value={formData.code}
                     onChange={(e) => handleInputChange("code", e.target.value)}
                     required

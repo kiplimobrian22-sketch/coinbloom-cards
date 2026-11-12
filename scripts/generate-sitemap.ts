@@ -2,6 +2,8 @@
 
 import { writeFileSync } from "fs"
 import { resolve } from "path"
+import { giftCards } from "../src/data/giftcards"
+import { giftCardSlug } from "../src/data/giftcard-slug"
 
 const BASE_URL = "https://coinbloom-cards.lovable.app"
 
@@ -23,6 +25,12 @@ const entries: SitemapEntry[] = [
   { path: "/faq", changefreq: "monthly", priority: "0.6" },
   { path: "/privacy", changefreq: "yearly", priority: "0.3" },
   { path: "/terms", changefreq: "yearly", priority: "0.3" },
+  { path: "/cards", changefreq: "weekly", priority: "0.8" },
+  ...giftCards.map((card) => ({
+    path: `/cards/${giftCardSlug(card.name)}`,
+    changefreq: "weekly" as const,
+    priority: "0.7",
+  })),
 ]
 
 function generateSitemap(entries: SitemapEntry[]) {
