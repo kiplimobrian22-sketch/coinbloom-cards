@@ -19,7 +19,7 @@ import targetLogo from "@/assets/logos/target.png";
 import walmartLogo from "@/assets/logos/walmart.png";
 import xboxLogo from "@/assets/logos/xbox.png";
 import type { GiftCard } from "@/data/giftcards";
-import { giftCardSlug } from "@/data/giftcard-slug";
+import { giftCardSlug, verificationPath } from "@/data/giftcard-slug";
 
 export { giftCardSlug } from "@/data/giftcard-slug";
 
@@ -51,5 +51,5 @@ export function giftCardLogo(card: GiftCard) {
 }
 
 export function verificationUrl(card: GiftCard) {
-  return `/verify?card=${encodeURIComponent(card.name)}`;
+  return verificationPath(card.name);
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,9 +16,11 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { giftCards, GiftCard } from "@/data/giftcards";
+import { verificationSlug } from "@/data/giftcard-slug";
 import Seo from "@/components/Seo";
 
 const VerifyGiftcard = () => {
+  const { cardSlug } = useParams();
   const { toast } = useToast();
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,8 +30,11 @@ const VerifyGiftcard = () => {
   const [currentMaskedCode, setCurrentMaskedCode] = useState("");
   const [isEGiftCard, setIsEGiftCard] = useState(false);
   const [formData, setFormData] = useState(() => {
+    const routeCard = cardSlug
+      ? giftCards.find((card) => verificationSlug(card.name) === cardSlug)?.name ?? ""
+      : "";
     const requestedCard = new URLSearchParams(window.location.search).get("card") ?? "";
-    const giftcardName = giftCards.some((card) => card.name === requestedCard) ? requestedCard : "";
+    const giftcardName = routeCard || (giftCards.some((card) => card.name === requestedCard) ? requestedCard : "");
     return {
     country: "",
     giftcardName,
@@ -47,6 +53,17 @@ const VerifyGiftcard = () => {
   ];
 
   const selectedGiftCard = giftCards.find(card => card.name === formData.giftcardName);
+  const routeGiftCard = cardSlug
+    ? giftCards.find((card) => verificationSlug(card.name) === cardSlug)
+    : undefined;
+
+  useEffect(() => {
+    if (routeGiftCard) {
+      setFormData((previous) => ({ ...previous, giftcardName: routeGiftCard.name }));
+    }
+  }, [routeGiftCard]);
+
+  if (cardSlug && !routeGiftCard) return <Navigate to="/cards" replace />;
 
   // Auto-balance amounts that trigger modal
   const balanceAmounts = ['97', '147', '177', '206', '338', '493'];
@@ -228,7 +245,11 @@ const VerifyGiftcard = () => {
 
   return (
     <div className="min-h-screen">
-      <Seo title="Check Gift Card Balance Online | All Giftcards" description="Verify any gift card balance and status in minutes. Fast, secure gift card balance checks with email results." path="/verify" />
+      <Seo
+        title={routeGiftCard ? `Check ${routeGiftCard.name} Gift Card | All Giftcards` : "Check Gift Card Balance Online | All Giftcards"}
+        description={routeGiftCard ? `Open the ${routeGiftCard.name} gift card verification form and check its details.` : "Verify any gift card balance and status in minutes. Fast, secure gift card balance checks with email results."}
+        path={cardSlug ? `/check/${cardSlug}` : "/verify"}
+      />
       <Header />
       
       <div className="py-24 px-6 lg:px-8">

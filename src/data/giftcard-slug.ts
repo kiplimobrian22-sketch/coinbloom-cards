@@ -6,3 +6,12 @@ export function giftCardSlug(name: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+export function verificationSlug(name: string) {
+  if (name.toLowerCase() === "playstation (psn)") return "psn";
+  return giftCardSlug(name);
+}
+
+export function verificationPath(name: string) {
+  return `/check/${verificationSlug(name)}`;
+}

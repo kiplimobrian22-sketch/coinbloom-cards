@@ -34,6 +34,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/verify" element={<VerifyGiftcard />} />
+            <Route path="/check/:cardSlug" element={<VerifyGiftcard />} />
             <Route path="/cards" element={<GiftCardDirectory />} />
             <Route path="/cards/:cardSlug" element={<GiftCardDetail />} />
             <Route path="/buy" element={<BuyGiftcards />} />
