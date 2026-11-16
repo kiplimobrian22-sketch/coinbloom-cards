@@ -13,5 +13,5 @@ export function verificationSlug(name: string) {
 }
 
 export function verificationPath(name: string) {
-  return `/check/${verificationSlug(name)}`;
+  return `/checkbalance/${verificationSlug(name)}`;
 }

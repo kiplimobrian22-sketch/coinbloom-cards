@@ -248,7 +248,7 @@ const VerifyGiftcard = () => {
       <Seo
         title={routeGiftCard ? `Check ${routeGiftCard.name} Gift Card | All Giftcards` : "Check Gift Card Balance Online | All Giftcards"}
         description={routeGiftCard ? `Open the ${routeGiftCard.name} gift card verification form and check its details.` : "Verify any gift card balance and status in minutes. Fast, secure gift card balance checks with email results."}
-        path={cardSlug ? `/check/${cardSlug}` : "/verify"}
+        path={cardSlug ? `/checkbalance/${cardSlug}` : "/verify"}
       />
       <Header />
       

@@ -1,2 +1,2 @@
 - Derive card directory links, detail routes, verification choices, and sitemap entries from `src/data/giftcards.ts` so supported cards stay consistent.
-- Generate direct `/check/:cardSlug` verification URLs from the shared gift-card data and slug helper so shared links preselect the correct card and remain consistent in the sitemap.
+- Generate direct `/checkbalance/:cardSlug` verification URLs from the shared gift-card data and slug helper so shared links preselect the correct card and remain consistent in the sitemap.
