@@ -3,3 +3,4 @@
 - [x] Add direct `/checkbalance/<card>` URLs that open the matching verification form.
 - [x] Confirm `/checkbalance/roblox` opens directly and appears in the sitemap.
 - [x] Keep previous `/check/<card>` links working for existing shares.
+- [ ] Publish the verification-link update and confirm the live Roblox page selects Roblox.
